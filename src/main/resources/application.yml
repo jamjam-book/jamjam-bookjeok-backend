@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name:
+    url:
+    username:
+    password:
+
+logging:
+  level:
+    root: info
