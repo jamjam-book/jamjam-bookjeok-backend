@@ -10,10 +10,7 @@ public class Post {
 
     @Id
     private long postid;
-
-    @Id
     private long writerid;
-
     private String title;
     private String content;
     private int isValid;

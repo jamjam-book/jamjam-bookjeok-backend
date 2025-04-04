@@ -12,11 +12,7 @@ public class Bookmark {
 
     @Id
     private long bookmarkid;
-
-    @Id
     private long postid;
-
-    @Id
     private long memberuid;
 
     private LocalDateTime createdAt;

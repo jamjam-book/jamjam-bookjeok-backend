@@ -12,11 +12,7 @@ public class Comment {
 
     @Id
     private long commentid;
-
-    @Id
     private long writeruid;
-
-    @Id
     private long postid;
     private String contents;
     private int is_valid;

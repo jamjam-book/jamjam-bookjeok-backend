@@ -10,14 +10,8 @@ public class Report {
 
     @Id
     private long reportid;
-
-    @Id
     private long postid;
-
-    @Id
     private long commentid;
-
-    @Id
     private long reporteruid;
     private String reportReason;
     private LocalDateTime reportedAt;
