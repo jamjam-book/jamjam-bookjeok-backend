@@ -2,6 +2,7 @@ package com.jamjam.bookjeok.domains.book.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,5 +24,11 @@ public class BookAuthor {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
+
+    @Builder
+    public BookAuthor(Book book, Author author) {
+        this.book = book;
+        this.author = author;
+    }
 
 }
