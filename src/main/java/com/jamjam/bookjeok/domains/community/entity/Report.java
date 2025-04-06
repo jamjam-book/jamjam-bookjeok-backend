@@ -31,7 +31,7 @@ public class Report {
     @JoinColumn(name = "reporter_uid", referencedColumnName = "member_uid", nullable = false)
     private Member reporter;
 
-    @Column(name = "report_reason")
+    @Column(name = "report_reason", nullable = false)
     private String reportReason;
 
     @Column(name = "reported_at", nullable = false)
