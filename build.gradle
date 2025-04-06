@@ -68,6 +68,10 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 //	testImplementation 'org.springframework.security:spring-security-test'
 
+	// jsoup - web crawling
+	// https://mvnrepository.com/artifact/org.jsoup/jsoup
+	implementation("org.jsoup:jsoup:1.17.2")
+
 }
 
 tasks.named('test') {
