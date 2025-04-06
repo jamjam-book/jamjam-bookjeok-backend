@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "order_details")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderDetails {
+public class OrderDetail {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
@@ -40,7 +40,7 @@ public class OrderDetails {
     private LocalDateTime cratedAt;
 
     @Builder
-    public OrderDetails(
+    public OrderDetail(
             Order order, Book book, int price, int quantity,
             boolean isCanceled, LocalDateTime cratedAt
     ) {
