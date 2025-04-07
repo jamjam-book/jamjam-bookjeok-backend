@@ -19,37 +19,37 @@ public class DeliveryAddress {
     @Column(name = "delivery_address_id")
     private Long deliveryAddressId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "recipient_name", length = 100, nullable = false)
+    @Column(name = "recipient_name")
     private String recipientName;
 
-    @Column(name = "recipient_phone", length = 11, nullable = false)
+    @Column(name = "recipient_phone")
     private String recipientPhone;
 
-    @Column(name = "delivery_address_category", nullable = false)
+    @Column(name = "delivery_address_category")
     private String deliveryAddressCategory;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "address_detail", length = 60, nullable = false)
+    @Column(name = "address_detail")
     private String addressDetail;
 
-    @Column(name = "postal_code", length = 10, nullable = false)
+    @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(name = "request_note", nullable = false)
+    @Column(name = "request_note")
     private String requestNote;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder

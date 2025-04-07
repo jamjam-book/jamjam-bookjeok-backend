@@ -18,16 +18,16 @@ public class CouponBox {
     @Column(name = "member_coupon_id")
     private Long memberCouponId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "coupon_id", nullable = false)
+    @Column(name = "coupon_id")
     private Long couponId;
 
     @Column(name = "order_uid")
     private Long orderUid;
 
-    @Column(name = "is_used", nullable = false)
+    @Column(name = "is_used")
     private boolean isUsed = false;
 
     public CouponBox(

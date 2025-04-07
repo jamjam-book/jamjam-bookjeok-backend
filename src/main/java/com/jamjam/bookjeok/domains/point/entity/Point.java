@@ -20,28 +20,28 @@ public class Point {
     @Column(name = "point_save_id")
     private Long pointSaveId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "order_uid", nullable = false)
+    @Column(name = "order_uid")
     private Long orderUid;
 
-    @Column(name = "point_type", nullable = false)
+    @Column(name = "point_type")
     private PointType pointType;
 
-    @Column(name = "save_amount", nullable = false)
+    @Column(name = "save_amount")
     private int saveAmount;
 
-    @Column(name = "saved_at", nullable = false)
+    @Column(name = "saved_at")
     private LocalDateTime savedAt;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean deleted = false;
 
     @Builder
