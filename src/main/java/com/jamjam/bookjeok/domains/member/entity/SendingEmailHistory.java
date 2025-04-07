@@ -16,28 +16,27 @@ public class SendingEmailHistory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sending_email_id")
-    private Long id;
+    private Long sendingEmailId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
     @Lob
-    @Column(name = "email_content", nullable = false)
+    @Column(name = "email_content")
     private String emailContent;
 
-    @Column(name = "sending_status_value", nullable = false)
+    @Column(name = "sending_status_value")
     private Boolean sendingStatusValue;
 
-    @Column(name = "sent_at", nullable = false)
+    @Column(name = "sent_at")
     private LocalDateTime sentAt;
 
     @Builder
     public SendingEmailHistory(
-            Member member, String emailContent,
+            Long memberUid, String emailContent,
             Boolean sendingStatusValue, LocalDateTime sentAt
     ) {
-        this.member = member;
+        this.memberUid = memberUid;
         this.emailContent = emailContent;
         this.sendingStatusValue = sendingStatusValue;
         this.sentAt = sentAt;

@@ -16,21 +16,20 @@ public class MemberBlock {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "block_id")
-    private Long id;
+    private Long blockId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
-    @Column(name = "block_start_date", nullable = false)
+    @Column(name = "block_start_date")
     private LocalDate blockStartDate;
 
-    @Column(name = "block_end_date", nullable = false)
+    @Column(name = "block_end_date")
     private LocalDate blockEndDate;
 
     @Builder
-    public MemberBlock(Member member, LocalDate blockStartDate, LocalDate blockEndDate) {
-        this.member = member;
+    public MemberBlock(Long memberUid, LocalDate blockStartDate, LocalDate blockEndDate) {
+        this.memberUid = memberUid;
         this.blockStartDate = blockStartDate;
         this.blockEndDate = blockEndDate;
     }
