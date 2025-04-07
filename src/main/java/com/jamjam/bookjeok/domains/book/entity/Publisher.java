@@ -14,9 +14,9 @@ public class Publisher {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "publisher_id")
-    private Long id;
+    private Long publisherId;
 
-    @Column(name = "publisher_name", nullable = false)
+    @Column(name = "publisher_name")
     private String publisherName;
 
     @Builder

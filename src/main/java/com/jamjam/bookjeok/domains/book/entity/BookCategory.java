@@ -16,18 +16,18 @@ public class BookCategory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private Long id;
+    private Long categoryId;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(name = "category_name")
     private String categoryName;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
