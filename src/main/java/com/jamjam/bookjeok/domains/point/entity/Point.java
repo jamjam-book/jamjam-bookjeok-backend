@@ -18,18 +18,16 @@ public class Point {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_save_id")
-    private Long id;
+    private Long pointSaveId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid", nullable = false)
+    private Long memberUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_uid", nullable = false)
-    private Order order;
+    @Column(name = "order_uid", nullable = false)
+    private Long orderUid;
 
-    @Column(name = "save_status", nullable = false)
-    private boolean saveStatus;
+    @Column(name = "point_type", nullable = false)
+    private PointType pointType;
 
     @Column(name = "save_amount", nullable = false)
     private int saveAmount;
@@ -48,18 +46,17 @@ public class Point {
 
     @Builder
     public Point(
-            Member member, Order order, boolean saveStatus,
+            Long memberUid, Long orderUid, PointType pointType,
             int saveAmount, LocalDateTime savedAt, LocalDateTime createdAt,
             LocalDateTime modifiedAt, boolean deleted
     ) {
-        this.member = member;
-        this.order = order;
-        this.saveStatus = saveStatus;
+        this.memberUid = memberUid;
+        this.orderUid = orderUid;
+        this.pointType = pointType;
         this.saveAmount = saveAmount;
         this.savedAt = savedAt;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.deleted = deleted;
     }
-
 }

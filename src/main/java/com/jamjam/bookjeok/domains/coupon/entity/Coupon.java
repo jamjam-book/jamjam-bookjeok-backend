@@ -25,6 +25,18 @@ public class Coupon {
     @Column(name = "coupon_detail", nullable = false)
     private String couponDetail;
 
+    @Column(name = "discount_type", nullable = false)
+    private DiscountType discount_type;
+
+    @Column(name = "discount_value", nullable = false)
+    private int discount_value;
+
+    @Column(name = "min_order_amount")
+    private int min_order_amount = 0;
+
+    @Column(name = "max_discount_amount")
+    private int max_discount_amount;
+
     @Column(name = "coupon_started_at", nullable = false)
     private LocalDateTime couponStartedAt;
 
@@ -35,15 +47,18 @@ public class Coupon {
     private boolean deleted = false;
 
     @Builder
-    public Coupon(
-            String couponName, String couponDetail,
-            LocalDateTime couponStartedAt, LocalDateTime couponExpiredAt, boolean deleted
-    ) {
+    public Coupon(String couponName, String couponDetail,
+                  DiscountType discount_type, int discount_value,
+                  int min_order_amount, int max_discount_amount,
+                  LocalDateTime couponStartedAt, LocalDateTime couponExpiredAt, boolean deleted) {
         this.couponName = couponName;
         this.couponDetail = couponDetail;
+        this.discount_type = discount_type;
+        this.discount_value = discount_value;
+        this.min_order_amount = min_order_amount;
+        this.max_discount_amount = max_discount_amount;
         this.couponStartedAt = couponStartedAt;
         this.couponExpiredAt = couponExpiredAt;
         this.deleted = deleted;
     }
-
 }

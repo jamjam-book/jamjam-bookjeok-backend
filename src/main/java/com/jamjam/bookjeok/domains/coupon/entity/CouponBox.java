@@ -16,30 +16,27 @@ public class CouponBox {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_coupon_id")
-    private Long id;
+    private Long memberCouponId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid", nullable = false)
+    private Long memberUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id", nullable = false)
-    private Coupon coupon;
+    @Column(name = "coupon_id", nullable = false)
+    private Long couponId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_uid", nullable = false)
-    private Order order;
+    @Column(name = "order_uid")
+    private Long orderUid;
 
     @Column(name = "is_used", nullable = false)
     private boolean isUsed = false;
 
     public CouponBox(
-            Member member, Coupon coupon,
-            Order order, boolean isUsed
+            Long memberUid, Long couponId,
+            Long orderUid, boolean isUsed
     ) {
-        this.member = member;
-        this.coupon = coupon;
-        this.order = order;
+        this.memberUid = memberUid;
+        this.couponId = couponId;
+        this.orderUid = orderUid;
         this.isUsed = isUsed;
     }
 

@@ -17,11 +17,10 @@ public class DeliveryAddress {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_address_id")
-    private Long id;
+    private Long deliveryAddressId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid", nullable = false)
+    private Long memberUid;
 
     @Column(name = "recipient_name", length = 100, nullable = false)
     private String recipientName;
@@ -38,7 +37,7 @@ public class DeliveryAddress {
     @Column(name = "address_detail", length = 60, nullable = false)
     private String addressDetail;
 
-    @Column(name = "postal_code", nullable = false)
+    @Column(name = "postal_code", length = 10, nullable = false)
     private String postalCode;
 
     @Column(name = "request_note", nullable = false)
@@ -55,12 +54,12 @@ public class DeliveryAddress {
 
     @Builder
     public DeliveryAddress(
-            Member member, String recipientName, String recipientPhone,
+            Long memberUid, String recipientName, String recipientPhone,
             String deliveryAddressCategory, String address, String addressDetail,
             String postalCode, String requestNote, LocalDateTime createdAt,
             LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.member = member;
+        this.memberUid = memberUid;
         this.recipientName = recipientName;
         this.recipientPhone = recipientPhone;
         this.deliveryAddressCategory = deliveryAddressCategory;

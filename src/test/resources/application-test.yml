@@ -10,16 +10,24 @@ spring:
     password:
 
   jpa:
+    defer-datasource-initialization: true
+
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
 
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
+        show_sql: true
         format_sql: true
         use_sql_comments: true
+
+  sql:
+    init:
+      mode: always
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: mappers/**/*.xml
+  type-aliases-package: com.jamjam.bookjeok.domains
