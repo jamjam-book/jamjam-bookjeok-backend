@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.order.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,45 +16,39 @@ public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_uid")
-    private Long id;
+    private Long orderUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "delivery_address_id", nullable = false)
-    private DeliveryAddress deliveryAddress;
+    @Column(name = "delivery_address_id")
+    private Long deliveryAddressId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_status_id", nullable = false)
-    private OrderStatus orderStatus;
+    @Column(name = "order_status_id")
+    private Long orderStatusId;
 
-    @Column(
-            name = "order_code", unique = true,
-            length = 16, nullable = false
-    )
+    @Column(name = "order_code")
     private String orderCode;
 
-    @Column(name = "order_name", nullable = false)
+    @Column(name = "order_name")
     private String orderName;
 
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount")
     private int totalAmount;
 
-    @Column(name = "delivery_cost", nullable = false)
+    @Column(name = "delivery_cost")
     private int deliveryCost;
 
-    @Column(name = "ordered_at", nullable = false)
+    @Column(name = "ordered_at")
     private LocalDateTime orderedAt;
 
-    @Column(name = "cancled_at")
+    @Column(name = "canceled_at")
     private LocalDateTime canceledAt;
 
     @Column(name = "refunded_at")
     private LocalDateTime refundedAt;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
@@ -63,14 +56,14 @@ public class Order {
 
     @Builder
     public Order(
-            Member member, DeliveryAddress deliveryAddress, OrderStatus orderStatus,
+            Long memberUid, Long deliveryAddressId, Long orderStatusId,
             String orderCode, String orderName, int totalAmount, int deliveryCost,
             LocalDateTime orderedAt, LocalDateTime canceledAt, LocalDateTime refundedAt,
             LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
-        this.member = member;
-        this.deliveryAddress = deliveryAddress;
-        this.orderStatus = orderStatus;
+        this.memberUid = memberUid;
+        this.deliveryAddressId = deliveryAddressId;
+        this.orderStatusId = orderStatusId;
         this.orderCode = orderCode;
         this.orderName = orderName;
         this.totalAmount = totalAmount;

@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.order.entity;
 
-import com.jamjam.bookjeok.domains.book.entity.Book;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,39 +16,37 @@ public class OrderDetail {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
-    private Long id;
+    private Long orderDetailId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_uid", nullable = false)
-    private Order order;
+    @Column(name = "order_uid")
+    private Long orderUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id")
+    private Long bookId;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private int price;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "is_canceled", nullable = false)
+    @Column(name = "is_canceled")
     private boolean isCanceled = false;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime cratedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Builder
     public OrderDetail(
-            Order order, Book book, int price, int quantity,
-            boolean isCanceled, LocalDateTime cratedAt
+            Long orderUid, Long bookId, int price,
+            int quantity, boolean isCanceled, LocalDateTime createdAt
     ) {
-        this.order = order;
-        this.book = book;
+        this.orderUid = orderUid;
+        this.bookId = bookId;
         this.price = price;
         this.quantity = quantity;
         this.isCanceled = isCanceled;
-        this.cratedAt = cratedAt;
+        this.createdAt = createdAt;
     }
 
 }

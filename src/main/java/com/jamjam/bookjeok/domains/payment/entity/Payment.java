@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.payment.entity;
 
-import com.jamjam.bookjeok.domains.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,31 +16,27 @@ public class Payment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id")
-    private Long id;
+    private Long paymentId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_uid", nullable = false)
-    private Order order;
+    @Column(name = "order_uid")
+    private Long orderUid;
 
-    @Column(
-            name = "payment_key", unique = true,
-            length = 200, nullable = false
-    )
+    @Column(name = "payment_key")
     private String paymentKey;
 
-    @Column(name = "payment_type", length = 30, nullable = false)
+    @Column(name = "payment_type")
     private String paymentType;
 
-    @Column(name = "payment_method", length = 50, nullable = false)
+    @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount")
     private int totalAmount;
 
-    @Column(name = "requested_at", nullable = false)
+    @Column(name = "requested_at")
     private LocalDateTime requestedAt;
 
-    @Column(name = "approved_at", nullable = false)
+    @Column(name = "approved_at")
     private LocalDateTime approvedAt;
 
     @Column(name = "cancel_amount")
@@ -52,11 +47,11 @@ public class Payment {
 
     @Builder
     public Payment(
-            Order order, String paymentKey, String paymentType,
+            Long orderUid, String paymentKey, String paymentType,
             String paymentMethod, int totalAmount, LocalDateTime requestedAt,
             LocalDateTime approvedAt, int cancelAmount, LocalDateTime canceledAt
     ) {
-        this.order = order;
+        this.orderUid = orderUid;
         this.paymentKey = paymentKey;
         this.paymentType = paymentType;
         this.paymentMethod = paymentMethod;
