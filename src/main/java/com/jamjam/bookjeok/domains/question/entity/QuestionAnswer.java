@@ -17,13 +17,15 @@ public class QuestionAnswer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
-    private Long answerId;
+    private Long id;
 
-    @Column(name = "question_id", nullable = false)
-    private Long questionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
 
-    @Column(name = "writer_uid")
-    private Long writerUid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_uid")
+    private Member writer;
 
     @Lob
     @Column(name = "contents", nullable = false)
@@ -40,11 +42,11 @@ public class QuestionAnswer {
 
     @Builder
     public QuestionAnswer(
-            Long questionId, Long writerUid, String contents,
+            Question question, Member writer, String contents,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.questionId = questionId;
-        this.writerUid = writerUid;
+        this.question = question;
+        this.writer = writer;
         this.contents = contents;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;

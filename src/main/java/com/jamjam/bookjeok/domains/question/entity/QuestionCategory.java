@@ -16,7 +16,7 @@ public class QuestionCategory {
     @Column(name = "question_category_id")
     private Long questionCategoryId;
 
-    @Column(name = "question_category_name", length = 100, nullable = false)
+    @Column(name = "question_category_name")
     private String questionCategoryName;
 
     @Builder

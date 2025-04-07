@@ -17,10 +17,11 @@ public class Notice {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_id")
-    private Long noticeId;
+    private Long id;
 
-    @Column(name = "writer_uid", nullable = false)
-    private Long writerUid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
+    private Member writer;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -39,8 +40,8 @@ public class Notice {
     private boolean isDeleted = false;
 
     @Builder
-    public Notice(Long writerUid, String title, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
-        this.writerUid = writerUid;
+    public Notice(Member writer, String title, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+        this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.createdAt = createdAt;

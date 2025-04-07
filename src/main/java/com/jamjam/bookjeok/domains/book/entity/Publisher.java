@@ -16,7 +16,7 @@ public class Publisher {
     @Column(name = "publisher_id")
     private Long publisherId;
 
-    @Column(name = "publisher_name", nullable = false)
+    @Column(name = "publisher_name")
     private String publisherName;
 
     @Builder

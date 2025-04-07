@@ -17,13 +17,15 @@ public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Long bookId;
+    private Long id;
 
-    @Column(name = "publisher_id", nullable = false)
-    private Long publisherId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id", nullable = false)
+    private Publisher publisher;
 
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private BookCategory bookCategory;
 
     @Column(name = "book_name", nullable = false)
     private String bookName;
@@ -54,12 +56,12 @@ public class Book {
 
     @Builder
     public Book(
-            Long publisherId, Long categoryId, String bookName,
+            Publisher publisher, BookCategory bookCategory, String bookName,
             String isbn, String imageUrl, LocalDate publishedAt, int price,
             int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.publisherId = publisherId;
-        this.categoryId = categoryId;
+        this.publisher = publisher;
+        this.bookCategory = bookCategory;
         this.bookName = bookName;
         this.isbn = isbn;
         this.imageUrl = imageUrl;
