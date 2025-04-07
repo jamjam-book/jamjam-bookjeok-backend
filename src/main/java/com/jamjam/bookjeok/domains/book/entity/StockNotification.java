@@ -17,18 +17,16 @@ public class StockNotification {
     @Column(name = "notification_id")
     private Long notificationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @Column(name = "book_id")
+    private Long bookId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid")
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
     @Builder
-    public StockNotification(Book book, Member member) {
-        this.book = book;
-        this.member = member;
+    public StockNotification(Long bookId, Long memberUid) {
+        this.bookId = bookId;
+        this.memberUid = memberUid;
     }
 
 }

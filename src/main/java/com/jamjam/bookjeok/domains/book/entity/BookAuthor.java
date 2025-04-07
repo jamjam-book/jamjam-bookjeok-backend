@@ -15,20 +15,16 @@ public class BookAuthor {
     @Id @EmbeddedId
     private BookAuthorId id;
 
-    @MapsId("bookId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @Column(name = "book_id")
+    private Long bookId;
 
-    @MapsId("authorId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @Column(name = "author_id")
+    private Long authorId;
 
     @Builder
-    public BookAuthor(Book book, Author author) {
-        this.book = book;
-        this.author = author;
+    public BookAuthor(Long bookId, Long authorId) {
+        this.bookId = bookId;
+        this.authorId = authorId;
     }
 
 }

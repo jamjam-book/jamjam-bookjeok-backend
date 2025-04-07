@@ -19,13 +19,11 @@ public class Book {
     @Column(name = "book_id")
     private Long bookId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_id")
-    private Publisher publisher;
+    @Column(name = "publisher_id")
+    private Long publisherId;
 
-    @ManyToOne(fetch = FetchType.LAZY) 
-    @JoinColumn(name = "category_id")
-    private BookCategory bookCategory;
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @Column(name = "book_name")
     private String bookName;
@@ -56,12 +54,12 @@ public class Book {
 
     @Builder
     public Book(
-            Publisher publisher, BookCategory bookCategory, String bookName,
+            Long publisherId, Long categoryId, String bookName,
             String isbn, String imageUrl, LocalDate publishedAt, int price,
             int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.publisher = publisher;
-        this.bookCategory = bookCategory;
+        this.publisherId = publisherId;
+        this.categoryId = categoryId;
         this.bookName = bookName;
         this.isbn = isbn;
         this.imageUrl = imageUrl;
