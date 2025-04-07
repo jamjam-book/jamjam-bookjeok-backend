@@ -14,9 +14,9 @@ public class OrderStatus {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_status_id")
-    private Integer id;
+    private Integer orderStatusId;
 
-    @Column(name = "order_status_name", length = 100, nullable = false)
+    @Column(name = "order_status_name")
     private String orderStatusName;
 
     @Builder

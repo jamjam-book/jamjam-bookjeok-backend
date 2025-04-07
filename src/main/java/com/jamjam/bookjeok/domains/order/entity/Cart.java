@@ -1,7 +1,5 @@
 package com.jamjam.bookjeok.domains.order.entity;
 
-import com.jamjam.bookjeok.domains.book.entity.Book;
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,20 +16,18 @@ public class Cart {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private Long id;
+    private Long cartId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id")
+    private Long bookId;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
@@ -39,11 +35,11 @@ public class Cart {
 
     @Builder
     public Cart(
-            Member member, Book book, int quantity,
+            Long memberUid, Long bookId, int quantity,
             LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
-        this.member = member;
-        this.book = book;
+        this.memberUid = memberUid;
+        this.bookId = bookId;
         this.quantity = quantity;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
