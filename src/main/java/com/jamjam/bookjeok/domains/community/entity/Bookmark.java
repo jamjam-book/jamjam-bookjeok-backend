@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.community.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
