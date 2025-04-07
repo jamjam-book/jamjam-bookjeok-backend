@@ -16,51 +16,44 @@ public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_uid")
-    private Long id;
+    private Long memberUid;
 
-    @Column(
-            name = "member_id", unique = true,
-            length = 50, nullable = false
-    )
+    @Column(name = "member_id")
     private String memberId;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "member_name", length = 100, nullable = false)
+    @Column(name = "member_name")
     private String memberName;
 
-    @Column(name = "phone_number", length = 11, nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(
-            name = "nickname", length = 100,
-            unique = true, nullable = false
-    )
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "birth_date", length = 10, nullable = false)
+    @Column(name = "birth_date")
     private String birthDate;
 
-    @Column(name = "marketing_consent", nullable = false)
+    @Column(name = "marketing_consent")
     private boolean marketingConsent = true;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private MemberRole role = MemberRole.MEMBER;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "activity_status", nullable = false)
+    @Column(name = "activity_status")
     private String activityStatus;
-
     @Builder
     public Member(
             String memberId, String password, String memberName, String phoneNumber,
