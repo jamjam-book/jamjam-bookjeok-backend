@@ -18,17 +18,17 @@ public class MemberBlock {
     @Column(name = "block_id")
     private Long blockId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "block_start_date", nullable = false)
+    @Column(name = "block_start_date")
     private LocalDate blockStartDate;
 
-    @Column(name = "block_end_date", nullable = false)
+    @Column(name = "block_end_date")
     private LocalDate blockEndDate;
 
     @Builder
-    public MemberBlock(Member member, LocalDate blockStartDate, LocalDate blockEndDate) {
+    public MemberBlock(Long memberUid, LocalDate blockStartDate, LocalDate blockEndDate) {
         this.memberUid = memberUid;
         this.blockStartDate = blockStartDate;
         this.blockEndDate = blockEndDate;
