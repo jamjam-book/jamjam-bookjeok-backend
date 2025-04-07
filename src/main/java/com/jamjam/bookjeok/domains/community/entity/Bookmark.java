@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.community.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,23 +16,21 @@ public class Bookmark {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookmark_id")
-    private Long id;
+    private Long bookmarkId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Builder
-    public Bookmark(Post post, Member member, LocalDateTime createdAt) {
-        this.post = post;
-        this.member = member;
+    public Bookmark (Long postId, Long memberUid, LocalDateTime createdAt) {
+        this.postId = postId;
+        this.memberUid = memberUid;
         this.createdAt = createdAt;
     }
 

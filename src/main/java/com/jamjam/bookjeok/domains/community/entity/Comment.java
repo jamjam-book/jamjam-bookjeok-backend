@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.community.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,38 +16,36 @@ public class Comment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long id;
+    private Long commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id", referencedColumnName = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "writer_uid")
+    private Long writerUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
-    @Column(name = "contents", nullable = false)
+    @Column(name = "contents")
     private String contents;
 
-    @Column(name = "is_valid", nullable = false)
+    @Column(name = "is_valid")
     private boolean isValid = false;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
-    public Comment(
-            Member member, Post post, String contents, boolean isValid,
+    public Comment (
+            Long writerUid, Long postId, String contents, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.member = member;
-        this.post = post;
+        this.writerUid = writerUid;
+        this.postId = postId;
         this.contents = contents;
         this.isValid = isValid;
         this.createdAt = createdAt;

@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.community.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,36 +16,35 @@ public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long id;
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member writer;
+    @Column(name = "writer_uid")
+    private Long writerUid;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     private String content;
 
-    @Column(name = "is_valid", nullable = false)
+    @Column(name = "is_valid")
     private boolean isValid = false;
 
-    @Column(name = "created_At", nullable = false)
+    @Column(name = "created_At")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
-    public Post(
-            Member writer, String title, String content, boolean isValid,
+    public Post (
+            Long writerUid, String title, String content, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.writer = writer;
+        this.writerUid = writerUid;
         this.title = title;
         this.content = content;
         this.isValid = isValid;
