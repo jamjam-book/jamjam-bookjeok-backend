@@ -17,15 +17,13 @@ public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private Long id;
+    private Long questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member writer;
+    @Column(name = "writer_uid", nullable = false)
+    private Long writerUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_categories_id", nullable = false)
-    private QuestionCategory questionCategory;
+    @Column(name = "question_categories_id", nullable = false)
+    private Long questionCategoriesId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -48,12 +46,12 @@ public class Question {
 
     @Builder
     public Question(
-            Member writer, QuestionCategory questionCategory,
+            Long writerUid, Long questionCategoriesId,
             String title, String contents, LocalDateTime createdAt,
             LocalDateTime modifiedAt, boolean isDeleted, String questionsImgUrl
     ) {
-        this.writer = writer;
-        this.questionCategory = questionCategory;
+        this.writerUid = writerUid;
+        this.questionCategoriesId = questionCategoriesId;
         this.title = title;
         this.contents = contents;
         this.createdAt = createdAt;

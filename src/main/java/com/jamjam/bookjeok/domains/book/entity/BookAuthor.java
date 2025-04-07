@@ -13,22 +13,18 @@ import lombok.NoArgsConstructor;
 public class BookAuthor {
 
     @Id @EmbeddedId
-    private BookAuthorId id;
+    private BookAuthorId bookAuthorId;
 
-    @MapsId("bookId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Long bookId;
 
-    @MapsId("authorId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    @Column(name = "author_id", nullable = false)
+    private Long authorId;
 
     @Builder
-    public BookAuthor(Book book, Author author) {
-        this.book = book;
-        this.author = author;
+    public BookAuthor(Long bookId, Long authorId) {
+        this.bookId = bookId;
+        this.authorId = authorId;
     }
 
 }

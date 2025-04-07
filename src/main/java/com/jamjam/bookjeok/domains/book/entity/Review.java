@@ -17,15 +17,13 @@ public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private Long id;
+    private Long reviewId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid", nullable = false)
+    private Long memberUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Long bookId;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -44,11 +42,11 @@ public class Review {
 
     @Builder
     public Review(
-            Member member, Book book, String content, int rating,
+            Long memberUid, Long bookId, String content, int rating,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.member = member;
-        this.book = book;
+        this.memberUid = memberUid;
+        this.bookId = bookId;
         this.content = content;
         this.rating = rating;
         this.createdAt = createdAt;
