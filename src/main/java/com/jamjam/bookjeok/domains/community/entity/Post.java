@@ -40,7 +40,7 @@ public class Post {
     private boolean isDeleted = false;
 
     @Builder
-    public Post(
+    public Post (
             Long writerUid, String title, String content, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {

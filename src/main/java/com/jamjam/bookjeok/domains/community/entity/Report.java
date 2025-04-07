@@ -33,7 +33,7 @@ public class Report {
     private LocalDateTime reportedAt;
 
     @Builder
-    public Report(
+    public Report (
             Long postId, Long commentId, Long reporterUid,
             String reportReason, LocalDateTime reportedAt
     ) {

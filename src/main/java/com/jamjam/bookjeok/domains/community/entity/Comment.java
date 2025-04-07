@@ -40,7 +40,7 @@ public class Comment {
     private boolean isDeleted = false;
 
     @Builder
-    public Comment(
+    public Comment (
             Long writerUid, Long postId, String contents, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
