@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.notice.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,31 +16,30 @@ public class Notice {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notice_id")
-    private Long id;
+    private Long noticeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member writer;
+    @Column(name = "writer_uid")
+    private Long writerUid;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Lob
-    @Column(name = "contents", nullable = false)
+    @Column(name = "contents")
     private String contents;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
-    public Notice(Member writer, String title, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
-        this.writer = writer;
+    public Notice(Long writerUid, String title, String contents, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+        this.writerUid = writerUid;
         this.title = title;
         this.contents = contents;
         this.createdAt = createdAt;

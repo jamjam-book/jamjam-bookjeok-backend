@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.question.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,30 +16,28 @@ public class Question {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private Long id;
+    private Long questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member writer;
+    @Column(name = "writer_uid")
+    private Long writerUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_categories_id", nullable = false)
-    private QuestionCategory questionCategory;
+    @Column(name = "question_categories_id")
+    private Long questionCategoriesId;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
     @Lob
-    @Column(name = "contents", nullable = false)
+    @Column(name = "contents")
     private String contents;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Column(name = "questions_img_url")
@@ -48,12 +45,12 @@ public class Question {
 
     @Builder
     public Question(
-            Member writer, QuestionCategory questionCategory,
+            Long writerUid, Long questionCategoriesId,
             String title, String contents, LocalDateTime createdAt,
             LocalDateTime modifiedAt, boolean isDeleted, String questionsImgUrl
     ) {
-        this.writer = writer;
-        this.questionCategory = questionCategory;
+        this.writerUid = writerUid;
+        this.questionCategoriesId = questionCategoriesId;
         this.title = title;
         this.contents = contents;
         this.createdAt = createdAt;
