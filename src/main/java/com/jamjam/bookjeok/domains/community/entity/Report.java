@@ -17,19 +17,16 @@ public class Report {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
-    private Long id;
+    private Long reportId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @Column(name = "post_id", nullable = false)
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = false)
-    private Comment comment;
+    @Column(name = "comment_id")
+    private Long commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reporter_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member reporter;
+    @Column(name = "reporter_uid", nullable = false)
+    private Long reporterUid;
 
     @Column(name = "report_reason", nullable = false)
     private String reportReason;
@@ -39,14 +36,13 @@ public class Report {
 
     @Builder
     public Report(
-            Post post, Comment comment, Member reporter,
+            Long postId, Long commentId, Long reporterUid,
             String reportReason, LocalDateTime reportedAt
     ) {
-        this.post = post;
-        this.comment = comment;
-        this.reporter = reporter;
+        this.postId = postId;
+        this.commentId = commentId;
+        this.reporterUid = reporterUid;
         this.reportReason = reportReason;
         this.reportedAt = reportedAt;
     }
-
 }

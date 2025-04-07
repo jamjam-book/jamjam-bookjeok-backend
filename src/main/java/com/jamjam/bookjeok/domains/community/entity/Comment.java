@@ -17,15 +17,13 @@ public class Comment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long id;
+    private Long commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id", referencedColumnName = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "writer_uid", nullable = false)
+    private Long writerUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    @Column(name = "post_id", nullable = false)
+    private Long postId;
 
     @Column(name = "contents", nullable = false)
     private String contents;
@@ -44,11 +42,11 @@ public class Comment {
 
     @Builder
     public Comment(
-            Member member, Post post, String contents, boolean isValid,
+            Long writerUid, Long postId, String contents, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.member = member;
-        this.post = post;
+        this.writerUid = writerUid;
+        this.postId = postId;
         this.contents = contents;
         this.isValid = isValid;
         this.createdAt = createdAt;

@@ -15,25 +15,22 @@ public class Like {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
-    private Long id;
+    private Long likeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid", nullable = false)
+    private Long memberUid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @Column(name = "comment_id")
+    private Long commentId;
 
     @Builder
-    public Like(Member member, Post post, Comment comment) {
-        this.member = member;
-        this.post = post;
-        this.comment = comment;
+    public Like(Long memberUid, Long postId, Long commentId) {
+        this.memberUid = memberUid;
+        this.postId = postId;
+        this.commentId = commentId;
     }
 
 }

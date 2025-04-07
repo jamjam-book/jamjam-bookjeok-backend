@@ -17,11 +17,10 @@ public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long id;
+    private Long post_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid", referencedColumnName = "member_uid", nullable = false)
-    private Member writer;
+    @Column(name = "writer_uid", nullable = false)
+    private Long writerUid;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -43,10 +42,10 @@ public class Post {
 
     @Builder
     public Post(
-            Member writer, String title, String content, boolean isValid,
+            Long writerUid, String title, String content, boolean isValid,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.writer = writer;
+        this.writerUid = writerUid;
         this.title = title;
         this.content = content;
         this.isValid = isValid;
