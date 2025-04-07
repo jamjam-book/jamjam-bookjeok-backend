@@ -28,6 +28,10 @@ public class Book {
     @Column(name = "book_name")
     private String bookName;
 
+    @Lob
+    @Column(name = "book_info")
+    private String bookInfo;
+
     @Column(name = "isbn")
     private String isbn;
 
