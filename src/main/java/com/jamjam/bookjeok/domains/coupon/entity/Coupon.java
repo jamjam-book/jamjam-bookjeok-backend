@@ -25,6 +25,7 @@ public class Coupon {
     @Column(name = "coupon_detail")
     private String couponDetail;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "discount_type")
     private DiscountType discount_type;
 
@@ -50,7 +51,8 @@ public class Coupon {
     public Coupon(String couponName, String couponDetail,
                   DiscountType discount_type, int discount_value,
                   int min_order_amount, int max_discount_amount,
-                  LocalDateTime couponStartedAt, LocalDateTime couponExpiredAt, boolean deleted) {
+                  LocalDateTime couponStartedAt, LocalDateTime couponExpiredAt, boolean deleted
+    ) {
         this.couponName = couponName;
         this.couponDetail = couponDetail;
         this.discount_type = discount_type;

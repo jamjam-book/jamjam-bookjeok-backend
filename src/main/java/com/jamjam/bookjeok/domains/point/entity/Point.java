@@ -26,6 +26,7 @@ public class Point {
     @Column(name = "order_uid")
     private Long orderUid;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "point_type")
     private PointType pointType;
 
