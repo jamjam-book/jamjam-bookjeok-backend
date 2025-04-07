@@ -44,4 +44,5 @@ public class Report {
         this.reportReason = reportReason;
         this.reportedAt = reportedAt;
     }
+
 }

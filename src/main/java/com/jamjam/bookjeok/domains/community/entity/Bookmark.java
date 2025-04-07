@@ -28,7 +28,7 @@ public class Bookmark {
     private LocalDateTime createdAt;
 
     @Builder
-    public Bookmark(Long postId, Long memberUid, LocalDateTime createdAt) {
+    public Bookmark (Long postId, Long memberUid, LocalDateTime createdAt) {
         this.postId = postId;
         this.memberUid = memberUid;
         this.createdAt = createdAt;
