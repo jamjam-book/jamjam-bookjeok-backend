@@ -26,7 +26,7 @@ public class Like {
     private Long commentId;
 
     @Builder
-    public Like (Long memberUid, Long postId, Long commentId) {
+    public Like(Long memberUid, Long postId, Long commentId) {
         this.memberUid = memberUid;
         this.postId = postId;
         this.commentId = commentId;
