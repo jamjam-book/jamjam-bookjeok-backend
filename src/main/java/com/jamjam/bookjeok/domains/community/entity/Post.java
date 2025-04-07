@@ -16,27 +16,27 @@ public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
-    private Long post_id;
+    private Long postId;
 
-    @Column(name = "writer_uid", nullable = false)
+    @Column(name = "writer_uid")
     private Long writerUid;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     private String content;
 
-    @Column(name = "is_valid", nullable = false)
+    @Column(name = "is_valid")
     private boolean isValid = false;
 
-    @Column(name = "created_At", nullable = false)
+    @Column(name = "created_At")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder

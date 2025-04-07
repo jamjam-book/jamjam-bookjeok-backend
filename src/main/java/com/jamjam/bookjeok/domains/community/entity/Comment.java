@@ -18,25 +18,25 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @Column(name = "writer_uid", nullable = false)
+    @Column(name = "writer_uid")
     private Long writerUid;
 
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "contents", nullable = false)
+    @Column(name = "contents")
     private String contents;
 
-    @Column(name = "is_valid", nullable = false)
+    @Column(name = "is_valid")
     private boolean isValid = false;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder

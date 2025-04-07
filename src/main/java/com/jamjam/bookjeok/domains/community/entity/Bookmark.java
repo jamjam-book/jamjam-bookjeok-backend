@@ -18,13 +18,13 @@ public class Bookmark {
     @Column(name = "bookmark_id")
     private Long bookmarkId;
 
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Builder

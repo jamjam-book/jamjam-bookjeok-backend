@@ -17,19 +17,19 @@ public class Report {
     @Column(name = "report_id")
     private Long reportId;
 
-    @Column(name = "post_id", nullable = false)
+    @Column(name = "post_id")
     private Long postId;
 
     @Column(name = "comment_id")
     private Long commentId;
 
-    @Column(name = "reporter_uid", nullable = false)
+    @Column(name = "reporter_uid")
     private Long reporterUid;
 
-    @Column(name = "report_reason", nullable = false)
+    @Column(name = "report_reason")
     private String reportReason;
 
-    @Column(name = "reported_at", nullable = false)
+    @Column(name = "reported_at")
     private LocalDateTime reportedAt;
 
     @Builder

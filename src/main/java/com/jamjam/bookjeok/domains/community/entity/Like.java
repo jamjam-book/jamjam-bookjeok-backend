@@ -16,7 +16,7 @@ public class Like {
     @Column(name = "like_id")
     private Long likeId;
 
-    @Column(name = "member_uid", nullable = false)
+    @Column(name = "member_uid")
     private Long memberUid;
 
     @Column(name = "post_id")
