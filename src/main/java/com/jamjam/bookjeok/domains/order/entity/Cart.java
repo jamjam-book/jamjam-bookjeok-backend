@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.order.entity;
 
+import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,6 +44,22 @@ public class Cart {
         this.quantity = quantity;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+    }
+
+    public static void validateCartItemLimit(final int cartItemCountFromDb) {
+        final int MAX_CART_COUNT = 20;
+
+        if (cartItemCountFromDb >= MAX_CART_COUNT) {
+            throw new CartItemLimitExceededException("장바구니에는 최대 20까지 도서를 담을 수 있습니다.");
+        }
+    }
+
+    public static int calculateBookTotalPrice(final int quantity, final int price) {
+        return quantity * price;
+    }
+
+    public void addQuantity(final int quantity) {
+        this.quantity += quantity;
     }
 
 }
