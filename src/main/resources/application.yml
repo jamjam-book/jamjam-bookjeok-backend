@@ -5,9 +5,9 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ${LOCAL_DATASOURCE_URL}
-    username: ${LOCAL_DATASOURCE_USERNAME}
-    password: ${LOCAL_DATASOURCE_PASSWORD}
+    url: ${SPRING_LOCAL_DATASOURCE_URL}
+    username: ${SPRING_LOCAL_DATASOURCE_USERNAME}
+    password: ${SPRING_LOCAL_DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -27,7 +27,7 @@ mybatis:
   type-aliases-package: com.jamjam.bookjeok.domains
 
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 tosspayemnts:
   wiget-secret-key: ${WIDGET_SECRET_KEY}
