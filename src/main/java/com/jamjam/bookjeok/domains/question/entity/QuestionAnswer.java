@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.question.entity;
 
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,36 +16,34 @@ public class QuestionAnswer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
-    private Long id;
+    private Long answerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", nullable = false)
-    private Question question;
+    @Column(name = "question_id")
+    private Long questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_uid")
-    private Member writer;
+    @Column(name = "writer_uid")
+    private Long writerUid;
 
     @Lob
-    @Column(name = "contents", nullable = false)
+    @Column(name = "contents")
     private String contents;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
     public QuestionAnswer(
-            Question question, Member writer, String contents,
+            Long questionId, Long writerUid, String contents,
             LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.question = question;
-        this.writer = writer;
+        this.questionId = questionId;
+        this.writerUid = writerUid;
         this.contents = contents;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;

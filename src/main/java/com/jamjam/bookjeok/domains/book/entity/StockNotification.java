@@ -15,20 +15,18 @@ public class StockNotification {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
-    private Long id;
+    private Long notificationId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id")
+    private Long bookId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_uid", nullable = false)
-    private Member member;
+    @Column(name = "member_uid")
+    private Long memberUid;
 
     @Builder
-    public StockNotification(Book book, Member member) {
-        this.book = book;
-        this.member = member;
+    public StockNotification(Long bookId, Long memberUid) {
+        this.bookId = bookId;
+        this.memberUid = memberUid;
     }
 
 }

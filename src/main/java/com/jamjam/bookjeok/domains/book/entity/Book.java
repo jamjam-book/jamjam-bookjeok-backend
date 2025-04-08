@@ -17,51 +17,53 @@ public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private Long id;
+    private Long bookId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_id", nullable = false)
-    private Publisher publisher;
+    @Column(name = "publisher_id")
+    private Long publisherId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private BookCategory bookCategory;
+    @Column(name = "category_id")
+    private Long categoryId;
 
-    @Column(name = "book_name", nullable = false)
+    @Column(name = "book_name")
     private String bookName;
 
-    @Column(name = "isbn", nullable = false)
+    @Lob
+    @Column(name = "book_info")
+    private String bookInfo;
+
+    @Column(name = "isbn")
     private String isbn;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "published_at", nullable = false)
+    @Column(name = "published_at")
     private LocalDate publishedAt;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private int price;
 
-    @Column(name = "stock_quantity", nullable = false)
+    @Column(name = "stock_quantity")
     private int stockQuantity;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
     @Builder
     public Book(
-            Publisher publisher, BookCategory bookCategory, String bookName,
+            Long publisherId, Long categoryId, String bookName,
             String isbn, String imageUrl, LocalDate publishedAt, int price,
             int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
-        this.publisher = publisher;
-        this.bookCategory = bookCategory;
+        this.publisherId = publisherId;
+        this.categoryId = categoryId;
         this.bookName = bookName;
         this.isbn = isbn;
         this.imageUrl = imageUrl;
