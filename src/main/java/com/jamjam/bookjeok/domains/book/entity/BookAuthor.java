@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class BookAuthor {
 
     @Id @EmbeddedId
-    private BookAuthorId id;
+    private BookAuthorId bookAuthorId;
 
     @Column(name = "book_id")
     private Long bookId;
