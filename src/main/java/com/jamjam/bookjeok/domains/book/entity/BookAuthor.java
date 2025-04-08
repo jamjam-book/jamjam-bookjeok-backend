@@ -15,16 +15,4 @@ public class BookAuthor {
     @Id @EmbeddedId
     private BookAuthorId bookAuthorId;
 
-    @Column(name = "book_id")
-    private Long bookId;
-
-    @Column(name = "author_id")
-    private Long authorId;
-
-    @Builder
-    public BookAuthor(Long bookId, Long authorId) {
-        this.bookId = bookId;
-        this.authorId = authorId;
-    }
-
 }
