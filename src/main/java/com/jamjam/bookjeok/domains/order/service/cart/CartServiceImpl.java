@@ -62,8 +62,7 @@ public class CartServiceImpl implements CartService {
         Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
 
         // 장바구니에 도서 정보가 있는지 확인한다.
-        Cart findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId())
-                .orElseThrow(() -> new CartBookNotFoundException("장바구니에 해당 도서 정보가 없습니다."));
+        Cart findCart = findCartOrThrow(cartRequest.memberUid(), cartRequest.bookId());
 
         // 장바구니에 도서 정보가 있는 경우에만 수량을 변경할 수 있다.
         findCart.updateQuantity(cartRequest.quantity());
@@ -74,9 +73,23 @@ public class CartServiceImpl implements CartService {
         return toCartResponse(findCart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
     }
 
+    @Override
+    public void deleteBookFromCartByMemberId(CartRequest cartRequest) {
+        // 장바구니에 삭제할 도서 정보가 있는지 조회한다.
+        Cart findCart = findCartOrThrow(cartRequest.memberUid(), cartRequest.bookId());
+
+        // 삭제할 도서 정보가 있으면 삭제한다.
+        cartRepository.delete(findCart);
+    }
+
     private Book findBookOrThrow(Long bookId, String bookName, int price) {
         return cartMapper.findBookByIdAndBookNameAndPrice(bookId, bookName, price)
                 .orElseThrow(() -> new CartItemLimitExceededException("존재하지 않는 책 정보 입니다."));
+    }
+
+    private Cart findCartOrThrow(Long memberUid, Long bookId) {
+        return cartMapper.findCartByMemberUidAndBookId(memberUid, bookId)
+                .orElseThrow(() -> new CartBookNotFoundException("장바구니에 해당 도서 정보가 없습니다."));
     }
 
     private Cart createCartEntity(Long memberUid, Long bookId, int quantity) {

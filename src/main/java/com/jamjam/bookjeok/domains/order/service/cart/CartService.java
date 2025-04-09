@@ -9,4 +9,6 @@ public interface CartService {
 
     CartResponse modifyBookQuantity(CartRequest cartRequest);
 
+    void deleteBookFromCartByMemberId(CartRequest cartRequest);
+
 }

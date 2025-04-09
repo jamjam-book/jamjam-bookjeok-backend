@@ -39,4 +39,15 @@ public class CartController {
                 .body(ApiResponse.success(cartResponse));
     }
 
+    @DeleteMapping("/cart")
+    public ResponseEntity<ApiResponse<CartResponse>> deleteBookFromCartByMemberId(
+            @RequestBody @Validated CartRequest cartRequest
+    ) {
+        cartService.deleteBookFromCartByMemberId(cartRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(null));
+    }
+
 }
