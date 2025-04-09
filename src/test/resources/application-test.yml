@@ -25,3 +25,11 @@ mybatis:
     map-underscore-to-camel-case: true
   mapper-locations: mappers/**/*.xml
   type-aliases-package: com.jamjam.bookjeok.domains
+
+tosspayemnts:
+  wiget-secret-key: ${WIDGET_SECRET_KEY}
+  api-secret-key: ${API_SECRET_KEY}
+
+naver:
+  book-client-api: ${BOOK_CLIENT_ID}
+  book-secret-key: ${BOOK_CLIENT_KEY}
