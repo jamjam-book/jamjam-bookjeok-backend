@@ -38,7 +38,7 @@ public class CartServiceImpl implements CartService {
 
         if (findCart.isPresent()) { // 장바구니에 동일한 도서가 있다면?
             Cart cart = findCart.get();
-            cart.addQuantity(cartRequest.quantity()); // 해당 도서에서 개수를 증가시킨다.
+            cart.updateQuantity(cartRequest.quantity() + cart.getQuantity()); // 해당 도서에서 개수를 증가시킨다.
             int totalPrice = calculateBookTotalPrice(cart.getQuantity(), cartRequest.price()); // 총 금액을 구한다.
 
             return toCartResponse(cart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.

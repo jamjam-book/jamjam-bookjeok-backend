@@ -59,7 +59,8 @@ class CartTest {
                 .quantity(10)
                 .createdAt(LocalDateTime.now().withNano(0))
                 .build();
-        cart.addQuantity(20);
+
+        cart.updateQuantity(cart.getQuantity() + 20);
 
         assertThat(cart.getQuantity()).isEqualTo(30);
     }
