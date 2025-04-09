@@ -58,10 +58,6 @@ public class Cart {
         return quantity * price;
     }
 
-    public void addQuantity(final int quantity) {
-        this.quantity += quantity;
-    }
-
     public void updateQuantity(final int quantity) {
         this.quantity = quantity;
     }
