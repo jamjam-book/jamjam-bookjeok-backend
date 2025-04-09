@@ -7,4 +7,6 @@ public interface CartService {
 
     CartResponse createBookToCart(CartRequest cartRequest);
 
+    CartResponse modifyBookQuantity(CartRequest cartRequest);
+
 }

@@ -30,4 +30,14 @@ public class CartExceptionHandler {
                 .body(ApiResponse.failure(errorCode, errorMessage));
     }
 
+    @ExceptionHandler(CartBookNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> cartBookNotFoundExceptionHandler(CartBookNotFoundException e) {
+        String errorCode = HttpStatus.NOT_FOUND.getReasonPhrase();
+        String errorMessage = e.getMessage();
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.failure(errorCode, errorMessage));
+    }
+
 }

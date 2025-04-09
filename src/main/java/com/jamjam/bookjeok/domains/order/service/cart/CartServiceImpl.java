@@ -6,6 +6,7 @@ import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
 import com.jamjam.bookjeok.domains.order.entity.Cart;
 import com.jamjam.bookjeok.domains.order.repository.cart.CartRepository;
 import com.jamjam.bookjeok.domains.order.repository.cart.mapper.CartMapper;
+import com.jamjam.bookjeok.exception.order.cart.CartBookNotFoundException;
 import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponse createBookToCart(CartRequest cartRequest) {
-        // books db에 존재하는 정보인지 검증하는 로직
-        Book book = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
+        // books 테이블에 존재하는 정보인지 검증하는 로직
+        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
 
         // 장바구니에 동일한 도서명이 있는지 검증하는 로직
         Optional<Cart> findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId());
@@ -40,19 +41,37 @@ public class CartServiceImpl implements CartService {
             cart.addQuantity(cartRequest.quantity()); // 해당 도서에서 개수를 증가시킨다.
             int totalPrice = calculateBookTotalPrice(cart.getQuantity(), cartRequest.price()); // 총 금액을 구한다.
 
-            return toCartResponse(cart, book, totalPrice); // 응답 객체에 넣고 반환한다.
+            return toCartResponse(cart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
         } else { // 장바구니에 동일한 도서명이 없다면?
             int cartCount = cartMapper.findCartCountByMemberUid(cartRequest.memberUid()); // 장바구니에 있는 도서 정보 개수를 파악
             validateCartItemLimit(cartCount); // 장바구니에 도서 정보가 20개 이상인지 검증
 
             // 검증이 완료되었으면 Cart 엔티티 생성
-            Cart cart = createCartEntity(cartRequest.memberUid(), book.getBookId(), cartRequest.quantity());
+            Cart cart = createCartEntity(cartRequest.memberUid(), findBook.getBookId(), cartRequest.quantity());
             Cart savedCart = cartRepository.save(cart); // 엔티티 영속성 컨텍스트에 저장
 
             int totalPrice = calculateBookTotalPrice(savedCart.getQuantity(), cartRequest.price()); // 총 금액을 구한다.
 
-            return toCartResponse(savedCart, book, totalPrice); // 응답 객체에 넣고 반환한다.
+            return toCartResponse(savedCart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
         }
+    }
+
+    @Override
+    public CartResponse modifyBookQuantity(CartRequest cartRequest) {
+        // books 테이블에 존재하는 정보인지 검증하는 로직
+        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
+
+        // 장바구니에 도서 정보가 있는지 확인한다.
+        Cart findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId())
+                .orElseThrow(() -> new CartBookNotFoundException("장바구니에 추가된 도서만 수량을 변경할 수 있습니다."));
+
+        // 장바구니에 도서 정보가 있는 경우에만 수량을 변경할 수 있다.
+        findCart.updateQuantity(cartRequest.quantity());
+
+        // 변경된 수량과 도서 가격으로 결제 예정 금액을 구한다.
+        int totalPrice = calculateBookTotalPrice(findCart.getQuantity(), findBook.getPrice());
+
+        return toCartResponse(findCart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
     }
 
     private Book findBookOrThrow(Long bookId, String bookName, int price) {
