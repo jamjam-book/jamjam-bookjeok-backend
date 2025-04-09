@@ -1,6 +1,8 @@
 package com.jamjam.bookjeok.domains.order.controller.cart;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.domains.order.dto.cart.request.CartMemberIdRequest;
+import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookListResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.response.CartResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
 import com.jamjam.bookjeok.domains.order.service.cart.CartService;
@@ -16,6 +18,17 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    
+    @GetMapping("/cart")
+    public ResponseEntity<ApiResponse<CartBookListResponse>> getBooksInCart(
+            @RequestBody @Validated CartMemberIdRequest cartMemberIdRequest
+    ) {
+        CartBookListResponse cartBookListResponse = cartService.getBooksInCart(cartMemberIdRequest.memberUid());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(cartBookListResponse));
+    }
 
     @PostMapping("/cart")
     public ResponseEntity<ApiResponse<CartResponse>> createBookToCart(

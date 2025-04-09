@@ -1,6 +1,8 @@
 package com.jamjam.bookjeok.domains.order.service.cart;
 
 import com.jamjam.bookjeok.domains.book.entity.Book;
+import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookListResponse;
+import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.response.CartResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
 import com.jamjam.bookjeok.domains.order.entity.Cart;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.jamjam.bookjeok.domains.order.entity.Cart.calculateBookTotalPrice;
@@ -27,6 +30,12 @@ public class CartServiceImpl implements CartService {
 
     private final CartMapper cartMapper;
     private final CartRepository cartRepository;
+
+    @Override
+    public CartBookListResponse getBooksInCart(Long memberUid) {
+        List<CartBookResponse> bookList = cartMapper.findCartBooksByMemberUid(memberUid);
+        return new CartBookListResponse(bookList);
+    }
 
     @Override
     public CartResponse createBookToCart(CartRequest cartRequest) {

@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.order.controller.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jamjam.bookjeok.domains.order.dto.cart.request.CartMemberIdRequest;
 import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,41 @@ class CartControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Test
+    @DisplayName("memberUid로 장바구니 목록을 조회하는 테스트")
+    void testGetBooksInCart() throws Exception {
+        CartMemberIdRequest cartMemberIdRequest = CartMemberIdRequest.builder()
+                .memberUid(1L)
+                .build();
+
+        mockMvc.perform(get("/api/v1/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cartMemberIdRequest))
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.bookList[0].memberUid").exists())
+                .andExpect(jsonPath("$.data.bookList[0].memberUid").value(1L))
+                .andExpect(jsonPath("$.data.bookList[0].bookId").exists())
+                .andExpect(jsonPath("$.data.bookList[0].bookId").value(1L))
+                .andExpect(jsonPath("$.data.bookList[0].bookName").value("태백산맥 1권"))
+                .andExpect(jsonPath("$.data.bookList[0].totalPrice").exists())
+                .andExpect(jsonPath("$.data.bookList[0].totalPrice").value(180000))
+                .andExpect(jsonPath("$.data.bookList[0].quantity").value(10))
+                .andExpect(jsonPath("$.data.bookList[1].memberUid").exists())
+                .andExpect(jsonPath("$.data.bookList[1].memberUid").value(1L))
+                .andExpect(jsonPath("$.data.bookList[1].bookId").exists())
+                .andExpect(jsonPath("$.data.bookList[1].bookId").value(5L))
+                .andExpect(jsonPath("$.data.bookList[1].bookName").value("7년의 밤"))
+                .andExpect(jsonPath("$.data.bookList[1].totalPrice").exists())
+                .andExpect(jsonPath("$.data.bookList[1].totalPrice").value(48000))
+                .andExpect(jsonPath("$.data.bookList[1].quantity").value(3))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.message").doesNotExist())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+    }
 
     @Test
     @DisplayName("장바구니에 도서를 등록하는 테스트")
