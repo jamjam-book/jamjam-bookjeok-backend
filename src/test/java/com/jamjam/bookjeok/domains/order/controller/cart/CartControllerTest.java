@@ -13,8 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -129,6 +128,52 @@ class CartControllerTest {
                 ).andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("장바구니에 해당 도서 정보가 없습니다."))
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    @DisplayName("장바구니에 있는 도서 정보를 삭제하는 테스트")
+    void testDeleteBookFromCartByMemberId() throws Exception {
+        CartRequest cartRequest = CartRequest.builder()
+                .memberUid(1L)
+                .bookId(1L)
+                .bookName("태백산맥 1권")
+                .price(18000)
+                .quantity(5)
+                .build();
+
+        mockMvc.perform(delete("/api/v1/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cartRequest))
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.message").doesNotExist())
+                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    @DisplayName("장바구니에 없는 도서 정보를 삭제할 때 예외가 발생하는 테스트")
+    void testDeleteBookFromCartByMemberIdException() throws Exception {
+        CartRequest cartRequest = CartRequest.builder()
+                .memberUid(1L)
+                .bookId(10L)
+                .bookName("Clean Code")
+                .price(25000)
+                .quantity(1)
+                .build();
+
+        mockMvc.perform(delete("/api/v1/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cartRequest))
+                ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.message").value("장바구니에 해당 도서 정보가 없습니다."))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
     }

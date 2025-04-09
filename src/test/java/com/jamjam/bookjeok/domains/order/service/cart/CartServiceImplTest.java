@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Slf4j
 @Transactional
@@ -105,6 +106,36 @@ class CartServiceImplTest {
                 .build();
 
         assertThatThrownBy(() -> cartService.modifyBookQuantity(cartRequest))
+                .isInstanceOf(CartBookNotFoundException.class)
+                .hasMessage("장바구니에 해당 도서 정보가 없습니다.");
+    }
+
+    @Test
+    @DisplayName("memberUid와 bookId로 장바구니에 있는 도서 정보 삭제하는 테스트")
+    void testDeleteBookFromCartByMemberId() {
+        CartRequest cartRequest = CartRequest.builder()
+                .memberUid(1L)
+                .bookId(1L)
+                .bookName("태백산맥 1권")
+                .price(18000)
+                .quantity(2)
+                .build();
+
+        assertDoesNotThrow(() -> cartService.deleteBookFromCartByMemberId(cartRequest));
+    }
+
+    @Test
+    @DisplayName("장바구니에 없는 도서 정보를 삭제할 때 예외가 발생하는 테스트")
+    void testDeleteBookFromCartByMemberIdException() {
+        CartRequest cartRequest = CartRequest.builder()
+                .memberUid(1L)
+                .bookId(2L)
+                .bookName("채식주의자")
+                .price(13000)
+                .quantity(1)
+                .build();
+
+        assertThatThrownBy(() -> cartService.deleteBookFromCartByMemberId(cartRequest))
                 .isInstanceOf(CartBookNotFoundException.class)
                 .hasMessage("장바구니에 해당 도서 정보가 없습니다.");
     }
