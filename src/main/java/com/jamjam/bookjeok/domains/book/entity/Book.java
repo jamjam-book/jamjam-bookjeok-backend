@@ -76,4 +76,26 @@ public class Book {
         this.isDeleted = isDeleted;
     }
 
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateBook(final Long publisherId, final Long categoryId, final String bookName, final String bookInfo,
+                           final String isbn, final LocalDate publishedAt, final int price,
+                           final int stockQuantity, final LocalDateTime modifiedAt) {
+        this.publisherId = publisherId;
+        this.categoryId = categoryId;
+        this.bookName = bookName;
+        this.bookInfo = bookInfo;
+        this.isbn = isbn;
+        this.publishedAt = publishedAt;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public void deleteBook(final boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
 }

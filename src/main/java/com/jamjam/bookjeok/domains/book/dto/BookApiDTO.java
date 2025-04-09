@@ -1,12 +1,11 @@
 package com.jamjam.bookjeok.domains.book.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
-@Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookApiDTO {
 
     private String title;
@@ -21,4 +20,8 @@ public class BookApiDTO {
     private String toc;
     private String categoryName;
 
+    public BookApiDTO(String toc, String categoryName) {
+        this.toc = toc;
+        this.categoryName = categoryName;
+    }
 }

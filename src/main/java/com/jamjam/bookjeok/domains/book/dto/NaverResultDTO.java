@@ -7,7 +7,6 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
 public class NaverResultDTO {
     private String lastBuildDate;
