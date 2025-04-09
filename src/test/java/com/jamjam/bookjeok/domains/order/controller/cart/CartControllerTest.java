@@ -129,7 +129,7 @@ class CartControllerTest {
                 ).andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.message").value("장바구니에 추가된 도서만 수량을 변경할 수 있습니다."))
+                .andExpect(jsonPath("$.message").value("장바구니에 해당 도서 정보가 없습니다."))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
     }
 

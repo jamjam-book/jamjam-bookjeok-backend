@@ -106,7 +106,7 @@ class CartServiceImplTest {
 
         assertThatThrownBy(() -> cartService.modifyBookQuantity(cartRequest))
                 .isInstanceOf(CartBookNotFoundException.class)
-                .hasMessage("장바구니에 추가된 도서만 수량을 변경할 수 있습니다.");
+                .hasMessage("장바구니에 해당 도서 정보가 없습니다.");
     }
 
 }
