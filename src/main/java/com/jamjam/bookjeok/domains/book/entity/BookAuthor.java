@@ -15,4 +15,9 @@ public class BookAuthor {
     @Id @EmbeddedId
     private BookAuthorId bookAuthorId;
 
+    @Builder
+    public BookAuthor(BookAuthorId bookAuthorId) {
+        this.bookAuthorId = bookAuthorId;
+    }
+
 }
