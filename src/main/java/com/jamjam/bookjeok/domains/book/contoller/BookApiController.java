@@ -45,7 +45,7 @@ public class BookApiController {
     @Value("${image.image-dir}")
     private String filepath;
 
-    @PostMapping("/bookApi/regist")
+    @PostMapping("/bookapi/regist")
     public ResponseEntity<ApiResponse<Void>> registBook(@RequestParam(value = "keyword") String keyword) {
 
         ResponseEntity<String> exchangeResponse = exchange(keyword);
