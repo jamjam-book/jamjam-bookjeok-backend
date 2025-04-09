@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
 
         // 장바구니에 도서 정보가 있는지 확인한다.
         Cart findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId())
-                .orElseThrow(() -> new CartBookNotFoundException("장바구니에 추가된 도서만 수량을 변경할 수 있습니다."));
+                .orElseThrow(() -> new CartBookNotFoundException("장바구니에 해당 도서 정보가 없습니다."));
 
         // 장바구니에 도서 정보가 있는 경우에만 수량을 변경할 수 있다.
         findCart.updateQuantity(cartRequest.quantity());
