@@ -58,13 +58,14 @@ public class Book {
 
     @Builder
     public Book(
-            Long publisherId, Long categoryId, String bookName,
+            Long publisherId, Long categoryId, String bookName, String bookInfo,
             String isbn, String imageUrl, LocalDate publishedAt, int price,
             int stockQuantity, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted
     ) {
         this.publisherId = publisherId;
         this.categoryId = categoryId;
         this.bookName = bookName;
+        this.bookInfo = bookInfo;
         this.isbn = isbn;
         this.imageUrl = imageUrl;
         this.publishedAt = publishedAt;
