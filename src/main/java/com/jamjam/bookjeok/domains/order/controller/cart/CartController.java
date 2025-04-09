@@ -28,4 +28,15 @@ public class CartController {
                 .body(ApiResponse.success(cartResponse));
     }
 
+    @PutMapping("/cart")
+    public ResponseEntity<ApiResponse<CartResponse>> modifyBookQuantity(
+            @RequestBody @Validated CartRequest cartRequest
+    ) {
+        CartResponse cartResponse = cartService.modifyBookQuantity(cartRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(cartResponse));
+    }
+
 }
