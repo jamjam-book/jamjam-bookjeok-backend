@@ -5,14 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
 @Getter
 @ToString
 @NoArgsConstructor
-public class InterestAuthorDTO {
+public class BookNameDTO {
 
-    private String authorName;
-    private List<BookNameDTO> bookList;
+    private String bookName;
 
 }
