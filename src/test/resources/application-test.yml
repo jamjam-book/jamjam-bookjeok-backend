@@ -23,6 +23,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: mappers/**/*.xml
   type-aliases-package: com.jamjam.bookjeok.domains
 
@@ -33,3 +34,7 @@ tosspayemnts:
 naver:
   book-client-api: ${BOOK_CLIENT_ID}
   book-secret-key: ${BOOK_CLIENT_KEY}
+
+image:
+  image-dir: ${IMAGE-DIRECTORY}
+  image-url: ${IMAGE-URL}
