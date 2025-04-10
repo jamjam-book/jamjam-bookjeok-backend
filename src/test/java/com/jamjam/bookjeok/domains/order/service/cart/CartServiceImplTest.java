@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.order.service.cart;
 
+import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookListResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.response.CartResponse;
 import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
 import com.jamjam.bookjeok.exception.order.cart.CartBookNotFoundException;
@@ -23,6 +24,16 @@ class CartServiceImplTest {
 
     @Autowired
     private CartService cartService;
+
+    @Test
+    @DisplayName("memberUid로 장바구니 목록 조회")
+    void testGetBooksInCart() {
+        Long memberUid = 1L;
+
+        CartBookListResponse cartBookListResponse = cartService.getBooksInCart(memberUid);
+
+        assertThat(cartBookListResponse).isNotNull();
+    }
 
     @Test
     @DisplayName("장바구니에 도서 정보 추가하는 테스트")

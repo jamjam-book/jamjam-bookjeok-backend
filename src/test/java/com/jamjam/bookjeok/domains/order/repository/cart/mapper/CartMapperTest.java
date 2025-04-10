@@ -2,6 +2,7 @@ package com.jamjam.bookjeok.domains.order.repository.cart.mapper;
 
 import com.jamjam.bookjeok.domains.book.entity.Book;
 import com.jamjam.bookjeok.domains.member.entity.Member;
+import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse;
 import com.jamjam.bookjeok.domains.order.entity.Cart;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +23,17 @@ class CartMapperTest {
 
     @Autowired
     private CartMapper cartMapper;
+
+    @Test
+    @DisplayName("memberUid로 장바구니 목록 조회")
+    void testFindCartBooksByMemberUid() {
+        Long memberUid = 1L;
+
+        List<CartBookResponse> cartBookResponse = cartMapper.findCartBooksByMemberUid(memberUid);
+
+        assertThat(cartBookResponse).isNotNull();
+        assertThat(cartBookResponse.size()).isEqualTo(2);
+    }
 
     @Test
     @DisplayName("memberUid로 회원 정보를 찾는 테스트")
@@ -53,7 +66,7 @@ class CartMapperTest {
 
         int count = cartMapper.findCartCountByMemberUid(memberUid);
 
-        assertThat(count).isEqualTo(1);
+        assertThat(count).isEqualTo(2);
     }
 
     @Test

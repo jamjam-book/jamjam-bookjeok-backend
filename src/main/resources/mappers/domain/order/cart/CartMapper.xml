@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jamjam.bookjeok.domains.order.repository.cart.mapper.CartMapper">
+    <select id="findCartBooksByMemberUid" resultType="com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse">
+        SELECT
+            c.member_uid, b.book_id, b.book_name, c.quantity,
+            c.quantity * b.price as total_price, b.image_url
+        FROM books b
+        JOIN carts c ON b.book_id = c.book_id
+        WHERE c.member_uid = #{ memberUid }
+        AND b.is_deleted = false;
+    </select>
+
     <select id="findMemberById" resultType="com.jamjam.bookjeok.domains.member.entity.Member">
         SELECT
             member_uid, member_id, password,
