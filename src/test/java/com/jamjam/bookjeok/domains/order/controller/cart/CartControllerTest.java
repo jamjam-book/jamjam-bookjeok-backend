@@ -72,7 +72,6 @@ class CartControllerTest {
                 .memberUid(1L)
                 .bookId(2L)
                 .bookName("채식주의자")
-                .price(13000)
                 .quantity(10)
                 .build();
 
@@ -101,7 +100,6 @@ class CartControllerTest {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(2L)
-                .price(13000)
                 .quantity(10)
                 .build();
 
@@ -123,7 +121,6 @@ class CartControllerTest {
                 .memberUid(1L)
                 .bookId(1L)
                 .bookName("태백산맥 1권")
-                .price(18000)
                 .quantity(5)
                 .build();
 
@@ -153,7 +150,6 @@ class CartControllerTest {
                 .memberUid(1L)
                 .bookId(2L)
                 .bookName("채식주의자")
-                .price(13000)
                 .quantity(7)
                 .build();
 
@@ -175,7 +171,6 @@ class CartControllerTest {
                 .memberUid(1L)
                 .bookId(1L)
                 .bookName("태백산맥 1권")
-                .price(18000)
                 .quantity(5)
                 .build();
 
@@ -198,7 +193,6 @@ class CartControllerTest {
                 .memberUid(1L)
                 .bookId(10L)
                 .bookName("Clean Code")
-                .price(25000)
                 .quantity(1)
                 .build();
 

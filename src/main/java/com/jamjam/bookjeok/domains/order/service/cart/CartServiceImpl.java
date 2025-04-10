@@ -40,15 +40,16 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse createBookToCart(CartRequest cartRequest) {
         // books 테이블에 존재하는 정보인지 검증하는 로직
-        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
+        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName());
 
         // 장바구니에 동일한 도서명이 있는지 검증하는 로직
         Optional<Cart> findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId());
 
         if (findCart.isPresent()) { // 장바구니에 동일한 도서가 있다면?
             Cart cart = findCart.get();
-            cart.updateQuantity(cartRequest.quantity() + cart.getQuantity()); // 해당 도서에서 개수를 증가시킨다.
-            int totalPrice = calculateBookTotalPrice(cart.getQuantity(), cartRequest.price()); // 총 금액을 구한다.
+            int bookQuantity = cartRequest.quantity() + cart.getQuantity();
+            cart.updateQuantity(bookQuantity); // 해당 도서에서 개수를 증가시킨다.
+            int totalPrice = calculateBookTotalPrice(cart.getQuantity(), findBook.getPrice()); // 총 금액을 구한다.
 
             return toCartResponse(cart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
         } else { // 장바구니에 동일한 도서명이 없다면?
@@ -59,7 +60,7 @@ public class CartServiceImpl implements CartService {
             Cart cart = createCartEntity(cartRequest.memberUid(), findBook.getBookId(), cartRequest.quantity());
             Cart savedCart = cartRepository.save(cart); // 엔티티 영속성 컨텍스트에 저장
 
-            int totalPrice = calculateBookTotalPrice(savedCart.getQuantity(), cartRequest.price()); // 총 금액을 구한다.
+            int totalPrice = calculateBookTotalPrice(savedCart.getQuantity(), findBook.getPrice()); // 총 금액을 구한다.
 
             return toCartResponse(savedCart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
         }
@@ -68,7 +69,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse modifyBookQuantity(CartRequest cartRequest) {
         // books 테이블에 존재하는 정보인지 검증하는 로직
-        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName(), cartRequest.price());
+        Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName());
 
         // 장바구니에 도서 정보가 있는지 확인한다.
         Cart findCart = findCartOrThrow(cartRequest.memberUid(), cartRequest.bookId());
@@ -91,8 +92,8 @@ public class CartServiceImpl implements CartService {
         cartRepository.delete(findCart);
     }
 
-    private Book findBookOrThrow(Long bookId, String bookName, int price) {
-        return cartMapper.findBookByIdAndBookNameAndPrice(bookId, bookName, price)
+    private Book findBookOrThrow(Long bookId, String bookName) {
+        return cartMapper.findByBookIdAndBookName(bookId, bookName)
                 .orElseThrow(() -> new CartItemLimitExceededException("존재하지 않는 책 정보 입니다."));
     }
 

@@ -14,7 +14,7 @@ public interface CartMapper {
 
     Optional<Member> findMemberById(Long memberUid);
 
-    Optional<Book> findBookByIdAndBookNameAndPrice(Long bookId, String bookName, int price);
+    Optional<Book> findByBookIdAndBookName(Long bookId, String bookName);
 
     int findCartCountByMemberUid(Long memberUid);
 
