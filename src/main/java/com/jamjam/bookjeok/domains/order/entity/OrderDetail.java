@@ -24,8 +24,8 @@ public class OrderDetail {
     @Column(name = "book_id")
     private Long bookId;
 
-    @Column(name = "price")
-    private int price;
+    @Column(name = "total_price")
+    private int totalPrice;
 
     @Column(name = "quantity")
     private int quantity;
@@ -36,17 +36,21 @@ public class OrderDetail {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
+
     @Builder
     public OrderDetail(
-            Long orderUid, Long bookId, int price,
-            int quantity, boolean isCanceled, LocalDateTime createdAt
+            Long orderUid, Long bookId, int totalPrice, int quantity,
+            boolean isCanceled, LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
         this.orderUid = orderUid;
         this.bookId = bookId;
-        this.price = price;
+        this.totalPrice = totalPrice;
         this.quantity = quantity;
         this.isCanceled = isCanceled;
         this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
 }
