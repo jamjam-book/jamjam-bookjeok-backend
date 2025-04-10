@@ -9,8 +9,8 @@
             m.member_id,
             m.nickname
         FROM follows f
-        JOIN members m ON f.following_id = m.member_uid
-        WHERE f.follower_id = (
+        JOIN members m ON f.following_uid = m.member_uid
+        WHERE f.follower_uid = (
             SELECT member_uid
             FROM members
             WHERE member_id = #{ memberId }
