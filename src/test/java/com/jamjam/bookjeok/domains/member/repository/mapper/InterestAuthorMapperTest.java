@@ -1,6 +1,6 @@
 package com.jamjam.bookjeok.domains.member.repository.mapper;
 
-import com.jamjam.bookjeok.domains.member.dto.response.InterestAuthorDTO;
+import com.jamjam.bookjeok.domains.member.dto.InterestAuthorDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

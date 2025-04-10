@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
-import com.jamjam.bookjeok.domains.member.dto.response.InterestAuthorDTO;
+import com.jamjam.bookjeok.domains.member.dto.InterestAuthorDTO;
 import com.jamjam.bookjeok.domains.member.service.InterestAuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

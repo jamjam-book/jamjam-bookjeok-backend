@@ -1,6 +1,6 @@
 package com.jamjam.bookjeok.domains.member.service;
 
-import com.jamjam.bookjeok.domains.member.dto.response.InterestAuthorDTO;
+import com.jamjam.bookjeok.domains.member.dto.InterestAuthorDTO;
 import com.jamjam.bookjeok.domains.member.repository.mapper.InterestAuthorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
