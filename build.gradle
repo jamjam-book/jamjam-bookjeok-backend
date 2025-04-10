@@ -72,6 +72,9 @@ dependencies {
 	// jsoup - web crawling
 	// https://mvnrepository.com/artifact/org.jsoup/jsoup
 	implementation("org.jsoup:jsoup:1.17.2")
+
+	// io
+	implementation 'commons-io:commons-io:2.14.0'
 }
 
 tasks.named('test') {
