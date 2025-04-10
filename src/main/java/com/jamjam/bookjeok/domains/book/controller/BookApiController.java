@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.book.contoller;
+package com.jamjam.bookjeok.domains.book.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
