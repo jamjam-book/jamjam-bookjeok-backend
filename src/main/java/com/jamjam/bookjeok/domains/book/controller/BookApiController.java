@@ -33,7 +33,6 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class BookApiController {
 
-    private final BookAdminService bookAdminService;
     private final BookApiService bookApiService;
 
     @Value("${naver.book-client-api}")
