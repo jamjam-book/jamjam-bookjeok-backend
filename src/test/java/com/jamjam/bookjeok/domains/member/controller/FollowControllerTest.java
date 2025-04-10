@@ -1,8 +1,8 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamjam.bookjeok.domains.member.dto.response.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.PostSummaryDTO;
+import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
+import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.service.FollowService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,15 +67,10 @@ class FollowControllerTest {
         String writerId = "user02";
 
         List<PostSummaryDTO> mockPostList = List.of(
-                PostSummaryDTO.builder()
-                        .nickname("닉네임02")
-                        .title("제목1")
-                        .build(),
-                PostSummaryDTO.builder()
-                        .nickname("닉네임02")
-                        .title("제목2")
-                        .build()
+                new PostSummaryDTO("닉네임02", "제목01"),
+                new PostSummaryDTO("닉네임02", "제목02")
         );
+
 
         when(followService.getPostListByWriterId(writerId)).thenReturn(mockPostList);
 
@@ -85,9 +80,9 @@ class FollowControllerTest {
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data.length()").value(2))
                 .andExpect(jsonPath("$.data[0].nickname").value("닉네임02"))
-                .andExpect(jsonPath("$.data[0].title").value("제목1"))
+                .andExpect(jsonPath("$.data[0].title").value("제목01"))
                 .andExpect(jsonPath("$.data[1].nickname").value("닉네임02"))
-                .andExpect(jsonPath("$.data[1].title").value("제목2"))
+                .andExpect(jsonPath("$.data[1].title").value("제목02"))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andDo(print());
 

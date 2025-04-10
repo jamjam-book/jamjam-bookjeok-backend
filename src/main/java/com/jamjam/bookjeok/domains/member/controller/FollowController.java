@@ -1,8 +1,8 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
-import com.jamjam.bookjeok.domains.member.dto.response.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.PostSummaryDTO;
+import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
+import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +38,4 @@ public class FollowController {
         return ResponseEntity.ok(ApiResponse.success(postList));
 
     }
-
 }
