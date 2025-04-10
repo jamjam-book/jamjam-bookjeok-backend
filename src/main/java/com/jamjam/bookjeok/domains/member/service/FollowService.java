@@ -19,7 +19,19 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<FollowDTO> getFollowingListByMemberId(String memberId) {
-
         return followMapper.findFollowingListByMemberId(memberId);
     }
+
+    @Transactional(readOnly = true)
+    public List<PostSummaryDTO> getPostListByWriterId(String writerId) {
+        return followMapper.findPostListByMemberId(writerId);
+    }
+
+    @Transactional
+    public void createFollow(){
+        // 자기 자신을 팔로우 할 수 없음
+        // 중복으로 follow할 수 없음
+        //
+    }
+
 }

@@ -11,4 +11,6 @@ public interface FollowMapper{
 
     List<FollowDTO> findFollowingListByMemberId(String memberId);
 
+    List<PostSummaryDTO> findPostListByMemberId(String memberId);
+
 }
