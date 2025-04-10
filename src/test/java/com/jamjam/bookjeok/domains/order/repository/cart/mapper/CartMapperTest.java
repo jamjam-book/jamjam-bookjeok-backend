@@ -48,12 +48,11 @@ class CartMapperTest {
 
     @Test
     @DisplayName("bookId로 책 정보 찾는 테스트")
-    void testFindBookByIdAndBookNameAndPrice() {
+    void testFindByBookIdAndBookName() {
         Long bookId = 1L;
         String bookName = "태백산맥 1권";
-        int price = 18000;
 
-        Optional<Book> findBook = cartMapper.findBookByIdAndBookNameAndPrice(bookId, bookName, price);
+        Optional<Book> findBook = cartMapper.findByBookIdAndBookName(bookId, bookName);
 
         assertThat(findBook).isNotNull();
         assertThat(findBook.get().getBookId()).isEqualTo(bookId);
