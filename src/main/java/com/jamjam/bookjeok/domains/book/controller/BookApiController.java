@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.book.contoller;
+package com.jamjam.bookjeok.domains.book.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,6 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class BookApiController {
 
-    private final BookAdminService bookAdminService;
     private final BookApiService bookApiService;
 
     @Value("${naver.book-client-api}")
