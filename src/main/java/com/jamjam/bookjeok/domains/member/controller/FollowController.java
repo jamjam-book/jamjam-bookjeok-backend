@@ -28,4 +28,15 @@ public class FollowController {
 
         return ResponseEntity.ok(ApiResponse.success(followList));
     }
+
+    @GetMapping("/{writerId}/postList")
+    public ResponseEntity<ApiResponse<List<PostSummaryDTO>>> getPostListByWriterId(
+            @PathVariable String writerId
+    ){
+        List<PostSummaryDTO> postList = followService.getPostListByWriterId(writerId);
+
+        return ResponseEntity.ok(ApiResponse.success(postList));
+
+    }
+
 }

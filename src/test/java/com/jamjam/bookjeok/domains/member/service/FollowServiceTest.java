@@ -52,4 +52,29 @@ class FollowServiceTest {
 
         followList.forEach(System.out::println);
     }
+
+
+    @DisplayName("팔로우한 사용자의 게시글 목록 정상 조회")
+    @Test
+    void getPostsByWriterIdTest() {
+        String writerId = "user02";
+
+        List<PostSummaryDTO> mockPostList = List.of(
+                PostSummaryDTO.builder()
+                        .nickname("닉네임02")
+                        .title("제목1")
+                        .build(),
+                PostSummaryDTO.builder()
+                        .nickname("닉네임02")
+                        .title("제목2")
+                        .build()
+        );
+
+
+        when(followMapper.findPostListByMemberId(writerId)).thenReturn(mockPostList);
+
+        List<PostSummaryDTO> postList = followService.getPostListByWriterId(writerId);
+
+        assertNotNull(postList);
+    }
 }

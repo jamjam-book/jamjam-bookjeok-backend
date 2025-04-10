@@ -19,7 +19,11 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<FollowDTO> getFollowingListByMemberId(String memberId) {
-
         return followMapper.findFollowingListByMemberId(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostSummaryDTO> getPostListByWriterId(String writerId) {
+        return followMapper.findPostListByMemberId(writerId);
     }
 }

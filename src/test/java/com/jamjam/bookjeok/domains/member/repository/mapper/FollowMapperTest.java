@@ -19,7 +19,7 @@ class FollowMapperTest {
     @Autowired
     private FollowMapper followMapper;
 
-    @DisplayName("멤버의 Uid로 팔로잉 리스트 가져오기")
+    @DisplayName("멤버의 id로 팔로잉 리스트 가져오기")
     @Test
     void findFollowingListByMemberUidTest() {
         String id = "user01";
@@ -29,4 +29,15 @@ class FollowMapperTest {
         assertNotNull(followingListDTO);
         followingListDTO.forEach(System.out::println);
     }
+
+    @DisplayName("멤버의 id로 게시글 목록 가져오기")
+    @Test
+    void findPostListByMemberIdTest(){
+        String id = "user02";
+
+        List<PostSummaryDTO> postSummaryList = followMapper.findPostListByMemberId(id);
+
+        assertNotNull(postSummaryList);
+    }
+
 }

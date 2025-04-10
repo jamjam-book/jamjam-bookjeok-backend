@@ -16,4 +16,19 @@
             WHERE member_id = #{ memberId }
         );
     </select>
+
+    <select id="findPostListByMemberId" resultType="PostSummaryDTO">
+        SELECT
+            m.nickname,
+            p.title
+        FROM posts p
+        JOIN members m ON p.writer_uid = m.member_uid
+        WHERE p.writer_uid = (
+            SELECT member_uid
+            FROM members
+            WHERE member_id = #{ writerId }
+        )
+        ORDER BY p.created_at DESC
+    </select>
+
 </mapper>
