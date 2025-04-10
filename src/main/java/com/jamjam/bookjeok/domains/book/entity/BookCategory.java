@@ -41,4 +41,9 @@ public class BookCategory {
         this.isDeleted = isDeleted;
     }
 
+    public void updateCategory(final String categoryName, final LocalDateTime modifiedAt) {
+        this.categoryName = categoryName;
+        this.modifiedAt = modifiedAt;
+    }
+
 }
