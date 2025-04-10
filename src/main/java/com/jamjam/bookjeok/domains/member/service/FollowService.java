@@ -1,9 +1,7 @@
 package com.jamjam.bookjeok.domains.member.service;
 
-import com.jamjam.bookjeok.domains.member.dto.response.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.PostSummaryDTO;
-import com.jamjam.bookjeok.exception.member.MemberErrorCode;
-import com.jamjam.bookjeok.exception.member.MemberException;
+import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
+import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.repository.mapper.FollowMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

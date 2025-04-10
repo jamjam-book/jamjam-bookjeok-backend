@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.domains.member.repository.mapper;
 
-import com.jamjam.bookjeok.domains.member.dto.response.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.PostSummaryDTO;
+import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
+import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
 package com.jamjam.bookjeok.domains.member.service;
 
-import com.jamjam.bookjeok.domains.member.dto.response.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.PostSummaryDTO;
+import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
+import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.repository.mapper.FollowMapper;
-import com.jamjam.bookjeok.exception.member.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,14 +59,8 @@ class FollowServiceTest {
         String writerId = "user02";
 
         List<PostSummaryDTO> mockPostList = List.of(
-                PostSummaryDTO.builder()
-                        .nickname("닉네임02")
-                        .title("제목1")
-                        .build(),
-                PostSummaryDTO.builder()
-                        .nickname("닉네임02")
-                        .title("제목2")
-                        .build()
+                new PostSummaryDTO("닉네임02", "제목01"),
+                new PostSummaryDTO("닉네임02", "제목02")
         );
 
 
