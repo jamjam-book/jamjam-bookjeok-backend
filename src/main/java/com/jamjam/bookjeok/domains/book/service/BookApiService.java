@@ -20,7 +20,7 @@ public interface BookApiService {
 
     void registAuthor(String[] authors, Long bookId);
 
-    String saveFile(String imgUrl, String filepath);
+    String saveFile(String imgUrl);
 
     void registBookAuthor(Long bookId, Long authorId);
 }

@@ -10,7 +10,6 @@ import com.jamjam.bookjeok.domains.book.entity.Book;
 import com.jamjam.bookjeok.domains.book.entity.BookCategory;
 import com.jamjam.bookjeok.domains.book.entity.Publisher;
 import com.jamjam.bookjeok.domains.book.service.BookApiService;
-import com.jamjam.bookjeok.domains.book.service.BookAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class BookApiController {
 
@@ -41,10 +40,7 @@ public class BookApiController {
     @Value("${naver.book-secret-key}")
     private String clientKey;
 
-    @Value("${image.image-dir}")
-    private String filepath;
-
-    @PostMapping("/bookapi/regist")
+    @PostMapping("/book/api")
     public ResponseEntity<ApiResponse<Void>> registBook(@RequestParam(value = "keyword") String keyword) {
 
         ResponseEntity<String> exchangeResponse = exchange(keyword);
@@ -133,7 +129,7 @@ public class BookApiController {
             int price = api.getDiscount().isEmpty() ? 0 : Integer.parseInt(api.getDiscount());
             int stockQuantity  = price != 0 ? 100 : 0;
 
-            String url = bookApiService.saveFile(api.getImage(), filepath);
+            String url = bookApiService.saveFile(api.getImage());
 
             String bookInfo = api.getDescription();
 
