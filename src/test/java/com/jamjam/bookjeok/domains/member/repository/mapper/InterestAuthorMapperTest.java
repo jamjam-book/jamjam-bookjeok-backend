@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("test")
@@ -28,6 +29,16 @@ class InterestAuthorMapperTest {
         assertNotNull(interestAuthorList);
         interestAuthorList.forEach(System.out::println);
 
+    }
+
+    @DisplayName("회원의 관심 작가 수 가져오기")
+    @Test
+    void countInterestAuthorTest(){
+        Long memberUid = 2L;
+
+        int totalInterestAuthor = interestAuthorMapper.countInterestAuthor(memberUid);
+
+        assertEquals(3, totalInterestAuthor);
     }
 
 }

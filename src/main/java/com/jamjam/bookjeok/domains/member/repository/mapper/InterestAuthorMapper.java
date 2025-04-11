@@ -10,4 +10,6 @@ public interface InterestAuthorMapper {
 
     List<InterestAuthorDTO> findInterestAuthorByMemberId(String memberId);
 
+    int countInterestAuthor(Long memberUid);
+
 }
