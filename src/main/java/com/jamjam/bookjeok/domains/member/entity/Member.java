@@ -52,13 +52,15 @@ public class Member {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "activity_status")
-    private String activityStatus;
+    private MemberActivityStatus activityStatus;
+
     @Builder
     public Member(
             String memberId, String password, String memberName, String phoneNumber,
             String email, String nickname, String birthDate, boolean marketingConsent,
-            MemberRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, String activityStatus
+            MemberRole role, LocalDateTime createdAt, LocalDateTime modifiedAt, MemberActivityStatus activityStatus
     ) {
         this.memberId = memberId;
         this.password = password;
