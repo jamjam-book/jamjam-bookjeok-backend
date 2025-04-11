@@ -10,6 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,12 @@ import java.util.concurrent.CompletableFuture;
 @Transactional
 @RequiredArgsConstructor
 public class BookApiServiceImpl implements BookApiService{
+
+    @Value("${image.image-dir}")
+    String filePath;
+
+    @Value("${image-url}")
+    private String fileUrl;
 
     private final BookRepository bookRepository;
     private final BookCategoryRepository bookCategoryRepository;
@@ -141,7 +148,7 @@ public class BookApiServiceImpl implements BookApiService{
     }
 
     @Override
-    public String saveFile(String imgUrl, String filePath){
+    public String saveFile(String imgUrl){
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         String fileName = imgUrl.replace("https://shopping-phinf.pstatic.net/", "").replace("/", "");
@@ -165,7 +172,7 @@ public class BookApiServiceImpl implements BookApiService{
             throw new FileStorageException("파일 저장을 실패했습니다.");
         }
 
-        return filePath + fileName;
+        return fileUrl + fileName;
 
     }
 }

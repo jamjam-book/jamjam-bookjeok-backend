@@ -39,7 +39,7 @@ class BookApiControllerTest {
         String body = mapper.writeValueAsString(keyword);
 
         // then
-        mvc.perform(post(BASE_URL + "/bookApi/regist")
+        mvc.perform(post(BASE_URL + "/book/api")
                 .param("keyword", keyword)
                 .contentType(MediaType.APPLICATION_JSON)
         )
