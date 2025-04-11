@@ -1,19 +1,21 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jamjam.bookjeok.domains.member.dto.request.InterestAuthorCreatRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @Transactional
@@ -40,6 +42,20 @@ public class InterestAuthorControllerTest {
                 .andExpect(jsonPath("$.data[0].bookList[0].bookName").value("태백산맥 1권"))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andDo(print());
+    }
+
+    @DisplayName("즐겨찾기 등록하기")
+    @Test
+    void createInterestAuthorTest() throws Exception {
+        InterestAuthorCreatRequest request = new InterestAuthorCreatRequest("공지영", 2L);
+
+        mockMvc.perform(post("/api/v1/interest-author")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.authorName").value("공지영"))
+                .andReturn();
     }
 
 }
