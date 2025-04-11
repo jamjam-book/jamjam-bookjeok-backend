@@ -32,9 +32,10 @@ public class BookCategory {
 
     @Builder
     public BookCategory(
-            String categoryName, LocalDateTime createdAt,
+            Long categoryId, String categoryName, LocalDateTime createdAt,
             LocalDateTime modifiedAt, boolean isDeleted
     ) {
+        this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
@@ -44,6 +45,11 @@ public class BookCategory {
     public void updateCategory(final String categoryName, final LocalDateTime modifiedAt) {
         this.categoryName = categoryName;
         this.modifiedAt = modifiedAt;
+    }
+
+    public void deleteCategory(final LocalDateTime modifiedAt, final boolean isDeleted) {
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
     }
 
 }

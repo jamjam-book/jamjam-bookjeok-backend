@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.exception.book;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.exception.member.MemberErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,24 +13,33 @@ public class BookExceptionHandler {
     @ExceptionHandler(RegistPreexistingBookException.class)
     public ResponseEntity<ApiResponse<Void>> registPreexistingBookExceptionHandler(RegistPreexistingBookException e) {
 
-        String errorCode = HttpStatus.BAD_REQUEST.getReasonPhrase();
-        String errorMessage = e.getMessage();
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
 
-        return ResponseEntity
-                .badRequest()
-                .body(ApiResponse.failure(errorCode, errorMessage));
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
 
     }
 
     @ExceptionHandler(BookNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> bookNotFoundExceptionHandler(BookNotFoundException e) {
 
-        String errorCode = HttpStatus.NOT_FOUND.getReasonPhrase();
-        String errorMessage = e.getMessage();
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
 
-        return ResponseEntity
-                .badRequest()
-                .body(ApiResponse.failure(errorCode, errorMessage));
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+
+    }
+
+    @ExceptionHandler(BookCategoryNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> bookCategoryNotFoundExceptionHandler(BookCategoryNotFoundException e) {
+
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
 
     }
 
@@ -41,6 +51,18 @@ public class BookExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.failure(errorCode, errorMessage));
+    }
+
+    @ExceptionHandler(RegistPreexistingCategoryException.class)
+    public ResponseEntity<ApiResponse<Void>> registPreexistingCategoryHandler(RegistPreexistingCategoryException e){
+
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+
+
     }
 
 }
