@@ -20,7 +20,7 @@
             activity_status
         FROM members
         WHERE role = 'MEMBER'
-        ORDER BY member_uid DESC
+        ORDER BY member_uid
         LIMIT #{ limit } OFFSET #{ offset }
     </select>
 
