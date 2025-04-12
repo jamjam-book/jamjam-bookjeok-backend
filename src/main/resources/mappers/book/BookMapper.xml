@@ -223,7 +223,7 @@
         JOIN books c ON a.book_id = c.book_id
         LEFT JOIN publishers d ON c.publisher_id = d.publisher_id
         WHERE b.ordered_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        AND b.orders_status = 1;
+        AND b.order_status_id = 1
         AND c.is_deleted = 0
         GROUP BY c.book_id
         ORDER BY total_quantity DESC, c.published_at DESC
@@ -245,7 +245,6 @@
                 FROM reviews s1
                 WHERE s1.book_id = #{ bookId }
             )
-
     </select>
 
 </mapper>
