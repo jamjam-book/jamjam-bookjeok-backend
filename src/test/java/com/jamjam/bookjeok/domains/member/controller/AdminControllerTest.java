@@ -25,7 +25,7 @@ class AdminControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-@DisplayName("멤버 전체 조회 테스트")
+    @DisplayName("멤버 전체 조회 테스트")
     @Test
     void getAllMembersTest() throws Exception {
         mockMvc.perform(get("/api/v1/admin/members"))

@@ -36,8 +36,7 @@ class AdminServiceTest {
     @DisplayName("findAllMember 서비스 단위 테스트")
     @Test
     void getAllMemberTest() {
-        // given
-        PageRequest request = new PageRequest();
+        PageRequest request = new PageRequest(1,10);
 
         MemberDTO member1 = new MemberDTO(
                 1L,

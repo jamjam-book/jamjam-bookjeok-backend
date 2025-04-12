@@ -26,7 +26,7 @@ class AdminMapperTest {
     @DisplayName("findAllMember 테스트")
     @Test
     void findAllMemberTest(){
-        pageRequest = new PageRequest();
+        pageRequest = new PageRequest(1,10);
 
         List<MemberDTO> members = adminMapper.findAllMember(pageRequest);
 
