@@ -80,6 +80,11 @@ public class Book {
         this.imageUrl = imageUrl;
     }
 
+    public void updateStockQuantity(final int stockQuantity, final LocalDateTime modifiedAt) {
+        this.stockQuantity = stockQuantity;
+        this.modifiedAt = modifiedAt;
+    }
+
     public void updateBook(final Long publisherId, final Long categoryId, final String bookName, final String bookInfo,
                            final String isbn, final LocalDate publishedAt, final int price,
                            final int stockQuantity, final LocalDateTime modifiedAt) {
@@ -94,7 +99,8 @@ public class Book {
         this.modifiedAt = modifiedAt;
     }
 
-    public void deleteBook(final boolean isDeleted) {
+    public void deleteBook(final LocalDateTime modifiedAt ,final boolean isDeleted) {
+        this.modifiedAt = modifiedAt;
         this.isDeleted = isDeleted;
     }
 
