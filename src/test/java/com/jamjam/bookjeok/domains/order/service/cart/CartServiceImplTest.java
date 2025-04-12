@@ -40,8 +40,8 @@ class CartServiceImplTest {
     void testCreateBookToCart() {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
-                .bookId(2L)
-                .bookName("채식주의자")
+                .bookId(33L)
+                .bookName("문학으로 본 심리학")
                 .quantity(10)
                 .build();
 
@@ -52,20 +52,20 @@ class CartServiceImplTest {
         assertThat(cartResponse).isNotNull();
 
         assertThat(cartResponse.memberUid()).isEqualTo(1L);
-        assertThat(cartResponse.bookId()).isEqualTo(2L);
-        assertThat(cartResponse.bookName()).isEqualTo("채식주의자");
-        assertThat(cartResponse.totalPrice()).isEqualTo(130000);
+        assertThat(cartResponse.bookId()).isEqualTo(33L);
+        assertThat(cartResponse.bookName()).isEqualTo("문학으로 본 심리학");
+        assertThat(cartResponse.totalPrice()).isEqualTo(215000);
         assertThat(cartResponse.quantity()).isEqualTo(10);
     }
 
     @Test
-    @DisplayName("장바구니에 도서 정보 추가할 때 동일한 책 정보가 있으면 수량을 증가시키는 테스트")
+    @DisplayName("장바구니에 도서 정보 추가할 때 동일한 도서 정보가 있으면 수량을 증가시키는 테스트")
     void testCreateBookToCartAddQuantity() {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(1L)
-                .bookName("태백산맥 1권")
-                .quantity(10)
+                .bookName("우리가 빛의 속도로 갈 수 없다면")
+                .quantity(5)
                 .build();
 
         CartResponse cartResponse = cartService.createBookToCart(cartRequest);
@@ -76,9 +76,9 @@ class CartServiceImplTest {
 
         assertThat(cartResponse.memberUid()).isEqualTo(1L);
         assertThat(cartResponse.bookId()).isEqualTo(1L);
-        assertThat(cartResponse.bookName()).isEqualTo("태백산맥 1권");
-        assertThat(cartResponse.totalPrice()).isEqualTo(360000);
-        assertThat(cartResponse.quantity()).isEqualTo(20);
+        assertThat(cartResponse.bookName()).isEqualTo("우리가 빛의 속도로 갈 수 없다면");
+        assertThat(cartResponse.totalPrice()).isEqualTo(315000);
+        assertThat(cartResponse.quantity()).isEqualTo(15);
     }
 
     @Test
@@ -87,8 +87,8 @@ class CartServiceImplTest {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(1L)
-                .bookName("태백산맥 1권")
-                .quantity(5)
+                .bookName("우리가 빛의 속도로 갈 수 없다면")
+                .quantity(3)
                 .build();
 
         CartResponse cartResponse = cartService.modifyBookQuantity(cartRequest);
@@ -98,8 +98,9 @@ class CartServiceImplTest {
         assertThat(cartResponse).isNotNull();
         assertThat(cartResponse.memberUid()).isEqualTo(1L);
         assertThat(cartResponse.bookId()).isEqualTo(1L);
-        assertThat(cartResponse.totalPrice()).isEqualTo(90000);
-        assertThat(cartResponse.quantity()).isEqualTo(5);
+        assertThat(cartResponse.bookName()).isEqualTo("우리가 빛의 속도로 갈 수 없다면");
+        assertThat(cartResponse.totalPrice()).isEqualTo(63000);
+        assertThat(cartResponse.quantity()).isEqualTo(3);
     }
 
     @Test
@@ -107,8 +108,8 @@ class CartServiceImplTest {
     void testModifyBookQuantityException() {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
-                .bookId(2L)
-                .bookName("채식주의자")
+                .bookId(32L)
+                .bookName("다 함께 쓰는 여행기")
                 .quantity(3)
                 .build();
 
@@ -123,8 +124,8 @@ class CartServiceImplTest {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(1L)
-                .bookName("태백산맥 1권")
-                .quantity(2)
+                .bookName("우리가 빛의 속도로 갈 수 없다면")
+                .quantity(10)
                 .build();
 
         assertDoesNotThrow(() -> cartService.deleteBookFromCartByMemberId(cartRequest));

@@ -48,17 +48,17 @@ class CartControllerTest {
                 .andExpect(jsonPath("$.data.bookList[0].memberUid").value(1L))
                 .andExpect(jsonPath("$.data.bookList[0].bookId").exists())
                 .andExpect(jsonPath("$.data.bookList[0].bookId").value(1L))
-                .andExpect(jsonPath("$.data.bookList[0].bookName").value("태백산맥 1권"))
+                .andExpect(jsonPath("$.data.bookList[0].bookName").value("우리가 빛의 속도로 갈 수 없다면"))
                 .andExpect(jsonPath("$.data.bookList[0].totalPrice").exists())
-                .andExpect(jsonPath("$.data.bookList[0].totalPrice").value(180000))
+                .andExpect(jsonPath("$.data.bookList[0].totalPrice").value(210000))
                 .andExpect(jsonPath("$.data.bookList[0].quantity").value(10))
                 .andExpect(jsonPath("$.data.bookList[1].memberUid").exists())
                 .andExpect(jsonPath("$.data.bookList[1].memberUid").value(1L))
                 .andExpect(jsonPath("$.data.bookList[1].bookId").exists())
                 .andExpect(jsonPath("$.data.bookList[1].bookId").value(5L))
-                .andExpect(jsonPath("$.data.bookList[1].bookName").value("7년의 밤"))
+                .andExpect(jsonPath("$.data.bookList[1].bookName").value("노르웨이의 숲"))
                 .andExpect(jsonPath("$.data.bookList[1].totalPrice").exists())
-                .andExpect(jsonPath("$.data.bookList[1].totalPrice").value(48000))
+                .andExpect(jsonPath("$.data.bookList[1].totalPrice").value(45000))
                 .andExpect(jsonPath("$.data.bookList[1].quantity").value(3))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.message").doesNotExist())
@@ -70,8 +70,8 @@ class CartControllerTest {
     void testCreateBookToCart() throws Exception {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
-                .bookId(2L)
-                .bookName("채식주의자")
+                .bookId(33L)
+                .bookName("문학으로 본 심리학")
                 .quantity(10)
                 .build();
 
@@ -85,9 +85,9 @@ class CartControllerTest {
                 .andExpect(jsonPath("$.data.memberUid").exists())
                 .andExpect(jsonPath("$.data.memberUid").value(1L))
                 .andExpect(jsonPath("$.data.bookId").exists())
-                .andExpect(jsonPath("$.data.bookId").value(2L))
-                .andExpect(jsonPath("$.data.bookName").value("채식주의자"))
-                .andExpect(jsonPath("$.data.totalPrice").value(130000))
+                .andExpect(jsonPath("$.data.bookId").value(33L))
+                .andExpect(jsonPath("$.data.bookName").value("문학으로 본 심리학"))
+                .andExpect(jsonPath("$.data.totalPrice").value(215000))
                 .andExpect(jsonPath("$.data.quantity").value(10))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.message").doesNotExist())
@@ -120,7 +120,7 @@ class CartControllerTest {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(1L)
-                .bookName("태백산맥 1권")
+                .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(5)
                 .build();
 
@@ -135,8 +135,8 @@ class CartControllerTest {
                 .andExpect(jsonPath("$.data.memberUid").value(1L))
                 .andExpect(jsonPath("$.data.bookId").exists())
                 .andExpect(jsonPath("$.data.bookId").value(1L))
-                .andExpect(jsonPath("$.data.bookName").value("태백산맥 1권"))
-                .andExpect(jsonPath("$.data.totalPrice").value(90000))
+                .andExpect(jsonPath("$.data.bookName").value("우리가 빛의 속도로 갈 수 없다면"))
+                .andExpect(jsonPath("$.data.totalPrice").value(105000))
                 .andExpect(jsonPath("$.data.quantity").value(5))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.message").doesNotExist())
@@ -148,8 +148,8 @@ class CartControllerTest {
     void testModifyBookQuantityException() throws Exception {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
-                .bookId(2L)
-                .bookName("채식주의자")
+                .bookId(3L)
+                .bookName("노르웨이의 숲")
                 .quantity(7)
                 .build();
 
@@ -170,8 +170,8 @@ class CartControllerTest {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
                 .bookId(1L)
-                .bookName("태백산맥 1권")
-                .quantity(5)
+                .bookName("우리가 빛의 속도로 갈 수 없다면")
+                .quantity(10)
                 .build();
 
         mockMvc.perform(delete("/api/v1/cart")
@@ -191,7 +191,7 @@ class CartControllerTest {
     void testDeleteBookFromCartByMemberIdException() throws Exception {
         CartRequest cartRequest = CartRequest.builder()
                 .memberUid(1L)
-                .bookId(10L)
+                .bookId(100L)
                 .bookName("Clean Code")
                 .quantity(1)
                 .build();
