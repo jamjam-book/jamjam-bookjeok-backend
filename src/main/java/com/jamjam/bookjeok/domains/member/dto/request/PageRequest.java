@@ -1,19 +1,21 @@
 package com.jamjam.bookjeok.domains.member.dto.request;
 
 import jakarta.validation.constraints.Min;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
 public class PageRequest {
 
     @Min(value = 1)
-    private Integer page = 1;
+    private Integer page;
 
     @Min(value = 1)
-    private Integer size = 10;
+    private Integer size;
+
+    public PageRequest(Integer page, Integer size) {
+        this.page = (page == null) ? 1 : page;
+        this.size = (size == null) ? 10 : size;
+    }
 
     public int getOffset(){
         return (page-1) * size;
