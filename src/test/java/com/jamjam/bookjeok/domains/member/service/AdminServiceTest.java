@@ -1,11 +1,8 @@
 package com.jamjam.bookjeok.domains.member.service;
 
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
-import com.jamjam.bookjeok.domains.member.dto.request.MemberSearchRequest;
 import com.jamjam.bookjeok.domains.member.dto.MemberDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.MemberListResponse;
-import com.jamjam.bookjeok.domains.member.entity.Member;
 import com.jamjam.bookjeok.domains.member.entity.MemberRole;
 import com.jamjam.bookjeok.domains.member.repository.mapper.AdminMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -74,14 +71,9 @@ class AdminServiceTest {
         when(adminMapper.findAllMember(request)).thenReturn(fakeMembers);
         when(adminMapper.countMembers()).thenReturn(2L);
 
-        long totalItems = adminMapper.countMembers();
-        int page = request.getPage();
-        int size = request.getSize();
-
         MemberListResponse response = adminService.getAllMembers(request);
 
         assertNotNull(response);
         assertEquals(2, response.getMemberList().size());
-        response.getMemberList().forEach(System.out::println);
     }
 }
