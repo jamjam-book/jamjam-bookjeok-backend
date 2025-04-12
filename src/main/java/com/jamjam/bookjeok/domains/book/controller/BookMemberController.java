@@ -7,6 +7,8 @@ import com.jamjam.bookjeok.domains.book.dto.PopularBookDTO;
 import com.jamjam.bookjeok.domains.book.dto.request.ReviewRequest;
 import com.jamjam.bookjeok.domains.book.dto.response.ReviewResponse;
 import com.jamjam.bookjeok.domains.book.service.BookMemberService;
+import com.jamjam.bookjeok.exception.book.BookErrorCode;
+import com.jamjam.bookjeok.exception.book.review.InconsistentReviewException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +61,12 @@ public class BookMemberController {
 
     @PostMapping("/book/{isbn}/review")
     public ResponseEntity<ApiResponse<ReviewResponse>> writeReview(@RequestBody @Validated ReviewRequest reviewRequest) {
-        
+
         boolean isBuyer = bookMemberService.validCheckBuyer(reviewRequest);
+
+        if(!isBuyer) {
+            throw new InconsistentReviewException(BookErrorCode.INVALID_WRITER);
+        }
 
         ReviewResponse response = bookMemberService.writeReview(reviewRequest);
 
