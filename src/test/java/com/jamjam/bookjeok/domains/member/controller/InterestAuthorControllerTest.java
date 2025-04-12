@@ -33,14 +33,14 @@ public class InterestAuthorControllerTest {
     @DisplayName("멤버의 아이디로 즐겨찾기 한 작가 목록 가져오기")
     @Test
     void getInterestAuthorByMemberIdTest() throws Exception {
-        String memberId = "user01";
+        String memberId = "user02";
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/{memberId}/interest-authors", memberId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data").isArray())
-                .andExpect(jsonPath("$.data[0].authorName").value("조정래"))
-                .andExpect(jsonPath("$.data[0].bookList[0].bookName").value("태백산맥 1권"))
+                .andExpect(jsonPath("$.data[0].authorName").value("정세랑"))
+                .andExpect(jsonPath("$.data[0].bookList[0].bookName").value("지구에서 한아뿐"))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andDo(print());
     }
@@ -62,7 +62,7 @@ public class InterestAuthorControllerTest {
     @DisplayName("관심 작가 삭제하기")
     @Test
     void deleteInterestAuthorTest() throws Exception {
-        InterestAuthorRequest request = new InterestAuthorRequest("정약용", 2L);
+        InterestAuthorRequest request = new InterestAuthorRequest("정세랑", 2L);
 
         mockMvc.perform(delete("/api/v1/interest-author")
                         .contentType(MediaType.APPLICATION_JSON)
