@@ -2,19 +2,13 @@ package com.jamjam.bookjeok.domains.member.service;
 
 import com.jamjam.bookjeok.common.dto.Pagination;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
-import com.jamjam.bookjeok.domains.member.dto.request.MemberSearchRequest;
 import com.jamjam.bookjeok.domains.member.dto.MemberDTO;
-import com.jamjam.bookjeok.domains.member.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.MemberListResponse;
 import com.jamjam.bookjeok.domains.member.repository.mapper.AdminMapper;
-import com.jamjam.bookjeok.exception.member.MemberErrorCode;
-import com.jamjam.bookjeok.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
