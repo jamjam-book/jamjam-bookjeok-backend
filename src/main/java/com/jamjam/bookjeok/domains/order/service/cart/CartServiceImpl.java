@@ -94,7 +94,7 @@ public class CartServiceImpl implements CartService {
 
     private Book findBookOrThrow(Long bookId, String bookName) {
         return cartMapper.findByBookIdAndBookName(bookId, bookName)
-                .orElseThrow(() -> new CartItemLimitExceededException("존재하지 않는 책 정보 입니다."));
+                .orElseThrow(() -> new CartItemLimitExceededException("존재하지 않는 도서 정보 입니다."));
     }
 
     private Cart findCartOrThrow(Long memberUid, Long bookId) {

@@ -12,16 +12,6 @@
         AND b.is_deleted = false;
     </select>
 
-    <select id="findMemberById" resultType="com.jamjam.bookjeok.domains.member.entity.Member">
-        SELECT
-            member_uid, member_id, password,
-            member_name, phone_number, email,
-            nickname, birth_date, marketing_consent,
-            role, created_at, modified_at, activity_status
-        FROM members
-        WHERE member_uid = #{ memberUid }
-    </select>
-
     <select id="findByBookIdAndBookName" resultType="com.jamjam.bookjeok.domains.book.entity.Book">
         SELECT
             book_id, publisher_id, category_id,
