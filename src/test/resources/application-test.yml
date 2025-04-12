@@ -27,7 +27,7 @@ mybatis:
   mapper-locations: mappers/**/*.xml
   type-aliases-package: com.jamjam.bookjeok.domains
 
-tosspayemnts:
+tosspayments:
   wiget-secret-key: ${WIDGET_SECRET_KEY}
   api-secret-key: ${API_SECRET_KEY}
 

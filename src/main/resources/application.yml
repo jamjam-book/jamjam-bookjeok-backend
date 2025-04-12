@@ -30,7 +30,7 @@ mybatis:
 server:
   port: ${SERVER_PORT}
 
-tosspayemnts:
+tosspayments:
   wiget-secret-key: ${WIDGET_SECRET_KEY}
   api-secret-key: ${API_SECRET_KEY}
 
