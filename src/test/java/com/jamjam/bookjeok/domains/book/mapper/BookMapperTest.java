@@ -1,7 +1,6 @@
 package com.jamjam.bookjeok.domains.book.mapper;
 
-import com.jamjam.bookjeok.domains.book.dto.BookCategoryDTO;
-import com.jamjam.bookjeok.domains.book.dto.BookDetailDTO;
+import com.jamjam.bookjeok.domains.book.dto.*;
 import com.jamjam.bookjeok.domains.book.repository.mapper.BookMapper;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +92,7 @@ public class BookMapperTest {
 
         Map<String, Object > params = new HashMap<>();
         params.put("option", "author");
-        String authorName = "유시민"; // 더미 데이터에 있는 데이터로 확인
+        String authorName = "한강"; // 더미 데이터에 있는 데이터로 확인
         params.put("search", authorName);
 
         List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
@@ -127,7 +126,7 @@ public class BookMapperTest {
 
         Map<String, Object > params = new HashMap<>();
         params.put("option", "publisher");
-        String publisher = "민음"; // 더미 데이터에 있는 데이터로 확인
+        String publisher = "위즈"; // 더미 데이터에 있는 데이터로 확인
         params.put("search", publisher);
 
         List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
@@ -147,6 +146,79 @@ public class BookMapperTest {
         assertThat(categories).isNotNull();
 
         categories.forEach(System.out::println);
+
+    }
+
+    @DisplayName("회원 도서 상세 조회")
+    @Test
+    void testGetBookDetail() {
+        String isbn = "9781082502224";
+        Map<String, Object> params = new HashMap<>();
+        params.put("isbn", isbn);
+
+        BookDetailPageDTO book = bookMapper.getBookDetail(params);
+
+        assertThat(book).isNotNull();
+
+        System.out.println(book);
+
+    }
+
+    @DisplayName("도서 상세 조회 시 작가 조회")
+    @Test
+    void testGetAuthors() {
+        Long bookId = 1L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+
+        List<AuthorDTO> authors = bookMapper.getAuthors(params);
+
+        assertThat(authors).isNotNull();
+
+        authors.forEach(System.out::println);
+
+    }
+
+    @DisplayName("도서 상세 조회 시 리뷰 조회")
+    @Test
+    void testGetReviews() {
+        Long bookId = 1L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+
+        List<ReviewDTO> reviews = bookMapper.getReviews(params);
+
+        assertThat(reviews).isNotNull();
+
+        reviews.forEach(System.out::println);
+
+    }
+
+    @DisplayName("일주일 간 판매량 TOP10 도서 조회")
+    @Test
+    void testGetPopularBooks() {
+
+        List<PopularBookDTO> books = bookMapper.getPopularBooks();
+
+        assertThat(books).isNotNull();
+
+        books.forEach(System.out::println);
+
+    }
+
+    @DisplayName("회원 리뷰 자격 증명 테스트")
+    @Test
+    void validCheckReviewer() {
+
+        Long bookId = 25L;
+        Long memberUid = 7L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("bookId", bookId);
+        params.put("memberUid", memberUid);
+
+        Long memberId = bookMapper.validCheckReviewer(params);
+
+        assertThat(memberId).isEqualTo(memberUid);
 
     }
 }

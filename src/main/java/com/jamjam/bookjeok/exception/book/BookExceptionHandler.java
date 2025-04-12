@@ -1,7 +1,10 @@
 package com.jamjam.bookjeok.exception.book;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
-import com.jamjam.bookjeok.exception.member.MemberErrorCode;
+import com.jamjam.bookjeok.exception.book.category.BookCategoryNotFoundException;
+import com.jamjam.bookjeok.exception.book.category.RegistPreexistingCategoryException;
+import com.jamjam.bookjeok.exception.book.review.InconsistentReviewException;
+import com.jamjam.bookjeok.exception.book.review.ReviewNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -62,6 +65,25 @@ public class BookExceptionHandler {
 
         return new ResponseEntity<>(response,errorCode.getHttpStatus());
 
+    }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> reviewNotFoundExceptionHandler(ReviewNotFoundException e) {
+
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
+
+    }
+
+    @ExceptionHandler(InconsistentReviewException.class)
+    public ResponseEntity<ApiResponse<Void>> inconsistentReviewExceptionHandler(InconsistentReviewException e) {
+
+        BookErrorCode errorCode = e.getBookErrorCode();
+        ApiResponse<Void> response = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response, errorCode.getHttpStatus());
 
     }
 
