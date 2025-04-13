@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public enum MemberErrorCode {
-    NOT_FOLLOW("1000", "팔로우 하지 않는 사용자입니다.", HttpStatus.NOT_FOUND),
+    NOT_FOLLOW("1000", "팔로우 하지 않는 사용자입니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_MEMBER("1001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND),
     MEMBER_SEARCH_CONDITION_MISSING("1002", "memberId 또는 nickname 중 하나는 필수입니다", HttpStatus.BAD_REQUEST),
     NOT_FOUND_AUTHOR("1003", "존재하지 않는 작가입니다.", HttpStatus.NOT_FOUND),
