@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InterestBookRequest {
 
-    @NotNull(message = "책의 이름은 비어있을 수 없습니다.")
-    private final String bookName;
-
-    @NotNull(message = "멤버 아이디는 비어있을 수 없습니다.")
-    private final Long memberUid;
+    @NotNull(message = "책의 아이디는 비어있을 수 없습니다.")
+    private final Long bookId;
 
 }

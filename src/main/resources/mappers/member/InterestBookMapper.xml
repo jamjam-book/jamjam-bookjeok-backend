@@ -17,4 +17,10 @@
         WHERE m.member_id = #{ memberId }
         LIMIT #{ pageRequest.limit } OFFSET #{ pageRequest.offset };
     </select>
+
+    <select id="countInterestBookByMemberUid" resultType="_int">
+        SELECT COUNT(*)
+        FROM interest_books
+        WHERE member_uid = #{ memberUid }
+    </select>
 </mapper>

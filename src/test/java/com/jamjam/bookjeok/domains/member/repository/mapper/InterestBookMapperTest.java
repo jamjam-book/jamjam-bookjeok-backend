@@ -30,4 +30,14 @@ class InterestBookMapperTest {
         assertNotNull(bookList);
     }
 
+    @DisplayName("특정 회원의 관심 도서의 수 가져오기")
+    @Test
+    void countInterestBookByMemberUidTest(){
+        Long memberUid = 2L;
+
+        int count = interestBookMapper.countInterestBookByMemberUid(memberUid);
+
+        assertEquals(2, count);
+    }
+
 }

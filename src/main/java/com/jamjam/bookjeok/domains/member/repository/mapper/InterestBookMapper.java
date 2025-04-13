@@ -14,4 +14,7 @@ public interface InterestBookMapper {
             @Param("memberId") String memberId,
             @Param("pageRequest") PageRequest pageRequest
     );
+
+    int countInterestBookByMemberUid(Long memberUid);
+
 }
