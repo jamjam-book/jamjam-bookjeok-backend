@@ -1,5 +1,6 @@
-package com.jamjam.bookjeok.exception.book;
+package com.jamjam.bookjeok.exception.book.category;
 
+import com.jamjam.bookjeok.exception.book.BookErrorCode;
 import lombok.Getter;
 
 @Getter
