@@ -2,7 +2,9 @@ package com.jamjam.bookjeok.domains.member.service;
 
 import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
 import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
+import com.jamjam.bookjeok.domains.member.repository.repository.FollowRepository;
 import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowException;
+import com.jamjam.bookjeok.exception.member.followException.NotFollowException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ class FollowServiceTest {
 
     @Autowired
     private FollowService followService;
+    @Autowired
+    private FollowRepository followRepository;
 
     @DisplayName("멤버의 id 통해 팔로우 목록 가져오기")
     @Test
@@ -68,6 +72,19 @@ class FollowServiceTest {
         assertThrows(AlreadyFollowException.class, () -> {
             followService.createFollow(followingId, followerId);
         });
+    }
+
+    @DisplayName("팔로우 취소 테스트")
+    @Test
+    void deleteFollowTest(){
+        String followingId = "user02";
+        String followerId = "user01";
+
+        followService.deleteFollow(followingId, followerId);
+
+        // 팔로우가 취소 됐으므로
+        assertThrows(NotFollowException.class, () ->
+            followService.deleteFollow(followingId, followerId));
     }
 
 }

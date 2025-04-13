@@ -64,4 +64,19 @@ public class FollowController {
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
     }
+
+    @DeleteMapping("/{followerId}/follow")
+    public ResponseEntity<ApiResponse<Void>> deleteFollow(
+            @RequestBody @Validated FollowMemberRequest followMemberRequest,
+            @PathVariable String followerId
+    ){
+        String followingId = followMemberRequest.getFollowingId();
+
+        log.info("followingId : {}", followingId);
+        log.info("followerId : {}", followerId);
+
+        followService.deleteFollow(followingId, followerId);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 }
