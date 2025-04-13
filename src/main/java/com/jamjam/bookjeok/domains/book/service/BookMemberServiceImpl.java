@@ -11,6 +11,7 @@ import com.jamjam.bookjeok.exception.book.review.InconsistentReviewException;
 import com.jamjam.bookjeok.exception.book.review.ReviewNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,6 +24,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     private final ReviewRepository reviewRepository;
 
     @Override
+    @Transactional
     public List<BookDetailDTO> getBookList(Map<String, Object> params) {
         List<BookDetailDTO> books = bookMapper.findBookListOrderByOption(params);
 
@@ -37,6 +39,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public BookDetailPageDTO getBookDetail(Map<String, Object> params) {
 
         BookDetailPageDTO book =  bookMapper.getBookDetail(params);
@@ -52,6 +55,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public List<PopularBookDTO> getPopularBooks() {
         List<PopularBookDTO> books = bookMapper.getPopularBooks();
         Map<String, Object> params = new HashMap<>();
@@ -74,6 +78,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public ReviewResponse writeReview(ReviewRequest request) {
 
         Review review = Review.builder()
@@ -89,6 +94,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public ReviewResponse modifyReview(ReviewRequest request, Long reviewId) {
 
         Optional<Review> findReview = reviewRepository.findByReviewId(reviewId);
@@ -117,6 +123,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public void deleteReview(Long reviewId) {
 
         Optional<Review> findReview = reviewRepository.findByReviewId(reviewId);
@@ -141,6 +148,7 @@ public class BookMemberServiceImpl implements BookMemberService{
     }
 
     @Override
+    @Transactional
     public boolean validCheckBuyer(ReviewRequest request) {
 
         Map<String, Object> params = new HashMap<>();
