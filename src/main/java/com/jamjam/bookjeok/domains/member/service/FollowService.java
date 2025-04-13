@@ -10,6 +10,7 @@ import com.jamjam.bookjeok.domains.member.repository.repository.MemberRepository
 import com.jamjam.bookjeok.exception.member.MemberErrorCode;
 import com.jamjam.bookjeok.exception.member.MemberException;
 import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowException;
+import com.jamjam.bookjeok.exception.member.followException.NotFollowException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -66,11 +67,44 @@ public class FollowService {
             throw new AlreadyFollowException(MemberErrorCode.ALREADY_FOLLOW);
         }
 
-        Follow follow = new Follow(followingUid, followerUid);
-
+        Follow follow = Follow.builder()
+                .followingUid(followingUid)
+                .followerUid(followerUid)
+                .build();
         followRepository.save(follow);
 
         return following.getNickname();
+    }
+
+    @Transactional
+    public void deleteFollow(String followingId, String followerId){
+        // followerId를 통해 팔로워 하는 사람의 Uid 가져오기 (나중에 변경할 예정)
+        Member follower = memberRepository.findByMemberId(followerId)
+                .orElseThrow(() -> {
+                    log.error("팔로워 ID {} 찾을 수 없음", followerId);
+                    return new MemberException(MemberErrorCode.NOT_EXIST_MEMBER);
+                });
+
+        // 팔로잉 하고자 하는 사람
+        Member following = memberRepository.findByMemberId(followingId)
+                .orElseThrow(() -> {
+                    log.error("팔로워 ID {} 찾을 수 없음", followingId);
+                    return new MemberException(MemberErrorCode.NOT_EXIST_MEMBER);
+                });
+
+        Long followingUid =  following.getMemberUid();
+        Long followerUid = follower.getMemberUid();
+
+        log.info("팔로우 하고 있나요? {}", isFollowing(followingUid, followerUid));
+
+        if(!isFollowing(followingUid, followerUid)){
+            throw new NotFollowException(MemberErrorCode.NOT_FOLLOW);
+        }
+
+        Follow follow = followRepository.findByFollowingUidAndFollowerUid(followingUid, followerUid)
+                .orElseThrow(() -> new NotFollowException(MemberErrorCode.NOT_FOLLOW));
+
+        followRepository.delete(follow);
     }
 
     private boolean isFollowing(Long followingUid, Long followerUid){

@@ -12,6 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,7 +65,7 @@ class FollowControllerTest {
 
     }
 
-    @DisplayName("팔로우 하기")
+    @DisplayName("팔로우 하기 테스트")
     @Test
     void createFollowTest() throws Exception {
         String followerId = "user01";
@@ -80,4 +82,17 @@ class FollowControllerTest {
                 .andReturn();
     }
 
+    @DisplayName("팔로우 취소하기 테스트")
+    @Test
+    void deleteFollowTest() throws Exception {
+        String followerId = "user01";
+        String followingId = "user02";
+
+        FollowMemberRequest followMemberRequest = new FollowMemberRequest(followingId);
+
+        mockMvc.perform(delete("/api/v1/{followerId}/follow", followerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(followMemberRequest)))
+                .andExpect(jsonPath("$.success").value(true));
+    }
 }
