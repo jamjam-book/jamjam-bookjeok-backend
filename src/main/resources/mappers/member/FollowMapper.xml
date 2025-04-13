@@ -10,7 +10,9 @@
             m.nickname
         FROM follows f
         JOIN members m ON f.following_uid = m.member_uid
-        WHERE f.follower_uid = (
+        WHERE m.activity_status = 'ACTIVE'
+        AND m.role = 'MEMBER'
+        AND f.follower_uid = (
             SELECT member_uid
             FROM members
             WHERE member_id = #{ memberId }
@@ -19,16 +21,19 @@
 
     <select id="findPostListByMemberId" resultType="PostSummaryDTO">
         SELECT
+            p.writer_uid,
             m.nickname,
             p.title
         FROM posts p
         JOIN members m ON p.writer_uid = m.member_uid
-        WHERE p.writer_uid = (
+        WHERE m.activity_status = 'ACTIVE'
+        AND m.role = 'MEMBER'
+        AND p.is_deleted = false
+        AND p.writer_uid = (
             SELECT member_uid
             FROM members
             WHERE member_id = #{ writerId }
         )
         ORDER BY p.created_at DESC
     </select>
-
 </mapper>

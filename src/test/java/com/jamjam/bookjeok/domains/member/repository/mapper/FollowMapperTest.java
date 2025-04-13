@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("test")
@@ -27,7 +28,10 @@ class FollowMapperTest {
         List<FollowDTO> followingListDTO = followMapper.findFollowingListByMemberId(id);
 
         assertNotNull(followingListDTO);
-        followingListDTO.forEach(System.out::println);
+        assertEquals("user02", followingListDTO.get(0).getMemberId());
+        assertEquals("user03", followingListDTO.get(1).getMemberId());
+        assertEquals("닉네임02", followingListDTO.get(0).getNickname());
+        assertEquals("닉네임03", followingListDTO.get(1).getNickname());
     }
 
     @DisplayName("멤버의 id로 게시글 목록 가져오기")

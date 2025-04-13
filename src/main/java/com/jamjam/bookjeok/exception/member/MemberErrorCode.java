@@ -14,7 +14,8 @@ public enum MemberErrorCode {
     NOT_FOUND_AUTHOR("1003", "존재하지 않는 작가입니다.", HttpStatus.NOT_FOUND),
     ALREADY_INTERESTED_AUTHOR("1004", "이미 즐겨찾기에 추가한 작가입니다.", HttpStatus.ALREADY_REPORTED),
     INTEREST_AUTHOR_LIMIT_EXCEEDED("1005","관심 작가는 최대 30명까지 등록할 수 있습니다.", HttpStatus.TOO_MANY_REQUESTS),
-    NOT_REGIST_AUTHOR("1006", "관심 작가에 등록되어 있지 않습니다.", HttpStatus.NOT_FOUND);
+    NOT_REGIST_AUTHOR("1006", "관심 작가에 등록되어 있지 않습니다.", HttpStatus.NOT_FOUND),
+    ALREADY_FOLLOW("1007", "이미 팔로우 하고 있는 사용자 입니다.", HttpStatus.ALREADY_REPORTED);
 
     private final String code;
     private final String message;

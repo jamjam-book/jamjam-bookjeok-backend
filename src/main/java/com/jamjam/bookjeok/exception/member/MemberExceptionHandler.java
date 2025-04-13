@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.exception.member;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AlreadyInterestedAuthorException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,15 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(AlreadyInterestedAuthorException.class)
     public ResponseEntity<ApiResponse> handleAlreadyInterestedAuthorException(AlreadyInterestedAuthorException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(AlreadyFollowException.class)
+    public ResponseEntity<ApiResponse> handleAlreadyFollowException(AlreadyFollowException e){
         MemberErrorCode errorCode = e.getMemberErrorCode();
         ApiResponse<Void> response
                 = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
