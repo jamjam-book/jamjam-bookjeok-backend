@@ -1,7 +1,9 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.domains.member.dto.request.MemberSearchRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
+import com.jamjam.bookjeok.domains.member.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.MemberListResponse;
 import com.jamjam.bookjeok.domains.member.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,19 @@ public class AdminController {
             @Validated PageRequest pageRequest
     ){
         MemberListResponse response = adminService.getAllMembers(pageRequest);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/admin/member")
+    public ResponseEntity<ApiResponse<MemberDetailResponse>> getMemberByName(
+            MemberSearchRequest memberSearchRequest
+    ){
+
+        MemberDetailResponse response = adminService.getMemberByIdOrNickname(memberSearchRequest);
+
+        log.info("멤버의 아이디 = " + response.getMember().getMemberId());
+        log.info("멤버의 닉네임 = " + response.getMember().getNickname());
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

@@ -1,10 +1,13 @@
 package com.jamjam.bookjeok.domains.member.service;
 
+import com.jamjam.bookjeok.domains.member.dto.request.MemberSearchRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
 import com.jamjam.bookjeok.domains.member.dto.MemberDTO;
+import com.jamjam.bookjeok.domains.member.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.MemberListResponse;
 import com.jamjam.bookjeok.domains.member.entity.MemberRole;
 import com.jamjam.bookjeok.domains.member.repository.mapper.AdminMapper;
+import com.jamjam.bookjeok.exception.member.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,5 +78,84 @@ class AdminServiceTest {
 
         assertNotNull(response);
         assertEquals(2, response.getMemberList().size());
+    }
+
+    @DisplayName("getMemberById 서비스 단위 테스트")
+    @Test
+    void getMemberByIdTest() {
+        MemberSearchRequest searchRequest = new MemberSearchRequest("user02", null);
+        MemberDTO member = new MemberDTO(
+                1L,
+                "user01",
+                "정유진",
+                "01012345678",
+                "test1@gmail.com",
+                "닉네임01",
+                "19970816",
+                true,
+                MemberRole.MEMBER,
+                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
+                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
+                "ACTIVE"
+        );
+
+        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+
+        MemberDetailResponse result = adminService.getMemberByIdOrNickname(searchRequest);
+
+        assertNotNull(result);
+        assertEquals("정유진", result.getMember().getMemberName());
+    }
+
+    @DisplayName("getMemberByNickname 서비스 단위 테스트")
+    @Test
+    void getMemberByIdOrNicknameTest() {
+        MemberSearchRequest searchRequest = new MemberSearchRequest(null, "닉네임01");
+        MemberDTO member = new MemberDTO(
+                1L,
+                "user01",
+                "정유진",
+                "01012345678",
+                "test1@gmail.com",
+                "닉네임01",
+                "19970816",
+                true,
+                MemberRole.MEMBER,
+                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
+                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
+                "ACTIVE"
+        );
+
+        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+
+        MemberDetailResponse result = adminService.getMemberByIdOrNickname(searchRequest);
+
+        assertNotNull(result);
+        assertEquals("닉네임01", result.getMember().getNickname());
+    }
+
+    @DisplayName("아무것도 검색하지 않는 경우에 exception 발생")
+    @Test
+    void getMemberByIdOrNicknameExceptionTest() {
+        MemberSearchRequest searchRequest = new MemberSearchRequest(null, null);
+        MemberDTO member = new MemberDTO(
+                1L,
+                "user01",
+                "정유진",
+                "01012345678",
+                "test1@gmail.com",
+                "닉네임01",
+                "19970816",
+                true,
+                MemberRole.MEMBER,
+                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
+                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
+                "ACTIVE"
+        );
+
+        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+
+        assertThrows(MemberException.class,
+                () -> adminService.getMemberByIdOrNickname(searchRequest));
     }
 }
