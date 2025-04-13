@@ -11,6 +11,8 @@ import com.jamjam.bookjeok.domains.book.entity.*;
 import com.jamjam.bookjeok.domains.book.repository.*;
 import com.jamjam.bookjeok.domains.book.repository.mapper.BookMapper;
 import com.jamjam.bookjeok.exception.book.*;
+import com.jamjam.bookjeok.exception.book.category.BookCategoryNotFoundException;
+import com.jamjam.bookjeok.exception.book.category.RegistPreexistingCategoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -105,6 +104,7 @@ public class BookAdminServiceImpl implements BookAdminService {
     }
 
     @Override
+    @Transactional
     public BookResponse modifyStockQuantity(Long bookId, int quantity) {
 
         Optional<Book> findBook = bookRepository.findBookByBookId(bookId);
@@ -139,20 +139,25 @@ public class BookAdminServiceImpl implements BookAdminService {
     @Override
     @Transactional
     public List<BookDetailDTO> findBookListOrderByOption(Map<String, Object> params) {
+
         List<BookDetailDTO> books = bookMapper.findBookListOrderByOption(params);
 
         for (BookDetailDTO book : books) {
+            List<AuthorDTO> authors = new ArrayList<>();
             if (book.getAuthorNames() != null) {
-                List<AuthorDTO> authors = Arrays.stream(book.getAuthorNames().split(",\\s*"))
+                authors = Arrays.stream(book.getAuthorNames().split(",\\s*"))
                         .map(AuthorDTO::new)
                         .toList();
             }
+            book.addList(authors);
         }
 
         return books;
+
     }
 
     @Override
+    @Transactional
     public BookDetailDTO findBook(Map<String, String> params) {
 
         BookDetailDTO book =  bookMapper.findBookByIsbn(params);
@@ -179,6 +184,7 @@ public class BookAdminServiceImpl implements BookAdminService {
     }
 
     @Override
+    @Transactional
     public BookCategoryResponse registCategory(BookCategoryRequest request) {
 
         Optional<BookCategory> findCategory = bookCategoryRepository.findCategoryByCategoryName(request.categoryName());
@@ -197,11 +203,13 @@ public class BookAdminServiceImpl implements BookAdminService {
     }
 
     @Override
+    @Transactional
     public List<BookCategoryDTO> findBookCategory() {
         return bookMapper.findAllCategory();
     }
 
     @Override
+    @Transactional
     public BookCategoryResponse modifyCategory(BookCategoryModifyRequest request) {
         Optional<BookCategory> findCategory = bookCategoryRepository.findCategoryByCategoryName(request.categoryName());
 
@@ -227,6 +235,7 @@ public class BookAdminServiceImpl implements BookAdminService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(BookCategoryRequest request) {
 
         Optional<BookCategory> findCategory = bookCategoryRepository.findCategoryByCategoryName(request.categoryName());
