@@ -26,15 +26,19 @@ public class BookMemberServiceImpl implements BookMemberService{
     @Override
     @Transactional
     public List<BookDetailDTO> getBookList(Map<String, Object> params) {
+
         List<BookDetailDTO> books = bookMapper.findBookListOrderByOption(params);
 
         for (BookDetailDTO book : books) {
+            List<AuthorDTO> authors = new ArrayList<>();
             if (book.getAuthorNames() != null) {
-                List<AuthorDTO> authors = Arrays.stream(book.getAuthorNames().split(",\\s*"))
+                authors = Arrays.stream(book.getAuthorNames().split(",\\s*"))
                         .map(AuthorDTO::new)
                         .toList();
             }
+            book.addList(authors);
         }
+
         return books;
     }
 
