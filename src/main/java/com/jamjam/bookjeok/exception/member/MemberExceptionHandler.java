@@ -5,6 +5,10 @@ import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowExcepti
 import com.jamjam.bookjeok.exception.member.followException.NotFollowException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AlreadyInterestedAuthorException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
+import com.jamjam.bookjeok.exception.member.interestAuthorException.InterestAuthorLimitExceededException;
+import com.jamjam.bookjeok.exception.member.interestBookException.AlreadyInterestedBookException;
+import com.jamjam.bookjeok.exception.member.interestBookException.InterestBookLimitExceededException;
+import com.jamjam.bookjeok.exception.member.interestBookException.NotFoundBookException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,6 +28,16 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(AuthorNotFoundException.class)
     public ResponseEntity<ApiResponse> handleAuthorNotFoundException(AuthorNotFoundException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(InterestAuthorLimitExceededException.class)
+    public ResponseEntity<ApiResponse> handleInterestAuthorLimitExceededException(InterestAuthorLimitExceededException e){
         MemberErrorCode errorCode = e.getMemberErrorCode();
 
         ApiResponse<Void> response
@@ -54,6 +68,34 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(NotFollowException.class)
     public ResponseEntity<ApiResponse> handleNotFollowException(NotFollowException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(AlreadyInterestedBookException.class)
+    public ResponseEntity<ApiResponse> handleAlreadyInterestedBookException(AlreadyInterestedBookException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+    @ExceptionHandler(InterestBookLimitExceededException.class)
+    public ResponseEntity<ApiResponse> handleInterestBookLimitExceededException(InterestBookLimitExceededException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+    @ExceptionHandler(NotFoundBookException.class)
+    public ResponseEntity<ApiResponse> handleNotFoundBookException(NotFoundBookException e){
         MemberErrorCode errorCode = e.getMemberErrorCode();
 
         ApiResponse<Void> response

@@ -2,6 +2,7 @@ package com.jamjam.bookjeok.domains.member.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +14,10 @@ public class InterestBook {
 
     @Id @EmbeddedId
     private InterestBookId interestBookId;
+
+    @Builder
+    public InterestBook(InterestBookId interestBookId){
+        this.interestBookId = interestBookId;
+    }
 
 }

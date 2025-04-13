@@ -1,30 +1,25 @@
 package com.jamjam.bookjeok.domains.member.service;
 
+import com.jamjam.bookjeok.domains.member.dto.request.InterestBookRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
-import com.jamjam.bookjeok.domains.member.dto.InterestBookDTO;
 import com.jamjam.bookjeok.domains.member.dto.response.InterestBookListResponse;
-import com.jamjam.bookjeok.domains.member.repository.mapper.InterestBookMapper;
+import com.jamjam.bookjeok.exception.member.interestBookException.AlreadyInterestedBookException;
+import com.jamjam.bookjeok.exception.member.interestBookException.NotFoundBookException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @ActiveProfiles("test")
-@ExtendWith(MockitoExtension.class)
+@Transactional
+@SpringBootTest
 class InterestBookServiceTest {
 
-    @Mock
-    private InterestBookMapper interestBookMapper;
-
-    @InjectMocks
+    @Autowired
     private InterestBookService interestBookService;
 
     @DisplayName("멤버의 책 즐겨 찾기 목록 가져오기")
@@ -32,31 +27,49 @@ class InterestBookServiceTest {
     void getInterestBookListByMemberIdTest(){
         String memberId = "user01";
 
-        List<InterestBookDTO> mockBookList = List.of(
-                new InterestBookDTO(
-                        "책01",
-                        "안녕안녕",
-                        "이미지1",
-                        "작가01"
-                ),
-                new InterestBookDTO(
-                        "책02",
-                        "안녕안녕안녕",
-                        "이미지2",
-                        "작가02"
-                )
-        );
-
         PageRequest pageRequest = new PageRequest(1,10);
-
-        when(interestBookMapper.findInterestBookList(memberId, pageRequest)).thenReturn(mockBookList);
 
         InterestBookListResponse response =
                 interestBookService.getInterestBookListByMemberId(memberId,pageRequest);
 
         assertNotNull(response);
-        assertEquals(2, response.getInterestBookList().size());
+        assertEquals(1, response.getInterestBookList().size());
         assertEquals(1, response.getPagination().getCurrentPage());
-        mockBookList.forEach(System.out::println);
     }
+
+    @DisplayName("관심 도서 추가하기")
+    @Test
+    void createInterestedBook(){
+        Long memberUid = 1L;
+        InterestBookRequest request = new InterestBookRequest(1L);
+
+        String bookName
+                = interestBookService.createInterestBook(memberUid, request);
+
+        assertEquals("우리가 빛의 속도로 갈 수 없다면", bookName);
+    }
+
+    @DisplayName("없는 책이라면 발생하는 예외")
+    @Test
+    void notFoundBookExceptionTest(){
+        Long memberUid = 1L;
+        InterestBookRequest request = new InterestBookRequest(1000L);
+
+        assertThrows(NotFoundBookException.class,
+                () ->  interestBookService.createInterestBook(memberUid, request));
+    }
+
+    @DisplayName("이미 즐겨찾기에 등록된 도서일 경우 발생하는 예외")
+    @Test
+    void alreadyInterestedBookExceptionTest(){
+        Long memberUid = 1L;
+        InterestBookRequest request = new InterestBookRequest(2L);
+
+        assertThrows(AlreadyInterestedBookException.class,
+                () ->  interestBookService.createInterestBook(memberUid, request));
+    }
+
+
+
+
 }
