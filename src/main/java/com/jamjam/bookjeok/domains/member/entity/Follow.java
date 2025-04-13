@@ -16,16 +16,16 @@ public class Follow {
     @Column(name = "follow_id")
     private Long followId;
 
-    @Column(name = "following_id")
-    private Long followingId;
+    @Column(name = "following_uid")
+    private Long followingUid;
 
-    @Column(name = "follower_id")
-    private Long followerId;
+    @Column(name = "follower_uid")
+    private Long followerUid;
 
     @Builder
-    public Follow(Long followingId, Long followerId) {
-        this.followingId = followingId;
-        this.followerId = followerId;
+    public Follow(Long followingUid, Long followerUid) {
+        this.followingUid = followingUid;
+        this.followerUid = followerUid;
     }
 
 }
