@@ -50,4 +50,14 @@ public class QuestionAnswer {
         this.isDeleted = isDeleted;
     }
 
+    public void updateAnswer(final String contents, final LocalDateTime modifiedAt) {
+        this.contents = contents;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public void deleteAnswer(final LocalDateTime modifiedAt, final boolean isDeleted) {
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+    }
+
 }
