@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.question.mapper;
 
+import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import com.jamjam.bookjeok.domains.question.repository.mapper.QuestionMapper;
 import jakarta.transaction.Transactional;
@@ -30,13 +31,26 @@ public class QuestionMapperTest {
     void testFindQuestions() {
 
         Map<String, Object> params = new HashMap<>();
-        params.put("isAnswered", false);
 
         List<QuestionListDTO> questions = questionMapper.findQuestions(params);
 
         assertThat(questions).isNotNull();
 
         questions.forEach(System.out::println);
+    }
+
+    @DisplayName("문의사항 상세 조회 테스트")
+    @Test
+    void findQuestionByQuestionId() {
+
+        Map<String, Object> params = new HashMap<>();
+        Long questionId = 2L;
+        params.put("questionId", questionId);
+
+        QuestionDTO question = questionMapper.findQuestionByQuestionId(params);
+
+        assertThat(question).isNotNull();
+        log.info("{}", question);
     }
 }
 

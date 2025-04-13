@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.question.service;
 
+import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import com.jamjam.bookjeok.domains.question.dto.request.QuestionAnswerRequest;
 import com.jamjam.bookjeok.domains.question.dto.response.QuestionAnswerResponse;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
@@ -19,6 +21,11 @@ import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
 @Transactional
@@ -40,6 +47,21 @@ public class QuestionAdminServiceTest {
         assertThat(questions).isNotNull();
 
         questions.forEach(System.out::println);
+
+    }
+
+    @DisplayName("문의사항 상세 조회 테스트")
+    @Test
+    void findQuestionByQuestionId() throws Exception {
+
+        Map<String, Object> params = new HashMap<>();
+        Long questionId = 2L;
+        params.put("questionId", questionId);
+
+        QuestionDTO question = questionAdminService.findQuestionByQuestionId(params);
+
+        assertThat(question).isNotNull();
+        log.info("{}", question);
 
     }
 

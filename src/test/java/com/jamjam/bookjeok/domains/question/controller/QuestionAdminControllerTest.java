@@ -49,6 +49,19 @@ public class QuestionAdminControllerTest {
 
     }
 
+    @DisplayName("문의사항 상세 조회 테스트")
+    @Test
+    void findQuestionByQuestionId() throws Exception {
+
+        Long questionId = 2L;
+
+        mvc.perform(get(BASE_URL + "/question/{questionId}", questionId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString("contents")));
+
+    }
+
     @DisplayName("문의사항 답변 등록 테스트")
     @Test
     void testRegistQuestionAnswer() throws Exception {

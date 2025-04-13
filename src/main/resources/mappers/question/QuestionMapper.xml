@@ -20,7 +20,7 @@
               a.question_id
             , a.writer_uid
             , c.member_name
-            , a.question_categories_id
+            , b.question_category_id
             , b.question_category_name
             , a.title
             , a.created_at
@@ -30,6 +30,25 @@
         JOIN members c ON (a.writer_uid = member_uid)
         WHERE a.is_deleted = false
         ORDER BY a.created_at DESC, modified_at DESC;
+    </select>
+
+    <select id="findQuestionByQuestionId" resultType="QuestionDTO">
+        SELECT
+            a.question_id
+            , a.writer_uid
+            , c.member_name
+            , a.question_categories_id
+            , b.question_category_name
+            , a.title
+            , a.contents
+            , a.created_at
+            , a.modified_at
+            , a.questions_img_url
+         FROM questions a
+         JOIN question_category b ON (a.question_categories_id = b.question_category_id)
+         JOIN members c ON (a.writer_uid = member_uid)
+        WHERE a.is_deleted = false
+          AND a.question_id = #{ questionId };
     </select>
 
 </mapper>

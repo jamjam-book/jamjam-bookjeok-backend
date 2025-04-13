@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.question.service;
 
+import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import com.jamjam.bookjeok.domains.question.dto.request.QuestionAnswerRequest;
 import com.jamjam.bookjeok.domains.question.dto.response.QuestionAnswerResponse;
@@ -15,4 +16,6 @@ public interface QuestionAdminService {
     QuestionAnswerResponse modifyQuestionAnswer(Long answerId, QuestionAnswerRequest request);
 
     QuestionAnswerResponse deleteQuestionAnswer(Long answerId);
+
+    QuestionDTO findQuestionByQuestionId(Map<String, Object> params);
 }

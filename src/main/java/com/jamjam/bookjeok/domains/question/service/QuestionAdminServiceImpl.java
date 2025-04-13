@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.question.service;
 
+import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import com.jamjam.bookjeok.domains.question.dto.request.QuestionAnswerRequest;
 import com.jamjam.bookjeok.domains.question.dto.response.QuestionAnswerResponse;
@@ -31,6 +32,14 @@ public class QuestionAdminServiceImpl implements QuestionAdminService{
     public List<QuestionListDTO> findQuestions(Map<String, Object> params) {
 
         return questionMapper.findQuestions(params);
+
+    }
+
+    @Override
+    public QuestionDTO findQuestionByQuestionId(Map<String, Object> params) {
+
+        return questionMapper.findQuestionByQuestionId(params);
+
     }
 
     @Override
@@ -88,6 +97,8 @@ public class QuestionAdminServiceImpl implements QuestionAdminService{
 
         return buildQuestionAnswerResponse(deleteAnswer);
     }
+
+
 
     private QuestionAnswerResponse buildQuestionAnswerResponse(QuestionAnswer answer) {
 

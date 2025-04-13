@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.question.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import com.jamjam.bookjeok.domains.question.dto.request.QuestionAnswerRequest;
 import com.jamjam.bookjeok.domains.question.dto.response.QuestionAnswerResponse;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,20 @@ public class QuestionAdminController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(questions));
+    }
+
+    @GetMapping("/question/{questionId}")
+    public ResponseEntity<ApiResponse<QuestionDTO>> findQuestionByQuestionId(
+            @PathVariable Long questionId) {
+
+        Map<String, Object> params  = new HashMap<>();
+        params.put("questionId", questionId);
+        QuestionDTO question = questionAdminService.findQuestionByQuestionId(params);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(question));
+
     }
 
     @PostMapping("/question/{questionId}")
