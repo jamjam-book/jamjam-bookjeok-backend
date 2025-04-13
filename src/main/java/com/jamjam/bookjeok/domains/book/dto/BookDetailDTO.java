@@ -30,5 +30,10 @@ public class BookDetailDTO {
     private List<AuthorDTO> authors;
     private int interestCount;
     private int ordersCount;
+
+    public void addList (List<AuthorDTO> authors) {
+        this.authors = authors;
+    }
+
 }
 

@@ -53,4 +53,16 @@ public class Review {
         this.isDeleted = isDeleted;
     }
 
+    public void updateReview(final String content, int rating, LocalDateTime modifiedAt) {
+
+        this.content = content;
+        this.rating = rating;
+        this.modifiedAt = modifiedAt;
+
+    }
+
+    public void deleteReview(final LocalDateTime modifiedAt, final boolean isDeleted) {
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+    }
 }
