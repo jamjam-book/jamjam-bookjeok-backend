@@ -4,7 +4,6 @@ import com.jamjam.bookjeok.domains.member.dto.InterestAuthorDTO;
 import com.jamjam.bookjeok.domains.member.dto.request.InterestAuthorRequest;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AlreadyInterestedAuthorException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
-import com.jamjam.bookjeok.exception.member.interestAuthorException.InterestAuthorLimitExceededException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
