@@ -69,7 +69,17 @@ class InterestBookServiceTest {
                 () ->  interestBookService.createInterestBook(memberUid, request));
     }
 
+    @DisplayName("관심 도서 삭제 후 존재 여부 확인해 예외 발생")
+    @Test
+    void deleteInterestAuthorTest(){
+        Long memberUid = 2L;
 
+        InterestBookRequest request = new InterestBookRequest(2L);
 
+        interestBookService.deleteInterestBook(memberUid, request);
 
+        assertThrows(NotFoundBookException.class, () -> {
+            interestBookService.deleteInterestBook(memberUid, request);
+        });
+    }
 }

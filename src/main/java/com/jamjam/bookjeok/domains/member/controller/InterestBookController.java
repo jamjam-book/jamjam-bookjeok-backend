@@ -1,13 +1,10 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
-import com.jamjam.bookjeok.domains.member.dto.request.InterestAuthorRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.InterestBookRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
-import com.jamjam.bookjeok.domains.member.dto.response.InterestAuthorResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.InterestBookListResponse;
 import com.jamjam.bookjeok.domains.member.dto.response.InterestBookResponse;
-import com.jamjam.bookjeok.domains.member.entity.InterestBook;
 import com.jamjam.bookjeok.domains.member.service.InterestBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,10 +31,9 @@ public class InterestBookController {
     }
 
     @PostMapping("/interest-book")
-    public ResponseEntity<ApiResponse<InterestBookResponse>> createInterestAuthor(
+    public ResponseEntity<ApiResponse<InterestBookResponse>> createInterestBook(
             @RequestBody @Validated InterestBookRequest request
     ){
-
         Long memberUid = 1L;
 
         String bookName = interestBookService.createInterestBook(memberUid, request);
@@ -49,6 +45,18 @@ public class InterestBookController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response));
+    }
+
+    @DeleteMapping("/interest-book")
+    public ResponseEntity<ApiResponse<Void>> deleteInterestBook(
+            @RequestBody @Validated InterestBookRequest request
+    ){
+        // 로그인 연결 후 수정
+        Long memberUid = 1L;
+
+        interestBookService.deleteInterestBook(memberUid, request);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
 }

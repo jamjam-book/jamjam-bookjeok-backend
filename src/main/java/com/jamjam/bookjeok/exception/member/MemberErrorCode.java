@@ -18,7 +18,8 @@ public enum MemberErrorCode {
     ALREADY_FOLLOW("1007", "이미 팔로우 하고 있는 사용자 입니다.", HttpStatus.CONFLICT),
     NOT_FOUND_BOOK("1008", "존재하지 않는 도서입니다.", HttpStatus.NOT_FOUND),
     INTEREST_BOOK_LIMIT_EXCEEDED("1009", "관심 도서는 최대 30권까지 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
-    ALREADY_INTERESTED_BOOK("1010", "이미 관심 도서에 추가 됐습니다.", HttpStatus.CONFLICT);
+    ALREADY_INTERESTED_BOOK("1010", "이미 관심 도서에 추가 됐습니다.", HttpStatus.CONFLICT),
+    NOT_REGIST_INTEREST_BOOK("1011", "관심 도서에 등록되어 있지 않습니다.", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;
