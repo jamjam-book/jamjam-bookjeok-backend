@@ -7,12 +7,14 @@ import com.jamjam.bookjeok.domains.member.dto.request.InterestBookRequest;
 import com.jamjam.bookjeok.domains.member.dto.request.PageRequest;
 import com.jamjam.bookjeok.domains.member.dto.InterestBookDTO;
 import com.jamjam.bookjeok.domains.member.dto.response.InterestBookListResponse;
-import com.jamjam.bookjeok.domains.member.dto.response.InterestBookResponse;
+import com.jamjam.bookjeok.domains.member.entity.InterestAuthor;
+import com.jamjam.bookjeok.domains.member.entity.InterestAuthorId;
 import com.jamjam.bookjeok.domains.member.entity.InterestBook;
 import com.jamjam.bookjeok.domains.member.entity.InterestBookId;
 import com.jamjam.bookjeok.domains.member.repository.mapper.InterestBookMapper;
 import com.jamjam.bookjeok.domains.member.repository.repository.InterestBookRepository;
 import com.jamjam.bookjeok.exception.member.MemberErrorCode;
+import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
 import com.jamjam.bookjeok.exception.member.interestBookException.AlreadyInterestedBookException;
 import com.jamjam.bookjeok.exception.member.interestBookException.InterestBookLimitExceededException;
 import com.jamjam.bookjeok.exception.member.interestBookException.NotFoundBookException;
@@ -90,4 +92,22 @@ public class InterestBookService {
 
         return book.getBookName();
     }
+
+    @Transactional
+    public void deleteInterestBook(
+            Long memberUid, // 로그인 부분 완성 되면 제거 -> 로그인 된 사용자를 가져오면 됨
+            InterestBookRequest interestBookRequest
+    ){
+        Book book = bookRepository.findBookByBookId(interestBookRequest.getBookId())
+                .orElseThrow(() -> new NotFoundBookException(MemberErrorCode.NOT_FOUND_BOOK));
+
+        InterestBookId interestBookId
+                = new InterestBookId(interestBookRequest.getBookId(), memberUid);
+
+        InterestBook interestBook = interestBookRepository.findById(interestBookId)
+                .orElseThrow(() -> new NotFoundBookException(MemberErrorCode.NOT_REGIST_INTEREST_BOOK));
+
+        interestBookRepository.delete(interestBook);
+    }
+
 }
