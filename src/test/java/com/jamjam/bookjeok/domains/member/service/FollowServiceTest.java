@@ -2,24 +2,17 @@ package com.jamjam.bookjeok.domains.member.service;
 
 import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
 import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
-import com.jamjam.bookjeok.domains.member.repository.mapper.FollowMapper;
 import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowException;
-import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @Transactional
@@ -70,7 +63,7 @@ class FollowServiceTest {
     @Test
     void alreadyFollowExceptionTest() {
         String followerId = "user01";
-        String followingId = "user04";
+        String followingId = "user02";
 
         assertThrows(AlreadyFollowException.class, () -> {
             followService.createFollow(followingId, followerId);

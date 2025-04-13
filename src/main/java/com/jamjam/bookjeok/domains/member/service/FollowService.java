@@ -2,13 +2,11 @@ package com.jamjam.bookjeok.domains.member.service;
 
 import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
 import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
-import com.jamjam.bookjeok.domains.member.dto.request.InterestAuthorRequest;
 import com.jamjam.bookjeok.domains.member.entity.Follow;
 import com.jamjam.bookjeok.domains.member.entity.Member;
 import com.jamjam.bookjeok.domains.member.repository.mapper.FollowMapper;
 import com.jamjam.bookjeok.domains.member.repository.repository.FollowRepository;
 import com.jamjam.bookjeok.domains.member.repository.repository.MemberRepository;
-import com.jamjam.bookjeok.exception.coupon.ErrorCode;
 import com.jamjam.bookjeok.exception.member.MemberErrorCode;
 import com.jamjam.bookjeok.exception.member.MemberException;
 import com.jamjam.bookjeok.exception.member.followException.AlreadyFollowException;

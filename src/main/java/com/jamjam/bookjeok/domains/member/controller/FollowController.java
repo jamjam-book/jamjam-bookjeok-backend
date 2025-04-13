@@ -6,7 +6,6 @@ import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.dto.request.FollowMemberRequest;
 import com.jamjam.bookjeok.domains.member.dto.response.FollowMemberResponse;
 import com.jamjam.bookjeok.domains.member.service.FollowService;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

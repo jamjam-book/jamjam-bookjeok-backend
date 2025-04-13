@@ -1,11 +1,7 @@
 package com.jamjam.bookjeok.domains.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamjam.bookjeok.domains.member.dto.FollowDTO;
-import com.jamjam.bookjeok.domains.member.dto.PostSummaryDTO;
 import com.jamjam.bookjeok.domains.member.dto.request.FollowMemberRequest;
-import com.jamjam.bookjeok.domains.member.dto.request.InterestAuthorRequest;
-import com.jamjam.bookjeok.domains.member.service.FollowService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
