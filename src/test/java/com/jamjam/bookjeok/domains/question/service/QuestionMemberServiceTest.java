@@ -110,7 +110,6 @@ public class QuestionMemberServiceTest {
     void testModifyQuestion() throws Exception {
         Long memberUid = 7L;
         Long questionId = 7L;
-        Long categoryId = 1L;
         String title = "수정 성공";
         String contents = "수정 잘 되었는지 확인해주실 수 있나요?";
 
@@ -119,7 +118,7 @@ public class QuestionMemberServiceTest {
 
         QuestionRequest request = QuestionRequest.builder()
                 .writerUid(memberUid)
-                .questionCategoryId(categoryId)
+                .questionCategoryId(2L)
                 .title(title)
                 .contents(contents)
                 .build();
@@ -128,7 +127,7 @@ public class QuestionMemberServiceTest {
 
         assertThat(response).isNotNull();
         assertThat(response.questionId()).isEqualTo(questionId);
-        assertThat(response.questionCategoryId()).isEqualTo(categoryId);
+        assertThat(response.questionCategoryId()).isEqualTo(2L);
         assertThat(response.title()).isEqualTo(title);
         assertThat(response.contents()).isEqualTo(contents);
         assertThat(response.modifiedAt()).isNotNull();
