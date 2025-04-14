@@ -7,7 +7,9 @@ import com.jamjam.bookjeok.domains.order.dto.pendingorder.response.PendingOrderR
 import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
 import com.jamjam.bookjeok.domains.order.repository.cart.mapper.CartMapper;
 import com.jamjam.bookjeok.domains.order.repository.order.pendingorder.PendingOrderRepository;
+import com.jamjam.bookjeok.domains.payment.dto.request.PaymentConfirmRequest;
 import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.exception.payment.PaymentOrderNotFountException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,12 @@ public class PendingOrderServiceImpl implements PendingOrderService {
         PendingOrder savedPendingOrder = pendingOrderRepository.save(pendingOrder);
 
         return toResponse(savedPendingOrder);
+    }
+
+    @Override
+    public PendingOrder getPendingOrder(PaymentConfirmRequest paymentConfirmRequest) {
+        return pendingOrderRepository.findPendingOrderByOrderIdAndTotalAmount(paymentConfirmRequest.orderId(), paymentConfirmRequest.amount())
+                .orElseThrow(() -> new PaymentOrderNotFountException("주문 정보가 일치하지 않습니다."));
     }
 
     private List<Book> validateOrderBooks(PendingOrderRequest pendingOrderRequest) {

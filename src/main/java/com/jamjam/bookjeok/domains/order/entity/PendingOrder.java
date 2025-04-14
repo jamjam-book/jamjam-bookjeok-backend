@@ -2,10 +2,7 @@ package com.jamjam.bookjeok.domains.order.entity;
 
 import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -16,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
+@ToString
 @Entity
 @Table(name = "pending_orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
