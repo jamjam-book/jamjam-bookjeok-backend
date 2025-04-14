@@ -59,7 +59,7 @@ class BookApiServiceImplTest {
     @Test
     void testRegistBookDuplicatedByOpenAPI() {
         // isbn 번호 중복 불가
-        String isbn = "9788954672214"; // db에 존재하는 isbn
+        String isbn = "9781082502224"; // db에 존재하는 isbn
 
         LocalDate publishedAt = LocalDate.now();
         String bookInfo = "테스트용으로 등록된 도서입니다. 저장되었다면 삭제해주세요.";
