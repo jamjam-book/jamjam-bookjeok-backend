@@ -78,18 +78,18 @@ public class BookMemberControllerTest {
     @Test
     void testWriteReview() throws Exception{
 
-        Long bookId = 18L;
-        Long memberUid = 7L;
+        Long bookId = 3L;
+        Long memberUid = 2L;
 
         ReviewRequest request = ReviewRequest.builder()
                 .bookId(bookId)
                 .memberUid(memberUid)
-                .content("역사란 무엇인가에 대해 알 수 있었습니다!")
+                .content("정말 재밌어요!!")
                 .rating(4)
                 .build();
 
         String content = mapper.writeValueAsString(request);
-        String isbn = "9787757774644";
+        String isbn = "9787245873163";
 
         mvc.perform(post(BASE_URL + "/book/{isbn}}/review", isbn)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +97,7 @@ public class BookMemberControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.bookId").value(bookId))
                 .andExpect(jsonPath("$.data.memberUid").value(memberUid))
-                .andExpect(jsonPath("$.data.content").value("역사란 무엇인가에 대해 알 수 있었습니다!"))
+                .andExpect(jsonPath("$.data.content").value("정말 재밌어요!!"))
                 .andExpect(jsonPath("$.data.rating").value(4));
     }
 
@@ -105,7 +105,7 @@ public class BookMemberControllerTest {
     @Test
     void testModifyReview() throws Exception{
 
-        String isbn = "9791141601713";
+        String isbn = "9781082502224";
         Long reviewId = 1L;
         Long bookId = 19L;
         Long memberUid = 2L;
