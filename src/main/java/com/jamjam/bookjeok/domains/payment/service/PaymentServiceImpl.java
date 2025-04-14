@@ -1,5 +1,7 @@
 package com.jamjam.bookjeok.domains.payment.service;
 
+import com.jamjam.bookjeok.domains.book.entity.Book;
+import com.jamjam.bookjeok.domains.book.repository.BookRepository;
 import com.jamjam.bookjeok.domains.order.dto.orderdetail.OrderDetailDTO;
 import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.entity.Order;
@@ -9,7 +11,6 @@ import com.jamjam.bookjeok.domains.order.repository.order.OrderRepository;
 import com.jamjam.bookjeok.domains.order.repository.order.pendingorder.PendingOrderRepository;
 import com.jamjam.bookjeok.domains.order.repository.orderdetail.OrderDetailRepository;
 import com.jamjam.bookjeok.domains.order.service.orderdetail.OrderDetailService;
-import com.jamjam.bookjeok.domains.payment.dto.BookInventoryDTO;
 import com.jamjam.bookjeok.domains.payment.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.payment.dto.request.PaymentConfirmRequest;
 import com.jamjam.bookjeok.domains.payment.dto.response.PaymentConfirmResponse;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final OrderRepository orderRepository;
+    private final BookRepository bookRepository;
     private final PendingOrderRepository pendingOrderRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final PaymentRepository paymentRepository;
@@ -68,13 +71,18 @@ public class PaymentServiceImpl implements PaymentService {
         List<PendingOrderBookItemsRequest> orderDataList = findPendingOrder.getOrderData();
 
         orderDataList.forEach(orderData -> {
-            BookInventoryDTO bookInventory = paymentMapper.findBookByBookId(orderData.bookId())
+            Book findBook = bookRepository.findBookByBookId(orderData.bookId())
                     .orElseThrow(() -> new BookInfoNotFoundException("도서 정보를 찾을 수 없습니다."));
 
-            if (bookInventory.stockQuantity() < orderData.quantity()) {
+            int stockQuantity = findBook.getStockQuantity() - orderData.quantity();
+
+            if (stockQuantity < 0) {
+                log.info("stockQuantity = {}", stockQuantity);
                 pendingOrderRepository.delete(findPendingOrder);
                 throw new InsufficientBookStockException("도서 수량이 부족하여 결제를 진행할 수 없습니다.");
             }
+
+            findBook.updateStockQuantity(stockQuantity, LocalDateTime.now().withNano(0));
         });
         return orderDataList;
     }

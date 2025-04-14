@@ -7,11 +7,4 @@
         FROM pending_orders
         WHERE order_id = #{orderId}
     </select>
-
-    <select id="findBookByBookId" resultType="com.jamjam.bookjeok.domains.payment.dto.BookInventoryDTO">
-        SELECT
-            book_id, book_name, stock_quantity
-        FROM books
-        WHERE book_id = #{ bookId }
-    </select>
 </mapper>
