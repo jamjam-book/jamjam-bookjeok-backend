@@ -124,7 +124,7 @@ class PendingOrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("임시 저장한 주문 정보가 없을 때 예외가 테스트")
+    @DisplayName("임시 저장한 주문 정보가 없을 때 예외가 발생하는 테스트")
     void testGetPendingOrderException() {
         PaymentConfirmRequest paymentConfirmRequest = PaymentConfirmRequest.builder()
                 .orderId("2025041412345678")
