@@ -78,8 +78,8 @@ public class BookMemberControllerTest {
     @Test
     void testWriteReview() throws Exception{
 
-        Long bookId = 3L;
-        Long memberUid = 2L;
+        Long bookId = 1L;
+        Long memberUid = 1L;
 
         ReviewRequest request = ReviewRequest.builder()
                 .bookId(bookId)
