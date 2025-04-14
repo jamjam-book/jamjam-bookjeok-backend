@@ -142,7 +142,7 @@ public class QuestionMemberControllerTest {
     @Test
     void testModifyQuestion() throws Exception {
         Long memberUid = 7L;
-        Long questionUid = 7L;
+        Long questionId = 6L;
 
         MockMultipartFile imageFile = new MockMultipartFile(
                 "questionImg", "cover.png", "image/png", "fake image data".getBytes());
@@ -159,14 +159,14 @@ public class QuestionMemberControllerTest {
                 """.getBytes()
         );
 
-        mvc.perform(multipart(HttpMethod.PUT,BASE_URL + "/{memberUid}/question/mod/{questionId}", memberUid, questionUid)
+        mvc.perform(multipart(HttpMethod.PUT,BASE_URL + "/{memberUid}/question/mod/{questionId}", memberUid, questionId)
                         .file(imageFile)
                         .file(jsonFile)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.questionId").exists())
                 .andExpect(jsonPath("$.data.modifiedAt").exists())
-                .andExpect(jsonPath("$.data.writerUid").value(7L))
+                .andExpect(jsonPath("$.data.writerUid").value(memberUid))
                 .andExpect(jsonPath("$.data.questionCategoryId").value(2L))
                 .andExpect(jsonPath("$.data.title").value("수정 성공"))
                 .andExpect(jsonPath("$.data.contents").value("수정 잘 되었는지 확인해주실 수 있나요?"));
@@ -177,7 +177,7 @@ public class QuestionMemberControllerTest {
     void testModifyQuestionValidReceiveAnswer() throws Exception {
 
         Long memberUid = 1L;
-        Long questionUid = 1L;
+        Long questionId = 1L;
 
         MockMultipartFile imageFile = new MockMultipartFile(
                 "questionImg", "cover.png", "image/png", "fake image data".getBytes());
@@ -194,7 +194,7 @@ public class QuestionMemberControllerTest {
                 """.getBytes()
         );
 
-        mvc.perform(multipart(HttpMethod.PUT,BASE_URL + "/{memberUid}/question/mod/{questionId}", memberUid, questionUid)
+        mvc.perform(multipart(HttpMethod.PUT,BASE_URL + "/{memberUid}/question/mod/{questionId}", memberUid, questionId)
                         .file(imageFile)
                         .file(jsonFile)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
