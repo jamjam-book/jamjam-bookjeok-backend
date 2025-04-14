@@ -21,23 +21,17 @@ public class Order {
     @Column(name = "member_uid")
     private Long memberUid;
 
-    @Column(name = "delivery_address_id")
-    private Long deliveryAddressId;
-
     @Column(name = "order_status_id")
-    private Long orderStatusId;
+    private Integer orderStatusId;
 
-    @Column(name = "order_code")
-    private String orderCode;
+    @Column(name = "order_id")
+    private String orderId;
 
     @Column(name = "order_name")
     private String orderName;
 
     @Column(name = "total_amount")
     private int totalAmount;
-
-    @Column(name = "delivery_cost")
-    private int deliveryCost;
 
     @Column(name = "ordered_at")
     private LocalDateTime orderedAt;
@@ -56,18 +50,15 @@ public class Order {
 
     @Builder
     public Order(
-            Long memberUid, Long deliveryAddressId, Long orderStatusId,
-            String orderCode, String orderName, int totalAmount, int deliveryCost,
-            LocalDateTime orderedAt, LocalDateTime canceledAt, LocalDateTime refundedAt,
-            LocalDateTime createdAt, LocalDateTime modifiedAt
+            Long memberUid, Integer orderStatusId, String orderId,
+            String orderName, int totalAmount, LocalDateTime orderedAt, LocalDateTime canceledAt,
+            LocalDateTime refundedAt, LocalDateTime createdAt, LocalDateTime modifiedAt
     ) {
         this.memberUid = memberUid;
-        this.deliveryAddressId = deliveryAddressId;
         this.orderStatusId = orderStatusId;
-        this.orderCode = orderCode;
+        this.orderId = orderId;
         this.orderName = orderName;
         this.totalAmount = totalAmount;
-        this.deliveryCost = deliveryCost;
         this.orderedAt = orderedAt;
         this.canceledAt = canceledAt;
         this.refundedAt = refundedAt;
