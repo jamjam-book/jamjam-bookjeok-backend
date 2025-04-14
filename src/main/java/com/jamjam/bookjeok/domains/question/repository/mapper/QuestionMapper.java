@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.question.repository.mapper;
 
+import com.jamjam.bookjeok.domains.question.dto.QuestionCategoryDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionDTO;
 import com.jamjam.bookjeok.domains.question.dto.QuestionListDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,4 +13,8 @@ public interface QuestionMapper{
     List<QuestionListDTO> findQuestions(Map<String, Object> params);
 
     QuestionDTO findQuestionByQuestionId(Map<String, Object> params);
+
+    List<QuestionListDTO> findMemberQuestions(Map<String, Object> params);
+
+    List<QuestionCategoryDTO> findQuestionCategories();
 }

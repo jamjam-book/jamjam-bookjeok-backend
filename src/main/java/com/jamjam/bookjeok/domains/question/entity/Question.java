@@ -59,4 +59,20 @@ public class Question {
         this.questionsImgUrl = questionsImgUrl;
     }
 
+    public void updateQuestion(final String title, final String contents,
+                               final LocalDateTime modifiedAt) {
+        this.title = title;
+        this.contents = contents;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public void changeImageUrl(String questionsImgUrl) {
+        this.questionsImgUrl = questionsImgUrl;
+    }
+
+    public void deleteQuestion(final LocalDateTime modifiedAt, final boolean isDeleted) {
+        this.modifiedAt = modifiedAt;
+        this.isDeleted = isDeleted;
+    }
+
 }

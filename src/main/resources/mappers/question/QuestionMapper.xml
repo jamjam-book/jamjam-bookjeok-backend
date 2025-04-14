@@ -48,7 +48,34 @@
          JOIN question_category b ON (a.question_categories_id = b.question_category_id)
          JOIN members c ON (a.writer_uid = member_uid)
         WHERE a.is_deleted = false
+          <if test="memberUid != null">
+              AND a.writer_uid = #{ memberUid }
+          </if>
           AND a.question_id = #{ questionId };
     </select>
 
+    <select id="findMemberQuestions" resultType="QuestionListDTO">
+        SELECT
+            a.question_id
+            , a.writer_uid
+            , c.member_name
+            , b.question_category_id
+            , b.question_category_name
+            , a.title
+            , a.created_at
+            , a.modified_at
+        FROM questions a
+        JOIN question_category b ON (a.question_categories_id = b.question_category_id)
+        JOIN members c ON (a.writer_uid = member_uid)
+        WHERE a.is_deleted = false
+        AND a.writer_uid = #{ memberUid }
+        ORDER BY a.created_at DESC, modified_at DESC;
+    </select>
+
+    <select id="findQuestionCategories" resultType="QuestionCategoryDTO">
+        SELECT
+              question_category_id
+            , question_category_name
+        FROM question_category
+    </select>
 </mapper>
