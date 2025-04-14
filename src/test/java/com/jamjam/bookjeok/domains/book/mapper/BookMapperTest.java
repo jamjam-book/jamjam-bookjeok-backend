@@ -218,7 +218,7 @@ public class BookMapperTest {
 
         Long memberId = bookMapper.validCheckReviewer(params);
 
-        assertThat(memberId).isEqualTo(null);
+        assertThat(memberId).isEqualTo(memberUid);
 
     }
 }

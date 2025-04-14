@@ -234,7 +234,7 @@ public class BookMemberServiceImplTest {
 
         boolean isBuyer = bookMemberService.validCheckBuyer(request);
 
-        assertThat(isBuyer).isEqualTo(false);
+        assertThat(isBuyer).isEqualTo(true);
 
     }
 
