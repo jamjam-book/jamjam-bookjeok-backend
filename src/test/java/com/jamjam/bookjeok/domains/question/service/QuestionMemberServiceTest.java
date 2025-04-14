@@ -109,7 +109,7 @@ public class QuestionMemberServiceTest {
     @Test
     void testModifyQuestion() throws Exception {
         Long memberUid = 7L;
-        Long questionId = 7L;
+        Long questionId = 6L;
         String title = "수정 성공";
         String contents = "수정 잘 되었는지 확인해주실 수 있나요?";
 
