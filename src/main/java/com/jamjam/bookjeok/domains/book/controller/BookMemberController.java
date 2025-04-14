@@ -64,7 +64,7 @@ public class BookMemberController {
 
         boolean isBuyer = bookMemberService.validCheckBuyer(reviewRequest);
 
-        if(!isBuyer) {
+        if(isBuyer) {
             throw new InconsistentReviewException(BookErrorCode.INVALID_WRITER);
         }
 
