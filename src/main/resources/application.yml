@@ -27,6 +27,11 @@ mybatis:
   mapper-locations: mappers/**/*.xml
   type-aliases-package: com.jamjam.bookjeok.domains
 
+jwt:
+  secret: l3uMquLkKiaMYahlXrGYqDZk92zIXwf4XZq8dQ0+W5uzYkF5BibQZ+Dm9m5eQOuq/oT0RFcHWcfJT2CdBlDyAA==
+  expiration: 1800000
+  refresh-expiration: 604800000
+
 server:
   port: ${SERVER_PORT}
 

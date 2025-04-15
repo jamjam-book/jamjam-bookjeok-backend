@@ -76,4 +76,8 @@ public class Member {
         this.activityStatus = activityStatus;
     }
 
+    public void setEncodedPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
 }
