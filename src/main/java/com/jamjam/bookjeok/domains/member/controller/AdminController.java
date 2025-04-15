@@ -22,14 +22,14 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @GetMapping("/admin/members")
-    public ResponseEntity<ApiResponse<MemberListResponse>> getAllMembers(
-            @Validated PageRequest pageRequest
-    ){
-        MemberListResponse response = adminService.getAllMembers(pageRequest);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
+//    @GetMapping("/admin/members")
+//    public ResponseEntity<ApiResponse<MemberListResponse>> getAllMembers(
+//            @Validated PageRequest pageRequest
+//    ){
+//        MemberListResponse response = adminService.getAllMembers(pageRequest);
+//
+//        return ResponseEntity.ok(ApiResponse.success(response));
+//    }
 
     @GetMapping("/admin/member")
     public ResponseEntity<ApiResponse<MemberDetailResponse>> getMemberByName(

@@ -66,8 +66,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// spring security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	// jsoup - web crawling
 	// https://mvnrepository.com/artifact/org.jsoup/jsoup
@@ -75,6 +75,11 @@ dependencies {
 
 	// io
 	implementation 'commons-io:commons-io:2.14.0'
+
+	// jwt
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 }
 
 tasks.named('test') {
