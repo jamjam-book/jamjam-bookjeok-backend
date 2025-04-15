@@ -391,14 +391,14 @@
       <summary>장바구니 도서 삭제</summary>
       <img src="assets/test/구매/03_장바구니_장바구니 도서 삭제.png" alt="장바구니 도서 삭제" />
     </details>
+  </details>  
+  <details>
+    <summary>임시 주문 정보 생성</summary>
+    <img src="assets/test/구매/02_임시 주문 정보 생성.png" alt="임시 주문 정보 생성 주문" />
   </details>
   <details>
     <summary>결제 승인</summary>
     <img src="assets/test/구매/01_결제 승인 요청.png" alt="결제 승인 요청" />
-  </details>
-  <details>
-    <summary>임시 주문 정보 생성</summary>
-    <img src="assets/test/구매/02_임시 주문 정보 생성.png" alt="임시 주문 정보 생성 주문" />
   </details>
 </details>
 
