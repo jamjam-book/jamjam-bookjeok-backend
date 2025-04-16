@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Slf4j
 @Transactional
@@ -134,6 +135,28 @@ class PendingOrderServiceImplTest {
         assertThatThrownBy(() -> pendingOrderService.getPendingOrder(paymentConfirmRequest))
                 .isInstanceOf(PaymentOrderNotFountException.class)
                 .hasMessage("주문 정보가 일치하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("임시 주문 정보를 삭제하는 테스트")
+    void testDeletePendingOrder() {
+        PendingOrderRequest pendingOrderRequest = PendingOrderRequest.builder()
+                .memberUid(1L)
+                .orderBookItems(pendingOrderBookItemsRequest)
+                .build();
+
+        PendingOrderResponse savedPendingOrder = pendingOrderService.createOrder(pendingOrderRequest);
+
+        PaymentConfirmRequest paymentConfirmRequest = PaymentConfirmRequest.builder()
+                .orderId(savedPendingOrder.orderId())
+                .amount(savedPendingOrder.totalAmount())
+                .build();
+
+        PendingOrder pendingOrder = pendingOrderService.getPendingOrder(paymentConfirmRequest);
+
+        log.info("pendingOrder = {}", pendingOrder);
+
+        assertDoesNotThrow(() -> pendingOrderService.deletePendingOrder(pendingOrder.getOrderId()));
     }
 
 }

@@ -6,7 +6,6 @@ import com.jamjam.bookjeok.domains.order.dto.orderdetail.OrderDetailDTO;
 import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.entity.Order;
 import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
-import com.jamjam.bookjeok.domains.order.repository.order.pendingorder.PendingOrderRepository;
 import com.jamjam.bookjeok.domains.order.service.order.OrderService;
 import com.jamjam.bookjeok.domains.order.service.orderdetail.OrderDetailService;
 import com.jamjam.bookjeok.domains.order.service.pendingorder.PendingOrderService;
@@ -39,7 +38,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderDetailService orderDetailService;
 
     private final BookRepository bookRepository;
-    private final PendingOrderRepository pendingOrderRepository;
     private final PaymentRepository paymentRepository;
 
     @Override
@@ -51,7 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
         orderDetailService.createOrderDetails(orderItems, savedOrder);
 
         savePayment(paymentDTO, savedOrder);
-        pendingOrderRepository.delete(findPendingOrder);
+        pendingOrderService.deletePendingOrder(findPendingOrder.getOrderId());
 
         List<OrderDetailDTO> orderDetails = orderDetailService.findOrderDetailByOrderId(paymentDTO.orderId());
 
@@ -71,8 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (stockQuantity < 0) {
                 log.info("stockQuantity = {}", stockQuantity);
-                pendingOrderRepository.delete(findPendingOrder);
-                throw new InsufficientBookStockException("도서 수량이 부족하여 결제를 진행할 수 없습니다.");
+                throw new InsufficientBookStockException("도서 재고 수량이 부족하여 결제를 진행할 수 없습니다.");
             }
 
             findBook.updateStockQuantity(stockQuantity, LocalDateTime.now().withNano(0));

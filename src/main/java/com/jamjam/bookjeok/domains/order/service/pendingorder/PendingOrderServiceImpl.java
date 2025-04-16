@@ -44,6 +44,11 @@ public class PendingOrderServiceImpl implements PendingOrderService {
                 .orElseThrow(() -> new PaymentOrderNotFountException("주문 정보가 일치하지 않습니다."));
     }
 
+    @Override
+    public void deletePendingOrder(String orderId) {
+        pendingOrderRepository.deletePendingOrderByOrderId(orderId);
+    }
+
     private List<Book> validateOrderBooks(PendingOrderRequest pendingOrderRequest) {
         return pendingOrderRequest.orderBookItems().stream()
                 .map(orderBookInfo ->
