@@ -6,7 +6,7 @@ import com.jamjam.bookjeok.domains.order.entity.Order;
 import com.jamjam.bookjeok.domains.orderdetail.entity.OrderDetail;
 import com.jamjam.bookjeok.domains.orderdetail.repository.OrderDetailRepository;
 import com.jamjam.bookjeok.domains.orderdetail.repository.mapper.OrderDetailMapper;
-import com.jamjam.bookjeok.exception.order.orderdetail.OrderDetailNotFoundException;
+import com.jamjam.bookjeok.exception.orderdetail.OrderDetailNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

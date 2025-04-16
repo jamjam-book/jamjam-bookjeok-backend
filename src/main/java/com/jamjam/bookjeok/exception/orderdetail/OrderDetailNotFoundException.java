@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.exception.order.orderdetail;
+package com.jamjam.bookjeok.exception.orderdetail;
 
 public class OrderDetailNotFoundException extends RuntimeException {
 
