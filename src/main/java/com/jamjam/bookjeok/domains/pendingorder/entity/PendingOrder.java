@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.entity;
+package com.jamjam.bookjeok.domains.pendingorder.entity;
 
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;

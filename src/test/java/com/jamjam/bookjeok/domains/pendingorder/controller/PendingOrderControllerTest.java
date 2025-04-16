@@ -1,8 +1,8 @@
-package com.jamjam.bookjeok.domains.order.controller.order;
+package com.jamjam.bookjeok.domains.pendingorder.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

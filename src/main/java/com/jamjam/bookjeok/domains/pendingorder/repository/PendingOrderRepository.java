@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.repository.order.pendingorder;
+package com.jamjam.bookjeok.domains.pendingorder.repository;
 
-import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
+import com.jamjam.bookjeok.domains.pendingorder.entity.PendingOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.order.dto.pendingorder.request;
+package com.jamjam.bookjeok.domains.pendingorder.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

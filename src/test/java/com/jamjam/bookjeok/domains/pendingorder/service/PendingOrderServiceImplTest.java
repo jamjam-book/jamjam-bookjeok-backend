@@ -1,12 +1,12 @@
-package com.jamjam.bookjeok.domains.order.service.pendingorder;
+package com.jamjam.bookjeok.domains.pendingorder.service;
 
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderRequest;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.response.PendingOrderResponse;
-import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
-import com.jamjam.bookjeok.domains.order.repository.order.pendingorder.PendingOrderRepository;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.response.PendingOrderResponse;
+import com.jamjam.bookjeok.domains.pendingorder.entity.PendingOrder;
+import com.jamjam.bookjeok.domains.pendingorder.repository.PendingOrderRepository;
 import com.jamjam.bookjeok.domains.payment.dto.request.PaymentConfirmRequest;
-import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
 import com.jamjam.bookjeok.exception.payment.PaymentOrderNotFountException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

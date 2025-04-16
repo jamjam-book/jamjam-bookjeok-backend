@@ -1,8 +1,8 @@
-package com.jamjam.bookjeok.domains.order.service.pendingorder;
+package com.jamjam.bookjeok.domains.pendingorder.service;
 
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderRequest;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.response.PendingOrderResponse;
-import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.response.PendingOrderResponse;
+import com.jamjam.bookjeok.domains.pendingorder.entity.PendingOrder;
 import com.jamjam.bookjeok.domains.payment.dto.request.PaymentConfirmRequest;
 
 public interface PendingOrderService {
