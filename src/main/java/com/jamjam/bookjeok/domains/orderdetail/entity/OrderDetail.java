@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.order.entity;
+package com.jamjam.bookjeok.domains.orderdetail.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

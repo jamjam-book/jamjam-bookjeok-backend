@@ -1,10 +1,10 @@
-package com.jamjam.bookjeok.domains.order.service.orderdetail;
+package com.jamjam.bookjeok.domains.orderdetail.service;
 
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.entity.Order;
-import com.jamjam.bookjeok.domains.order.entity.OrderDetail;
+import com.jamjam.bookjeok.domains.orderdetail.entity.OrderDetail;
 import com.jamjam.bookjeok.domains.order.repository.order.OrderRepository;
-import com.jamjam.bookjeok.domains.order.repository.orderdetail.OrderDetailRepository;
+import com.jamjam.bookjeok.domains.orderdetail.repository.OrderDetailRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

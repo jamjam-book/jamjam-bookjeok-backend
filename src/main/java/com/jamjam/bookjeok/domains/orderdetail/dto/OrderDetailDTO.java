@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.order.dto.orderdetail;
+package com.jamjam.bookjeok.domains.orderdetail.dto;
 
 import lombok.Builder;
 
