@@ -1,8 +1,8 @@
-package com.jamjam.bookjeok.domains.order.service.cart;
+package com.jamjam.bookjeok.domains.cart.service;
 
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookListResponse;
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartResponse;
-import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartBookListResponse;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartResponse;
+import com.jamjam.bookjeok.domains.cart.dto.request.CartRequest;
 
 public interface CartService {
 

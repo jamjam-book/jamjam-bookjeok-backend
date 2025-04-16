@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jamjam.bookjeok.domains.order.repository.cart.mapper.CartMapper">
-    <select id="findCartBooksByMemberUid" resultType="com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse">
+<mapper namespace="com.jamjam.bookjeok.domains.cart.repository.mapper.CartMapper">
+    <select id="findCartBooksByMemberUid" resultType="com.jamjam.bookjeok.domains.cart.dto.response.CartBookResponse">
         SELECT
             c.member_uid, b.book_id, b.book_name, c.quantity,
             c.quantity * b.price as total_price, b.image_url
@@ -28,7 +28,7 @@
         WHERE member_uid = #{ memberUid }
     </select>
 
-    <select id="findCartByMemberUidAndBookId" resultType="com.jamjam.bookjeok.domains.order.entity.Cart">
+    <select id="findCartByMemberUidAndBookId" resultType="com.jamjam.bookjeok.domains.cart.entity.Cart">
         SELECT
             cart_id, member_uid, book_id,
             quantity, created_at, modified_at

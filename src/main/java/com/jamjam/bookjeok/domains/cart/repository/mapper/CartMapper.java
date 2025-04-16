@@ -1,8 +1,8 @@
-package com.jamjam.bookjeok.domains.order.repository.cart.mapper;
+package com.jamjam.bookjeok.domains.cart.repository.mapper;
 
 import com.jamjam.bookjeok.domains.book.entity.Book;
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse;
-import com.jamjam.bookjeok.domains.order.entity.Cart;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartBookResponse;
+import com.jamjam.bookjeok.domains.cart.entity.Cart;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

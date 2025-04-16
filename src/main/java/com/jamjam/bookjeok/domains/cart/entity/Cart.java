@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.entity;
+package com.jamjam.bookjeok.domains.cart.entity;
 
-import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

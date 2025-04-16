@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.exception.order.cart;
+package com.jamjam.bookjeok.exception.cart;
 
 public class CartItemLimitExceededException extends RuntimeException {
 
