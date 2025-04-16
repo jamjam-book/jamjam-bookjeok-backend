@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,7 +17,7 @@ public class PendingOrderController {
 
     private final PendingOrderService pendingOrderService;
 
-    @PostMapping("/order/payment")
+    @PostMapping("/pending-order")
     public ResponseEntity<ApiResponse<PendingOrderResponse>> createOrder(
             @RequestBody @Validated PendingOrderRequest pendingOrderRequest
     ) {
@@ -29,6 +26,16 @@ public class PendingOrderController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(pendingOrderResponse));
+    }
+
+    @DeleteMapping("/pending-order/{order-id}")
+    public ResponseEntity<ApiResponse<Void>> deletePendingOrder(
+            @PathVariable("order-id") String orderId
+    ) {
+        pendingOrderService.deletePendingOrder(orderId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(null));
     }
 
 }

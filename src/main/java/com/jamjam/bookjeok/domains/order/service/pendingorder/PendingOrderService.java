@@ -11,4 +11,6 @@ public interface PendingOrderService {
 
     PendingOrder getPendingOrder(PaymentConfirmRequest paymentConfirmRequest);
 
+    void deletePendingOrder(String orderId);
+
 }
