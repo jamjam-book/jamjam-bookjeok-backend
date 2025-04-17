@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jamjam.bookjeok.domains.member.query.mapper.AdminMapper">
+
+    <select id="findAllMember" resultType="MemberDTO">
+        SELECT
+            member_uid,
+            member_id,
+            member_name,
+            phone_number,
+            email,
+            nickname,
+            birth_date,
+            marketing_consent,
+            role,
+            created_at,
+            modified_at,
+            activity_status
+        FROM members
+        WHERE role = 'MEMBER'
+        ORDER BY member_uid
+        LIMIT #{ limit } OFFSET #{ offset }
+    </select>
+
+    <select id="countMembers" resultType="_long">
+        SELECT COUNT(*)
+        FROM members
+        WHERE role = 'MEMBER'
+    </select>
+
+    <select id="findMemberByIdOrNickname" resultType="MemberDTO">
+    SELECT
+        member_uid,
+        member_id,
+        member_name,
+        phone_number,
+        email,
+        nickname,
+        birth_date,
+        marketing_consent,
+        role,
+        created_at,
+        modified_at,
+        activity_status
+    FROM members
+    WHERE role = 'MEMBER'
+    <choose>
+        <when test="memberId != null and memberId != ''">
+            AND member_id = #{ memberId }
+        </when>
+        <when test="nickname != null and nickname != ''">
+            AND nickname = #{ nickname }
+        </when>
+    </choose>
+    ORDER BY member_uid;
+    </select>
+
+</mapper>

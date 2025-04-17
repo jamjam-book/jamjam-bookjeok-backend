@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamjam.bookjeok.domains.cart.query.mapper.CartMapper">
+    <select id="findCartBooksByMemberUid" resultType="com.jamjam.bookjeok.domains.cart.query.dto.response.CartBookResponse">
+        SELECT
+            c.member_uid, b.book_id, b.book_name, c.quantity,
+            c.quantity * b.price as total_price, b.image_url
+        FROM books b
+        JOIN carts c ON b.book_id = c.book_id
+        WHERE c.member_uid = #{ memberUid }
+        AND b.is_deleted = false;
+    </select>
+
+    <select id="findByBookIdAndBookName" resultType="com.jamjam.bookjeok.domains.book.command.entity.Book">
+        SELECT
+            book_id, publisher_id, category_id,
+            book_name, isbn, image_url, published_at,
+            price, stock_quantity, created_at, modified_at, is_deleted
+        FROM books
+        WHERE book_id = #{ bookId }
+        AND book_name = #{ bookName }
+    </select>
+
+    <select id="findCartCountByMemberUid" resultType="int">
+        SELECT COUNT(*)
+        FROM carts
+        WHERE member_uid = #{ memberUid }
+    </select>
+
+    <select id="findCartByMemberUidAndBookId" resultType="com.jamjam.bookjeok.domains.cart.command.entity.Cart">
+        SELECT
+            cart_id, member_uid, book_id,
+            quantity, created_at, modified_at
+        FROM carts
+        WHERE member_uid = #{ memberUid }
+        AND book_id = #{ bookId }
+    </select>
+</mapper>
