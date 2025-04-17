@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.repository.orderdetail;
+package com.jamjam.bookjeok.domains.orderdetail.repository;
 
-import com.jamjam.bookjeok.domains.order.entity.OrderDetail;
+import com.jamjam.bookjeok.domains.orderdetail.entity.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

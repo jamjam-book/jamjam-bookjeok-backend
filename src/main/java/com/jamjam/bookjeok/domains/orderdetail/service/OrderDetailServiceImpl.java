@@ -1,12 +1,12 @@
-package com.jamjam.bookjeok.domains.order.service.orderdetail;
+package com.jamjam.bookjeok.domains.orderdetail.service;
 
-import com.jamjam.bookjeok.domains.order.dto.orderdetail.OrderDetailDTO;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.orderdetail.dto.OrderDetailDTO;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.entity.Order;
-import com.jamjam.bookjeok.domains.order.entity.OrderDetail;
-import com.jamjam.bookjeok.domains.order.repository.orderdetail.OrderDetailRepository;
-import com.jamjam.bookjeok.domains.order.repository.orderdetail.mapper.OrderDetailMapper;
-import com.jamjam.bookjeok.exception.order.orderdetail.OrderDetailNotFoundException;
+import com.jamjam.bookjeok.domains.orderdetail.entity.OrderDetail;
+import com.jamjam.bookjeok.domains.orderdetail.repository.OrderDetailRepository;
+import com.jamjam.bookjeok.domains.orderdetail.repository.mapper.OrderDetailMapper;
+import com.jamjam.bookjeok.exception.orderdetail.OrderDetailNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

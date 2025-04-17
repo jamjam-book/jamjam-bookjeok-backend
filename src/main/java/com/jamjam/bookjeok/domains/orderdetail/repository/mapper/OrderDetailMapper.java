@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.repository.orderdetail.mapper;
+package com.jamjam.bookjeok.domains.orderdetail.repository.mapper;
 
-import com.jamjam.bookjeok.domains.order.dto.orderdetail.OrderDetailDTO;
+import com.jamjam.bookjeok.domains.orderdetail.dto.OrderDetailDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
