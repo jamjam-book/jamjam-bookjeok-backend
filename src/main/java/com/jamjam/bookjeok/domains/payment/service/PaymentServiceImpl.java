@@ -2,13 +2,13 @@ package com.jamjam.bookjeok.domains.payment.service;
 
 import com.jamjam.bookjeok.domains.book.entity.Book;
 import com.jamjam.bookjeok.domains.book.repository.BookRepository;
-import com.jamjam.bookjeok.domains.order.dto.orderdetail.OrderDetailDTO;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderBookItemsRequest;
+import com.jamjam.bookjeok.domains.orderdetail.dto.OrderDetailDTO;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.entity.Order;
-import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
+import com.jamjam.bookjeok.domains.pendingorder.entity.PendingOrder;
 import com.jamjam.bookjeok.domains.order.service.order.OrderService;
-import com.jamjam.bookjeok.domains.order.service.orderdetail.OrderDetailService;
-import com.jamjam.bookjeok.domains.order.service.pendingorder.PendingOrderService;
+import com.jamjam.bookjeok.domains.orderdetail.service.OrderDetailService;
+import com.jamjam.bookjeok.domains.pendingorder.service.PendingOrderService;
 import com.jamjam.bookjeok.domains.payment.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.payment.dto.request.PaymentConfirmRequest;
 import com.jamjam.bookjeok.domains.payment.dto.response.PaymentConfirmResponse;

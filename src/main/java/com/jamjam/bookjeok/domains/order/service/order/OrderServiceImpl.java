@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.domains.order.service.order;
 
 import com.jamjam.bookjeok.domains.order.entity.Order;
-import com.jamjam.bookjeok.domains.order.entity.PendingOrder;
+import com.jamjam.bookjeok.domains.pendingorder.entity.PendingOrder;
 import com.jamjam.bookjeok.domains.order.repository.order.OrderRepository;
 import com.jamjam.bookjeok.domains.payment.dto.PaymentDTO;
 import lombok.RequiredArgsConstructor;
