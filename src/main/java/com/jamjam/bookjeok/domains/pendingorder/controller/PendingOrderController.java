@@ -1,9 +1,9 @@
-package com.jamjam.bookjeok.domains.order.controller.order;
+package com.jamjam.bookjeok.domains.pendingorder.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.request.PendingOrderRequest;
-import com.jamjam.bookjeok.domains.order.dto.pendingorder.response.PendingOrderResponse;
-import com.jamjam.bookjeok.domains.order.service.pendingorder.PendingOrderService;
+import com.jamjam.bookjeok.domains.pendingorder.dto.request.PendingOrderRequest;
+import com.jamjam.bookjeok.domains.pendingorder.dto.response.PendingOrderResponse;
+import com.jamjam.bookjeok.domains.pendingorder.service.PendingOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

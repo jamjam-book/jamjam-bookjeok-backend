@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.order.dto.pendingorder.response;
+package com.jamjam.bookjeok.domains.pendingorder.dto.response;
 
 import lombok.Builder;
 
