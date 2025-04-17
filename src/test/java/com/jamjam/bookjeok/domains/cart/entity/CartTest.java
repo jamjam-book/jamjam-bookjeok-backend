@@ -1,6 +1,6 @@
-package com.jamjam.bookjeok.domains.order.entity;
+package com.jamjam.bookjeok.domains.cart.entity;
 
-import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
-import static com.jamjam.bookjeok.domains.order.entity.Cart.calculateBookTotalPrice;
-import static com.jamjam.bookjeok.domains.order.entity.Cart.validateCartItemLimit;
+import static com.jamjam.bookjeok.domains.cart.entity.Cart.calculateBookTotalPrice;
+import static com.jamjam.bookjeok.domains.cart.entity.Cart.validateCartItemLimit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 

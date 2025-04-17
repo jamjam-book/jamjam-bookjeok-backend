@@ -1,8 +1,8 @@
-package com.jamjam.bookjeok.domains.order.controller.cart;
+package com.jamjam.bookjeok.domains.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamjam.bookjeok.domains.order.dto.cart.request.CartMemberIdRequest;
-import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
+import com.jamjam.bookjeok.domains.cart.dto.request.CartMemberIdRequest;
+import com.jamjam.bookjeok.domains.cart.dto.request.CartRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

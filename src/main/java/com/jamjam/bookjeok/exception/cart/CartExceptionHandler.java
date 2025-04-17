@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.exception.order.cart;
+package com.jamjam.bookjeok.exception.cart;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
 import org.springframework.http.HttpStatus;

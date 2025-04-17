@@ -1,4 +1,4 @@
-package com.jamjam.bookjeok.domains.order.dto.cart.response;
+package com.jamjam.bookjeok.domains.cart.dto.response;
 
 import lombok.Builder;
 

@@ -1,15 +1,15 @@
-package com.jamjam.bookjeok.domains.order.service.cart;
+package com.jamjam.bookjeok.domains.cart.service;
 
 import com.jamjam.bookjeok.domains.book.entity.Book;
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookListResponse;
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartBookResponse;
-import com.jamjam.bookjeok.domains.order.dto.cart.response.CartResponse;
-import com.jamjam.bookjeok.domains.order.dto.cart.request.CartRequest;
-import com.jamjam.bookjeok.domains.order.entity.Cart;
-import com.jamjam.bookjeok.domains.order.repository.cart.CartRepository;
-import com.jamjam.bookjeok.domains.order.repository.cart.mapper.CartMapper;
-import com.jamjam.bookjeok.exception.order.cart.CartBookNotFoundException;
-import com.jamjam.bookjeok.exception.order.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartBookListResponse;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartBookResponse;
+import com.jamjam.bookjeok.domains.cart.dto.response.CartResponse;
+import com.jamjam.bookjeok.domains.cart.dto.request.CartRequest;
+import com.jamjam.bookjeok.domains.cart.entity.Cart;
+import com.jamjam.bookjeok.domains.cart.repository.CartRepository;
+import com.jamjam.bookjeok.domains.cart.repository.mapper.CartMapper;
+import com.jamjam.bookjeok.exception.cart.CartBookNotFoundException;
+import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.jamjam.bookjeok.domains.order.entity.Cart.calculateBookTotalPrice;
-import static com.jamjam.bookjeok.domains.order.entity.Cart.validateCartItemLimit;
+import static com.jamjam.bookjeok.domains.cart.entity.Cart.calculateBookTotalPrice;
+import static com.jamjam.bookjeok.domains.cart.entity.Cart.validateCartItemLimit;
 
 @Slf4j
 @Service
