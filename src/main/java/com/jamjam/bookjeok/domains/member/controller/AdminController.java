@@ -9,6 +9,7 @@ import com.jamjam.bookjeok.domains.member.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +23,17 @@ public class AdminController {
 
     private final AdminService adminService;
 
-//    @GetMapping("/admin/members")
-//    public ResponseEntity<ApiResponse<MemberListResponse>> getAllMembers(
-//            @Validated PageRequest pageRequest
-//    ){
-//        MemberListResponse response = adminService.getAllMembers(pageRequest);
-//
-//        return ResponseEntity.ok(ApiResponse.success(response));
-//    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/members")
+    public ResponseEntity<ApiResponse<MemberListResponse>> getAllMembers(
+            @Validated PageRequest pageRequest
+    ){
+        MemberListResponse response = adminService.getAllMembers(pageRequest);
 
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/member")
     public ResponseEntity<ApiResponse<MemberDetailResponse>> getMemberByName(
             MemberSearchRequest memberSearchRequest

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,6 +27,7 @@ class AdminControllerTest {
     MockMvc mockMvc;
 
     @DisplayName("멤버 전체 조회 테스트")
+    @WithMockUser(authorities = "ADMIN")
     @Test
     void getAllMembersTest() throws Exception {
         mockMvc.perform(get("/api/v1/admin/members"))
@@ -36,8 +38,9 @@ class AdminControllerTest {
                 .andDo(print());
     }
 
-    @Test
     @DisplayName("멤버의 아이디로 멤버를 검색하는 테스트")
+    @WithMockUser(authorities = "ADMIN")
+    @Test
     void getMemberByIdTest() throws Exception {
         String memberId = "user02";
 
@@ -61,6 +64,7 @@ class AdminControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     @DisplayName("멤버의 닉네임으로 멤버를 검색하는 테스트")
     void getMemberByNicknameTest() throws Exception {
         String nickname = "닉네임02";
