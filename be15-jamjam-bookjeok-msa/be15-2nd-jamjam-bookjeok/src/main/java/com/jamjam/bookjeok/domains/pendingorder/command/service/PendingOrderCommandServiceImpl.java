@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.pendingorder.command.service;
 
 import com.jamjam.bookjeok.domains.book.command.entity.Book;
+import com.jamjam.bookjeok.domains.payment.command.dto.request.PaymentConfirmRequest;
 import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderRequest;
@@ -8,6 +9,7 @@ import com.jamjam.bookjeok.domains.pendingorder.command.dto.response.PendingOrde
 import com.jamjam.bookjeok.domains.pendingorder.command.repository.PendingOrderRepository;
 import com.jamjam.bookjeok.domains.cart.query.mapper.CartMapper;
 import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
+import com.jamjam.bookjeok.exception.payment.PaymentOrderNotFountException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,17 @@ public class PendingOrderCommandServiceImpl implements PendingOrderCommandServic
         PendingOrder savedPendingOrder = pendingOrderRepository.save(pendingOrder);
 
         return toResponse(savedPendingOrder);
+    }
+
+    @Override
+    public PendingOrder getPendingOrder(PaymentConfirmRequest paymentConfirmRequest) {
+        return pendingOrderRepository.findPendingOrderByOrderIdAndTotalAmount(paymentConfirmRequest.orderId(), paymentConfirmRequest.amount())
+                .orElseThrow(() -> new PaymentOrderNotFountException("주문 정보가 일치하지 않습니다."));
+    }
+
+    @Override
+    public void deletePendingOrder(String orderId) {
+        pendingOrderRepository.deletePendingOrderByOrderId(orderId);
     }
 
     private List<Book> validateOrderBooks(PendingOrderRequest pendingOrderRequest) {

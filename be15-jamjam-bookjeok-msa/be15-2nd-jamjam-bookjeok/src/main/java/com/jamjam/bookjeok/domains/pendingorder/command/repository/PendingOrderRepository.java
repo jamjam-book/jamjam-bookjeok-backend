@@ -9,4 +9,6 @@ public interface PendingOrderRepository extends JpaRepository<PendingOrder, Long
 
     Optional<PendingOrder> findPendingOrderByOrderIdAndTotalAmount(String orderId, int totalAmount);
 
+    void deletePendingOrderByOrderId(String orderId);
+
 }

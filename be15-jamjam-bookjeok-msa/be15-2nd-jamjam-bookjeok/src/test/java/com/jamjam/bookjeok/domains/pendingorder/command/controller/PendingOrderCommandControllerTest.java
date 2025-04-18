@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-class PendingOrderControllerTest {
+class PendingOrderCommandControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,7 +63,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))
@@ -94,7 +94,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))
@@ -123,7 +123,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))
@@ -152,7 +152,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))
@@ -181,7 +181,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))
@@ -210,7 +210,7 @@ class PendingOrderControllerTest {
                 .orderBookItems(pendingOrderBookItemsRequest)
                 .build();
 
-        mockMvc.perform(post("/api/v1/order/payment")
+        mockMvc.perform(post("/api/v1/pending-order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(pendingOrderRequest))

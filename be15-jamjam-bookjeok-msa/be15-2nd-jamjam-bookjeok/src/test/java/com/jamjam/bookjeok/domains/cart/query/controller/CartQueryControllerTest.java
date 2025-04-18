@@ -1,7 +1,6 @@
 package com.jamjam.bookjeok.domains.cart.query.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jamjam.bookjeok.domains.cart.command.dto.request.CartMemberIdRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +31,11 @@ class CartQueryControllerTest {
     @Test
     @DisplayName("memberUid로 장바구니 목록을 조회하는 테스트")
     void testGetBooksInCart() throws Exception {
-        CartMemberIdRequest cartMemberIdRequest = CartMemberIdRequest.builder()
-                .memberUid(1L)
-                .build();
+        Long memberUid = 1L;
 
-        mockMvc.perform(get("/api/v1/cart")
+        mockMvc.perform(get("/api/v1/carts/" + memberUid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(cartMemberIdRequest))
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -63,4 +59,5 @@ class CartQueryControllerTest {
                 .andExpect(jsonPath("$.message").doesNotExist())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
     }
+
 }
