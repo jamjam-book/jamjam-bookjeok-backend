@@ -1,7 +1,6 @@
 package com.jamjam.bookjeok.domains.pendingorder.command.entity;
 
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderBookItemsRequest;
-import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -39,7 +39,7 @@ class CartCommandControllerTest {
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(post("/api/v1/cart")
+        mockMvc.perform(post("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -67,7 +67,7 @@ class CartCommandControllerTest {
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(post("/api/v1/cart")
+        mockMvc.perform(post("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -88,7 +88,7 @@ class CartCommandControllerTest {
                 .quantity(5)
                 .build();
 
-        mockMvc.perform(put("/api/v1/cart")
+        mockMvc.perform(put("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -117,7 +117,7 @@ class CartCommandControllerTest {
                 .quantity(7)
                 .build();
 
-        mockMvc.perform(put("/api/v1/cart")
+        mockMvc.perform(put("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -138,7 +138,7 @@ class CartCommandControllerTest {
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(delete("/api/v1/cart")
+        mockMvc.perform(delete("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -160,7 +160,7 @@ class CartCommandControllerTest {
                 .quantity(1)
                 .build();
 
-        mockMvc.perform(delete("/api/v1/cart")
+        mockMvc.perform(delete("/api/v1/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))

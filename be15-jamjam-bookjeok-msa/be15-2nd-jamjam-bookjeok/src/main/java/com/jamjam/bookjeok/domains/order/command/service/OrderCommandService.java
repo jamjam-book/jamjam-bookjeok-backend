@@ -5,7 +5,7 @@ import com.jamjam.bookjeok.domains.order.command.entity.Order;
 import com.jamjam.bookjeok.domains.payment.command.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
 
-public interface OrderService {
+public interface OrderCommandService {
 
     Order createOrder(PendingOrder findPendingOrder, PaymentDTO paymentDTO);
 

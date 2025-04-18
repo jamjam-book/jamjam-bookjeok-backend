@@ -20,7 +20,7 @@ import java.util.Base64;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TossPaymentServiceImpl implements TossPaymentService {
+public class TossPaymentCommandServiceImpl implements TossPaymentCommandService {
 
     private static final String TOSS_CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
     private static final String CONTENT_TYPE = "application/json";

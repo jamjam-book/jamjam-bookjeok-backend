@@ -17,7 +17,7 @@ public class CartCommandController {
 
     private final CartCommandService cartCommandService;
 
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     public ResponseEntity<ApiResponse<CartResponse>> createBookToCart(
             @RequestBody @Validated CartRequest cartRequest
     ) {
@@ -28,7 +28,7 @@ public class CartCommandController {
                 .body(ApiResponse.success(cartResponse));
     }
 
-    @PutMapping("/cart")
+    @PutMapping("/carts")
     public ResponseEntity<ApiResponse<CartResponse>> modifyBookQuantity(
             @RequestBody @Validated CartRequest cartRequest
     ) {
@@ -39,7 +39,7 @@ public class CartCommandController {
                 .body(ApiResponse.success(cartResponse));
     }
 
-    @DeleteMapping("/cart")
+    @DeleteMapping("/carts")
     public ResponseEntity<ApiResponse<CartResponse>> deleteBookFromCartByMemberId(
             @RequestBody @Validated CartRequest cartRequest
     ) {
