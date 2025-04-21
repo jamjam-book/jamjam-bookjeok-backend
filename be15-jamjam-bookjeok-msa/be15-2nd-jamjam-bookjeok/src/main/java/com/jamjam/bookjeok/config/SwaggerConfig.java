@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     private Info swaggerInfo() {
         return new Info()
-                .title("Ohgiraffers API")
+                .title("Bookjeok API")
                 .description("Spring Boot Swagger 연동 테스트")
                 .version("1.0.0");
     }
