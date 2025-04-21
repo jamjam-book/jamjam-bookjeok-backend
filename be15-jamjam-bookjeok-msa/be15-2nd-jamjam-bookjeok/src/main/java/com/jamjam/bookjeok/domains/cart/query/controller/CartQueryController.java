@@ -3,6 +3,8 @@ package com.jamjam.bookjeok.domains.cart.query.controller;
 import com.jamjam.bookjeok.common.dto.ApiResponse;
 import com.jamjam.bookjeok.domains.cart.query.dto.response.CartBookListResponse;
 import com.jamjam.bookjeok.domains.cart.query.service.CartQueryService;
+import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
+import com.jamjam.bookjeok.domains.member.query.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class CartQueryController {
 
     private final CartQueryService cartQueryService;
+    private final MemberQueryService memberQueryService;
 
-    @GetMapping("/carts/{memberUid}")
+    @GetMapping("/members/{memberId}/carts")
     public ResponseEntity<ApiResponse<CartBookListResponse>> getBooksInCart(
-            @PathVariable(value = "memberUid") Long memberUid
+            @PathVariable(value = "memberId") String memberId
     ) {
-        CartBookListResponse cartBookListResponse = cartQueryService.getBooksInCart(memberUid);
+        MemberDetailResponse memberDetail = memberQueryService.getMemberDetail(memberId);
+
+        CartBookListResponse cartBookListResponse = cartQueryService.getBooksInCart(memberDetail.getMember().getMemberUid());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
