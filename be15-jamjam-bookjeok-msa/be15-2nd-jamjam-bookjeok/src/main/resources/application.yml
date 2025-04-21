@@ -1,9 +1,16 @@
 spring:
   application:
     name: bookjeok-service
+
   config:
     activate:
       on-profile: local
+
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 1000
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
