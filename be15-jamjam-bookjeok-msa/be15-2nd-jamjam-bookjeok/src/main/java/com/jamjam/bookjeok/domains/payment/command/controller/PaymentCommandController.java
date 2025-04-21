@@ -19,11 +19,12 @@ public class PaymentCommandController {
 
     private final PaymentCommandService paymentCommandService;
 
-    @PostMapping("/payment/confirm")
+    @PostMapping("/payment/{paymentKey}/confirm")
     public ResponseEntity<ApiResponse<PaymentConfirmResponse>> confirmPayment(
+            @PathVariable(value = "paymentKey") String paymentKey,
             @RequestBody @Validated PaymentConfirmRequest paymentConfirmRequest
     ) {
-        PaymentConfirmResponse paymentConfirmResponse = paymentCommandService.confirmPayment(paymentConfirmRequest);
+        PaymentConfirmResponse paymentConfirmResponse = paymentCommandService.confirmPayment(paymentKey, paymentConfirmRequest);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
