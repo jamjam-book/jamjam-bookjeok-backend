@@ -63,9 +63,9 @@ class OrderDetailQueryControllerTest {
         Long memberUid = 1L;
 
         MemberDetailResponse memberDetailResponse = MemberDetailResponse.builder()
-                .member(new MemberDTO(memberUid, null, null, null,
-                        null, null, null, true,
-                        null, null, null, null))
+                .member(MemberDTO.builder()
+                        .memberUid(memberUid)
+                        .build())
                 .build();
 
         when(memberQueryService.getMemberDetail(memberId)).thenReturn(memberDetailResponse);
