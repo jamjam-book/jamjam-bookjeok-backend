@@ -1,19 +1,22 @@
 package com.jamjam.bookjeok.domains.book.command.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.domains.book.command.dto.BookApiDTO;
 import com.jamjam.bookjeok.domains.book.command.dto.request.BookCategoryModifyRequest;
 import com.jamjam.bookjeok.domains.book.command.dto.request.BookCategoryRequest;
-import com.jamjam.bookjeok.domains.book.command.dto.request.BookRequest;
 import com.jamjam.bookjeok.domains.book.command.dto.response.BookCategoryResponse;
 import com.jamjam.bookjeok.domains.book.command.dto.response.BookResponse;
 import com.jamjam.bookjeok.domains.book.command.entity.Book;
+import com.jamjam.bookjeok.domains.book.command.service.BookApiService;
 import com.jamjam.bookjeok.domains.book.command.service.BookCommandAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -21,34 +24,34 @@ import org.springframework.web.multipart.MultipartFile;
 public class BookCommandAdminController {
 
     private final BookCommandAdminService bookCommandService;
+    private final BookApiService bookApiService;
 
-    @PostMapping("/book/in/{isbn}")
-    public ResponseEntity<ApiResponse<BookResponse>> registBook(
-            @RequestPart @Validated BookRequest bookRequest, @RequestPart MultipartFile bookImg) {
-        // foundByIsbn 으로 null 값이면 새로 등록
-        //Book foundBook = bookCommandService.findBookByIsbn(isbn);
+    @PostMapping("/book/check/{isbn}")
+    public ResponseEntity<ApiResponse<?>> checkBookByIsbn(
+            @PathVariable(name="isbn") String isbn) {
 
-        BookResponse bookResponse = bookCommandService.registBook(bookRequest, bookImg);
+        Optional<Book> foundBook = bookCommandService.findBookByIsbn(isbn);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(bookResponse));
+        if(foundBook.isPresent()) {
+             return ResponseEntity.ok(ApiResponse.success(Map.of("status", "exists", "bookId", foundBook.get().getBookId())));
+        } else {
+
+            BookApiDTO apiBook = bookApiService.getBookByIsbn(isbn);
+            return ResponseEntity.ok(ApiResponse.success(Map.of("status", "new", "book", apiBook)));
+        }
     }
 
-    @PostMapping("/book/mod")
-    public ResponseEntity<ApiResponse<BookResponse>> modifyBook (
-            @RequestPart @Validated BookRequest bookRequest,
-            @RequestPart MultipartFile bookImg) {
-
-        BookResponse bookResponse = bookCommandService.modifyBook(bookRequest, bookImg);
-
-        return ResponseEntity
-                .ok(ApiResponse.success(bookResponse));
+    @GetMapping("/book/mod/{bookId}")
+    public ResponseEntity<ApiResponse<BookResponse>> modifyBookPage(
+            @PathVariable(name="bookId") Long bookId
+    ) {
+        BookResponse response = bookCommandService.findBookByBookId(bookId);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @PostMapping("/book/mod/q")
+    @PutMapping("/book/mod/{bookId}")
     public ResponseEntity<ApiResponse<BookResponse>> modifyStockQuantity (
-            @RequestParam Long bookId, @RequestParam int quantity) {
+            @PathVariable(name="bookId") Long bookId, @RequestParam int quantity) {
 
         BookResponse bookResponse = bookCommandService.modifyStockQuantity(bookId, quantity);
 

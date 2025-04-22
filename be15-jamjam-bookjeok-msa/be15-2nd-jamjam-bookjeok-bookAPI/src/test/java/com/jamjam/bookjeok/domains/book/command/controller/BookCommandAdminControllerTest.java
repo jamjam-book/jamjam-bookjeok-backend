@@ -11,13 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,202 +41,60 @@ class BookCommandAdminControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
-   /* @DisplayName("도서 등록 테스트")
+    @DisplayName("새로운 도서 등록 테스트")
     @Test
-    void testRegistBook() throws Exception{
+    void testGetNewBookInfo() throws Exception {
+        String isbn = "9788936439750";
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "bookImg", "cover.png", "image/png", "fake image data".getBytes());
-
-        MockMultipartFile jsonFile = new MockMultipartFile(
-                "bookRequest", "request", "application/json",
-                """
-                {
-                  "publisherId": 1,
-                  "categoryId": 1,
-                  "bookName": "등록성공",
-                  "isbn": "9999999999999",
-                  "publishedAt": "2024-12-25",
-                  "price": 12000,
-                  "stockQuantity": 10,
-                  "bookInfo": "테스트용으로 등록된 도서입니다."
-                }
-                """.getBytes()
-        );
-
-        mvc.perform(multipart(BASE_URL + "/book/in")
-                        .file(imageFile)
-                        .file(jsonFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.publisherId").value(1L))
-                .andExpect(jsonPath("$.data.categoryId").value(1L))
-                .andExpect(jsonPath("$.data.bookName").value("등록성공"))
-                .andExpect(jsonPath("$.data.isbn").value("9999999999999"))
-                .andExpect(jsonPath("$.data.publishedAt").exists())
-                .andExpect(jsonPath("$.data.price").value(12000))
-                .andExpect(jsonPath("$.data.stockQuantity").value(10))
-                .andExpect(jsonPath("$.data.bookInfo").value("테스트용으로 등록된 도서입니다."))
-                .andExpect(jsonPath("$.data.imageUrl").exists());
-
+        mvc.perform(post(BASE_URL + "/book/check/{isbn}",isbn)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.book.isbn").value(isbn));
     }
-*/
-   /* @DisplayName("중복 도서 등록 시 예외 발생 테스트")
+
+    @DisplayName("존재하는 도서 ID 반환 테스트")
     @Test
-    void testRegistDuplicatedBookException() throws Exception {
+    void testGetExistBookInfo() throws Exception {
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "bookImg", "cover.png", "image/png", "fake image data".getBytes());
+        String isbn = "9781082502224";
 
-        MockMultipartFile jsonFile = new MockMultipartFile(
-                "bookRequest", "request", "application/json",
-                """
-                {
-                  "publisherId": 1,
-                  "categoryId": 1,
-                  "bookName": "중복도서",
-                  "isbn": "9781082502224",
-                  "publishedAt": "%s",
-                  "price": 12000,
-                  "stockQuantity": 10,
-                  "bookInfo": "중복도서입니다."
-                }
-                """.formatted(LocalDate.now()).getBytes()
-        );
-
-        mvc.perform(multipart(BASE_URL + "/book/in")
-                        .file(imageFile)
-                        .file(jsonFile)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.message").value("이미 등록된 도서입니다."))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
-
-    }*/
-
-   /* @DisplayName("도서 등록 시 필수 입력 값 누락 시 예외 발생 테스트")
-    @Test
-    void testRegistNotNUllElementException() throws Exception {
-
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "bookImg", "cover.png", "image/png", "fake image data".getBytes());
-
-        MockMultipartFile jsonFile = new MockMultipartFile(
-                "bookRequest", "request", "application/json",
-                """
-                {
-                  "publisherId": 1,
-                  "categoryId": 1,
-                  "bookName": "예외발생",
-                  "isbn": "",
-                  "publishedAt": "%s",
-                  "price": 12000,
-                  "stockQuantity": 10,
-                  "bookInfo": "등록될 수 없습니다."
-                }
-                """.formatted(LocalDate.now()).getBytes()
-        );
-
-        mvc.perform(multipart(HttpMethod.POST, BASE_URL + "/book/in")
-                        .file(imageFile)
-                        .file(jsonFile).headers(headers)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                ).andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.message").value("isbn 번호는 비어있을 수 없습니다."))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
-
-    }
-*/
-    @DisplayName("도서 수정 테스트")
-    @Test
-    void testModifyBook() throws Exception{
-
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "bookImg", "cover.png", "image/png", "fake image data".getBytes());
-
-        MockMultipartFile jsonFile = new MockMultipartFile(
-                "bookRequest", "request", "application/json",
-                """
-                {
-                  "publisherId": 1,
-                  "categoryId": 1,
-                  "bookName": "수정성공",
-                  "isbn": "9781082502224",
-                  "publishedAt": "2024-12-25",
-                  "price": 12000,
-                  "stockQuantity": 11,
-                  "bookInfo": "수정된 도서입니다."
-                }
-                """.getBytes()
-        );
-
-        mvc.perform(multipart(HttpMethod.POST, BASE_URL + "/book/mod")
-                        .file(imageFile)
-                        .file(jsonFile).headers(headers)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.publisherId").value(1L))
-                .andExpect(jsonPath("$.data.categoryId").value(1L))
-                .andExpect(jsonPath("$.data.bookName").value("수정성공"))
-                .andExpect(jsonPath("$.data.isbn").value("9781082502224"))
-                .andExpect(jsonPath("$.data.publishedAt").value("2024-12-25"))
-                .andExpect(jsonPath("$.data.price").value(12000))
-                .andExpect(jsonPath("$.data.stockQuantity").value(11))
-                .andExpect(jsonPath("$.data.bookInfo").value("수정된 도서입니다."))
-                .andExpect(jsonPath("$.data.imageUrl").exists());
-
+        mvc.perform(post(BASE_URL + "/book/check/{isbn}",isbn)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.bookId").exists());
     }
 
     @DisplayName("도서 수량 수정 테스트")
     @Test
-    void testModifyBookStockQuantity() throws Exception{
+    void testModifyBook() throws Exception{
 
-        mvc.perform(post(BASE_URL + "/book/mod/q")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("bookId", "1")
-                        .param("quantity", "50"))
+        Long bookId = 1L;
+        int quantity = 10;
+
+        mvc.perform(put(BASE_URL + "/book/mod/{bookId}", bookId)
+                        .param("quantity",String.valueOf(quantity))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.stockQuantity").value(50));
+                .andExpect(jsonPath("$.data.stockQuantity").value(quantity));
+
     }
 
     @DisplayName("존재하지 않는 도서 수정 요청 시 예외 발생 테스트")
     @Test
     void testModifyNotExistBook() throws Exception{
 
-        MockMultipartFile imageFile = new MockMultipartFile(
-                "bookImg", "cover.png", "image/png", "fake image data".getBytes());
+        Long bookId = 123456789L;
+        int quantity = 10;
 
-        MockMultipartFile jsonFile = new MockMultipartFile(
-                "bookRequest", "request", "application/json",
-                """
-                {
-                  "publisherId": 1,
-                  "categoryId": 1,
-                  "bookName": "수정 실패",
-                  "isbn": "1234567891012",
-                  "publishedAt": "%s",
-                  "price": 12000,
-                  "stockQuantity": 11,
-                  "bookInfo": "예외 발생"
-                }
-                """.formatted(LocalDate.now()).getBytes()
-        );
-
-        mvc.perform(multipart(HttpMethod.POST, BASE_URL + "/book/mod")
-                        .file(imageFile)
-                        .file(jsonFile).headers(headers)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+        mvc.perform(put(BASE_URL + "/book/mod/{bookId}", bookId)
+                        .param("quantity",String.valueOf(quantity))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.message").value("존재하지 않는 ISBN 입니다."))
+                .andExpect(jsonPath("$.message").value("존재하지 않는 도서입니다."))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
 
     }
-
 
     @DisplayName("도서 삭제 테스트")
     @Test
