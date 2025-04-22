@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface OrderDetailQueryService {
 
-    List<OrderDetailDTO> findOrderDetailByOrderId(String orderId);
+    List<OrderDetailDTO> getOrderDetailByMemberUidAndOrderId(Long memberUid, String orderId);
 
 }
