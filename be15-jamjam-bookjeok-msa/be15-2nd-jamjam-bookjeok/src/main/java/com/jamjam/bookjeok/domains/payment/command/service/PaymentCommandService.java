@@ -5,6 +5,6 @@ import com.jamjam.bookjeok.domains.payment.command.dto.response.PaymentConfirmRe
 
 public interface PaymentCommandService {
 
-    PaymentConfirmResponse confirmPayment(PaymentConfirmRequest paymentConfirmRequest);
+    PaymentConfirmResponse confirmPayment(String paymentKey, PaymentConfirmRequest paymentConfirmRequest);
 
 }

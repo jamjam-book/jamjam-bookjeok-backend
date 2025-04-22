@@ -2,7 +2,7 @@ package com.jamjam.bookjeok.domains.payment.command.infrastructure.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamjam.bookjeok.domains.payment.command.dto.PaymentDTO;
-import com.jamjam.bookjeok.domains.payment.command.dto.request.PaymentConfirmRequest;
+import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
 import com.jamjam.bookjeok.exception.payment.ExternalPaymentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,10 @@ public class TossPaymentCommandServiceImpl implements TossPaymentCommandService 
     private final ObjectMapper objectMapper;
 
     @Override
-    public PaymentDTO approvePayment(PaymentConfirmRequest paymentConfirmRequest) {
+    public PaymentDTO approvePayment(TossPaymentApproveRequest tossPaymentApproveRequest) {
         try {
             HttpURLConnection connection = createConnection();
-            sendRequest(connection, paymentConfirmRequest);
+            sendRequest(connection, tossPaymentApproveRequest);
 
             int code = connection.getResponseCode();
             boolean isSuccess = code == HTTP_STATUS_CODE_OK;
@@ -67,8 +67,8 @@ public class TossPaymentCommandServiceImpl implements TossPaymentCommandService 
         return connection;
     }
 
-    private void sendRequest(HttpURLConnection connection, PaymentConfirmRequest paymentConfirmRequest) throws IOException {
-        String requestJson = objectMapper.writeValueAsString(paymentConfirmRequest);
+    private void sendRequest(HttpURLConnection connection, TossPaymentApproveRequest tossPaymentApproveRequest) throws IOException {
+        String requestJson = objectMapper.writeValueAsString(tossPaymentApproveRequest);
         log.info("requestJson = {}", requestJson);
 
         try (OutputStream os = connection.getOutputStream()) {

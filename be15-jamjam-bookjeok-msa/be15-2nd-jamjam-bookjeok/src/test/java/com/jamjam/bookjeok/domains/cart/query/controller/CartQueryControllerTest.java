@@ -29,11 +29,11 @@ class CartQueryControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("memberUid로 장바구니 목록을 조회하는 테스트")
+    @DisplayName("memberId로 장바구니 목록을 조회하는 테스트")
     void testGetBooksInCart() throws Exception {
-        Long memberUid = 1L;
+        String memberId = "user01";
 
-        mockMvc.perform(get("/api/v1/carts/" + memberUid)
+        mockMvc.perform(get("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 ).andDo(print())

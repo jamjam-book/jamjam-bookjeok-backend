@@ -4,6 +4,7 @@ import com.jamjam.bookjeok.domains.book.command.entity.Book;
 import com.jamjam.bookjeok.domains.book.command.repository.BookRepository;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
 import com.jamjam.bookjeok.domains.orderdetail.command.service.OrderDetailCommandService;
+import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.command.entity.Order;
 import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
@@ -45,10 +46,13 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public PaymentConfirmResponse confirmPayment(PaymentConfirmRequest paymentConfirmRequest) {
+    public PaymentConfirmResponse confirmPayment(String paymentKey, PaymentConfirmRequest paymentConfirmRequest) {
         PendingOrder findPendingOrder = pendingOrderService.getPendingOrder(paymentConfirmRequest);
         List<PendingOrderBookItemsRequest> orderItems = validateBookStocks(findPendingOrder);
-        PaymentDTO paymentDTO = tossPaymentCommandService.approvePayment(paymentConfirmRequest);
+
+        TossPaymentApproveRequest tossPaymentApproveRequest = createTossPaymentApproveRequest(paymentKey, findPendingOrder);
+        PaymentDTO paymentDTO = tossPaymentCommandService.approvePayment(tossPaymentApproveRequest);
+
         Order savedOrder = orderCommandService.createOrder(findPendingOrder, paymentDTO);
         orderDetailService.createOrderDetails(orderItems, savedOrder);
 
@@ -79,6 +83,14 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
             findBook.updateStockQuantity(stockQuantity, LocalDateTime.now().withNano(0));
         });
         return orderDataList;
+    }
+
+    private TossPaymentApproveRequest createTossPaymentApproveRequest(String paymentKey, PendingOrder pendingOrder) {
+        return TossPaymentApproveRequest.builder()
+                .paymentKey(paymentKey)
+                .orderId(pendingOrder.getOrderId())
+                .amount(pendingOrder.getTotalAmount())
+                .build();
     }
 
     private void savePayment(PaymentDTO paymentDTO, Order order) {
