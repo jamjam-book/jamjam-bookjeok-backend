@@ -9,6 +9,7 @@
         FROM order_details od
         JOIN orders o ON od.order_uid = o.order_uid
         JOIN books b ON od.book_id = b.book_id
-        WHERE o.order_id = #{ orderId }
+        WHERE o.member_uid = #{ memberUid }
+        AND o.order_id = #{ orderId }
     </select>
 </mapper>

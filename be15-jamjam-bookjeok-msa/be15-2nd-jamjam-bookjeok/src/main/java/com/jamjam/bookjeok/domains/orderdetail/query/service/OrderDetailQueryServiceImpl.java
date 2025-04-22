@@ -17,8 +17,8 @@ public class OrderDetailQueryServiceImpl implements OrderDetailQueryService {
     private final OrderDetailMapper orderDetailMapper;
 
     @Override
-    public List<OrderDetailDTO> findOrderDetailByOrderId(String orderId) {
-        List<OrderDetailDTO> orderDetails = orderDetailMapper.findOrderDetailByOrderId(orderId);
+    public List<OrderDetailDTO> getOrderDetailByOrderId(Long memberUid, String orderId) {
+        List<OrderDetailDTO> orderDetails = orderDetailMapper.findOrderDetailByOrderId(memberUid, orderId);
 
         if (orderDetails != null) {
             return orderDetails;
