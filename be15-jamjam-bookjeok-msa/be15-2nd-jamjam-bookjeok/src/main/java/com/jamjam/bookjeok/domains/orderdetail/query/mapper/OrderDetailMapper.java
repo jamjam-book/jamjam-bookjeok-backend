@@ -8,6 +8,6 @@ import java.util.List;
 @Mapper
 public interface OrderDetailMapper {
 
-    List<OrderDetailDTO> findOrderDetailByOrderId(Long memberUid, String orderId);
+    List<OrderDetailDTO> findOrderDetailByMemberUidAndOrderId(Long memberUid, String orderId);
 
 }

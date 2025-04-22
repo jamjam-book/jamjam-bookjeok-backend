@@ -69,7 +69,7 @@ class OrderDetailQueryControllerTest {
                 .build();
 
         when(memberQueryService.getMemberDetail(memberId)).thenReturn(memberDetailResponse);
-        when(orderDetailQueryService.getOrderDetailByOrderId(memberUid, orderId)).thenReturn(orderDetails);
+        when(orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(memberUid, orderId)).thenReturn(orderDetails);
 
         mockMvc.perform(get("/api/v1/members/" + memberId + "/orders/" + orderId + "/order-detail")
                 .accept(MediaType.APPLICATION_JSON)

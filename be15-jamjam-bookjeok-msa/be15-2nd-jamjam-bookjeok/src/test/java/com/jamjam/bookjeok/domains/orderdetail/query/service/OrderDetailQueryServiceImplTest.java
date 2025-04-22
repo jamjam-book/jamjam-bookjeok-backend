@@ -45,13 +45,13 @@ class OrderDetailQueryServiceImplTest {
 
     @Test
     @DisplayName("회원Uid와 주문id로 주문 상세 내역을 조회하는 테스트")
-    void testGetOrderDetailByOrderId() {
+    void testGetOrderDetailByMemberUidAndOrderId() {
         Long memberUid = 1L;
         String orderId = "ORD001";
 
-        when(orderDetailMapper.findOrderDetailByOrderId(memberUid, orderId)).thenReturn(orderDetails);
+        when(orderDetailMapper.findOrderDetailByMemberUidAndOrderId(memberUid, orderId)).thenReturn(orderDetails);
 
-        List<OrderDetailDTO> orderDetailsResult = orderDetailQueryService.getOrderDetailByOrderId(memberUid, orderId);
+        List<OrderDetailDTO> orderDetailsResult = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(memberUid, orderId);
 
         assertNotNull(orderDetailsResult);
         assertThat(orderDetailsResult).hasSize(1);

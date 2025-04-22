@@ -32,7 +32,7 @@ public class OrderDetailQueryController {
         MemberDetailResponse memberDetail = memberQueryService.getMemberDetail(memberId);
         Long memberUid = memberDetail.getMember().getMemberUid();
 
-        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByOrderId(memberUid, orderId);
+        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(memberUid, orderId);
 
         OrderDetailResponse orderDetailResponse = OrderDetailResponse.builder()
                 .orderDetails(orderDetails)
