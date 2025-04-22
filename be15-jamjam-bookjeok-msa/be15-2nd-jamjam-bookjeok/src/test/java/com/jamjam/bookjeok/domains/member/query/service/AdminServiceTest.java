@@ -37,38 +37,37 @@ class AdminServiceTest {
     @DisplayName("findAllMember 서비스 단위 테스트")
     @Test
     void getAllMemberTest() {
-        PageRequest request = new PageRequest(1,10);
+        PageRequest request = new PageRequest(1, 10);
 
-        MemberDTO member1 = new MemberDTO(
-                1L,
-                "user01",
-                "홍길동",
-                "01012345678",
-                "test1@gmail.com",
-                "닉네임01",
-                "19970816",
-                true,
-                MemberRole.MEMBER,
-                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
-                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
-                "ACTIVE"
-        );
+        MemberDTO member1 = MemberDTO.builder()
+                .memberUid(1L)
+                .memberId("user01")
+                .memberName("홍길동")
+                .phoneNumber("01012345678")
+                .email("test1@gmail.com")
+                .nickname("닉네임01")
+                .birthDate("19970816")
+                .marketingConsent(true)
+                .role(MemberRole.MEMBER)
+                .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
+                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
+                .activityStatus("ACTIVE")
+                .build();
 
-        MemberDTO member2 = new MemberDTO(
-                2L,
-                "user02",
-                "유형진",
-                "01024001349",
-                "test2@gmail.com",
-                "닉네임02",
-                "19970918",
-                true,
-                MemberRole.MEMBER,
-                LocalDateTime.of(2025, 2, 6, 14, 13, 32),
-                null,
-                "DEACTIVATE"
-        );
-
+    MemberDTO member2 = MemberDTO.builder()
+            .memberUid(2L)
+            .memberId("user02")
+            .memberName("유형진")
+            .phoneNumber("01024001349")
+            .email("test2@gmail.com")
+            .nickname("닉네임02")
+            .birthDate("19970918")
+            .marketingConsent(true)
+            .role(MemberRole.MEMBER)
+            .createdAt(LocalDateTime.of(2025, 2, 6, 14, 13, 32))
+            .modifiedAt(null)
+            .activityStatus("DEACTIVATE")
+            .build();
 
         List<MemberDTO> fakeMembers = Arrays.asList(member1, member2);
 
@@ -85,47 +84,48 @@ class AdminServiceTest {
     @Test
     void getMemberByIdTest() {
         MemberSearchRequest searchRequest = new MemberSearchRequest("user02", null);
-        MemberDTO member = new MemberDTO(
-                1L,
-                "user01",
-                "정유진",
-                "01012345678",
-                "test1@gmail.com",
-                "닉네임01",
-                "19970816",
-                true,
-                MemberRole.MEMBER,
-                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
-                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
-                "ACTIVE"
-        );
+        MemberDTO member = MemberDTO.builder()
+                .memberUid(1L)
+                .memberId("user01")
+                .memberName("홍길동")
+                .phoneNumber("01012345678")
+                .email("test1@gmail.com")
+                .nickname("닉네임01")
+                .birthDate("19970816")
+                .marketingConsent(true)
+                .role(MemberRole.MEMBER)
+                .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
+                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
+                .activityStatus("ACTIVE")
+                .build();
+
 
         when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
 
         MemberDetailResponse result = adminQueryService.getMemberByIdOrNickname(searchRequest);
 
         assertNotNull(result);
-        assertEquals("정유진", result.getMember().getMemberName());
+        assertEquals("홍길동", result.getMember().getMemberName());
     }
 
     @DisplayName("getMemberByNickname 서비스 단위 테스트")
     @Test
     void getMemberByIdOrNicknameTest() {
         MemberSearchRequest searchRequest = new MemberSearchRequest(null, "닉네임01");
-        MemberDTO member = new MemberDTO(
-                1L,
-                "user01",
-                "정유진",
-                "01012345678",
-                "test1@gmail.com",
-                "닉네임01",
-                "19970816",
-                true,
-                MemberRole.MEMBER,
-                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
-                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
-                "ACTIVE"
-        );
+        MemberDTO member = MemberDTO.builder()
+                .memberUid(1L)
+                .memberId("user01")
+                .memberName("홍길동")
+                .phoneNumber("01012345678")
+                .email("test1@gmail.com")
+                .nickname("닉네임01")
+                .birthDate("19970816")
+                .marketingConsent(true)
+                .role(MemberRole.MEMBER)
+                .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
+                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
+                .activityStatus("ACTIVE")
+                .build();
 
         when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
 
@@ -139,20 +139,20 @@ class AdminServiceTest {
     @Test
     void getMemberByIdOrNicknameExceptionTest() {
         MemberSearchRequest searchRequest = new MemberSearchRequest(null, null);
-        MemberDTO member = new MemberDTO(
-                1L,
-                "user01",
-                "정유진",
-                "01012345678",
-                "test1@gmail.com",
-                "닉네임01",
-                "19970816",
-                true,
-                MemberRole.MEMBER,
-                LocalDateTime.of(2025, 4, 6, 11, 13, 40),
-                LocalDateTime.of(2025, 4, 7, 11, 30, 40),
-                "ACTIVE"
-        );
+        MemberDTO member = MemberDTO.builder()
+                .memberUid(1L)
+                .memberId("user01")
+                .memberName("홍길동")
+                .phoneNumber("01012345678")
+                .email("test1@gmail.com")
+                .nickname("닉네임01")
+                .birthDate("19970816")
+                .marketingConsent(true)
+                .role(MemberRole.MEMBER)
+                .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
+                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
+                .activityStatus("ACTIVE")
+                .build();
 
         when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
 
