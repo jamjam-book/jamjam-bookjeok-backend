@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.book.command.service;
 
+import com.jamjam.bookjeok.domains.book.command.dto.BookApiDTO;
 import com.jamjam.bookjeok.domains.book.command.entity.Book;
 import com.jamjam.bookjeok.domains.book.command.entity.BookCategory;
 import com.jamjam.bookjeok.domains.book.command.entity.Publisher;
@@ -27,53 +28,17 @@ class BookApiServiceImplTest {
     @Autowired
     private BookApiService bookApiService;
 
-    @DisplayName("Open API를 통한 도서 등록 테스트")
+    @DisplayName("ISBN을 통한 신규 도서 등록")
     @Test
-    void testRegistBookByOpenAPI() {
+    void testNewBookRegist() {
 
-        LocalDate publishedAt = LocalDate.now();
-        String bookInfo = "테스트용으로 등록된 도서입니다. 저장되었다면 삭제해주세요.";
-        String imgeUrl = "https://shopping-phinf.pstatic.net/main_3245497/32454975970.20230110165450.jpg";
+        String isbn = "9788936439750";
 
-        BookDTO bookDTO = new BookDTO(
-                1L, 1L, "등록성공", bookInfo,
-                "9123456789", publishedAt, 12000, 10, imgeUrl);
+        BookApiDTO apiBook = bookApiService.getBookByIsbn(isbn);
 
+        assertThat(apiBook).isNotNull();
+        assertThat(apiBook.getIsbn()).isEqualTo(isbn);
 
-        Book book = bookApiService.registBook(bookDTO);
-
-        assertThat(book).isNotNull();
-        assertThat(book.getPublisherId()).isEqualTo(1L);
-        assertThat(book.getCategoryId()).isEqualTo(1L);
-        assertThat(book.getBookName()).isEqualTo("등록성공");
-        assertThat(book.getBookInfo()).isEqualTo(bookInfo);
-        assertThat(book.getIsbn()).isEqualTo("9123456789");
-        assertThat(book.getPublishedAt()).isEqualTo(publishedAt);
-        assertThat(book.getPrice()).isEqualTo(12000);
-        assertThat(book.getStockQuantity()).isEqualTo(10);
-        assertThat(book.getImageUrl()).isNotNull();
-
-    }
-
-    @DisplayName("Open API를 통한 중복 도서 저장 테스트")
-    @Test
-    void testRegistBookDuplicatedByOpenAPI() {
-        // isbn 번호 중복 불가
-        String isbn = "9781082502224"; // db에 존재하는 isbn
-
-        LocalDate publishedAt = LocalDate.now();
-        String bookInfo = "테스트용으로 등록된 도서입니다. 저장되었다면 삭제해주세요.";
-        String imgeUrl = "https://shopping-phinf.pstatic.net/main_3245497/32454975970.20230110165450.jpg";
-
-        BookDTO bookDTO = new BookDTO(
-                1L, 1L, "중복 도서", bookInfo,
-                isbn, publishedAt, 12000, 10, imgeUrl);
-
-
-        Book book = bookApiService.registBook(bookDTO);
-
-        assertThat(book).isNull();
-        
     }
 
     @DisplayName("카테고리 이름으로 카테고리 정보 가져오기 테스트")

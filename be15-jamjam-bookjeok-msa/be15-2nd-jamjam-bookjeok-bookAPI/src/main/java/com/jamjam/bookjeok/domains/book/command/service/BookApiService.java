@@ -10,17 +10,13 @@ import java.util.concurrent.CompletableFuture;
 
 public interface BookApiService {
 
-    CompletableFuture<String> addTocAndCategoryName(BookApiDTO book);
-
     Publisher findPublisher(String publisher);
 
     BookCategory findCategoryByCategoryName(String categoryNameStr);
 
-    Book registBook(BookDTO bookDTO);
-
     void registAuthor(String[] authors, Long bookId);
 
-    String saveFile(String imgUrl);
-
     void registBookAuthor(Long bookId, Long authorId);
+
+    BookApiDTO getBookByIsbn(String isbn);
 }

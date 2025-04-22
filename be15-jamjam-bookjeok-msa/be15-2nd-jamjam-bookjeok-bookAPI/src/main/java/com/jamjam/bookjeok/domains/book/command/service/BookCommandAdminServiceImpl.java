@@ -1,9 +1,7 @@
 package com.jamjam.bookjeok.domains.book.command.service;
 
-import com.jamjam.bookjeok.common.service.FileStorageService;
 import com.jamjam.bookjeok.domains.book.command.dto.request.BookCategoryModifyRequest;
 import com.jamjam.bookjeok.domains.book.command.dto.request.BookCategoryRequest;
-import com.jamjam.bookjeok.domains.book.command.dto.request.BookRequest;
 import com.jamjam.bookjeok.domains.book.command.dto.response.BookCategoryResponse;
 import com.jamjam.bookjeok.domains.book.command.dto.response.BookResponse;
 import com.jamjam.bookjeok.domains.book.command.entity.Book;
@@ -12,15 +10,12 @@ import com.jamjam.bookjeok.domains.book.command.repository.BookCategoryRepositor
 import com.jamjam.bookjeok.domains.book.command.repository.BookRepository;
 import com.jamjam.bookjeok.exception.book.BookErrorCode;
 import com.jamjam.bookjeok.exception.book.BookNotFoundException;
-import com.jamjam.bookjeok.exception.book.RegistPreexistingBookException;
 import com.jamjam.bookjeok.exception.book.category.BookCategoryNotFoundException;
 import com.jamjam.bookjeok.exception.book.category.RegistPreexistingCategoryException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -32,77 +27,6 @@ public class BookCommandAdminServiceImpl implements BookCommandAdminService {
 
     private final BookRepository bookRepository;
     private final BookCategoryRepository bookCategoryRepository;
-    private final FileStorageService fileStorageService;
-
-    @Value("${image.image-url}")
-    private String IMAGE_URL;
-
-    @Override
-    @Transactional
-    public BookResponse registBook(BookRequest request, MultipartFile bookImg) {
-
-        Optional<Book> findBook = bookRepository.findBookByIsbn(request.isbn());
-
-        if(findBook.isPresent()) {
-            throw new RegistPreexistingBookException(BookErrorCode.PREEXISTING_BOOK);
-        }
-
-        String replaceFileName = fileStorageService.storeFile(bookImg);
-
-        Book book = Book.builder()
-                .categoryId(request.categoryId())
-                .publisherId(request.publisherId())
-                .bookName(request.bookName())
-                .isbn(request.isbn())
-                .price(request.price())
-                .publishedAt(request.publishedAt())
-                .stockQuantity(request.stockQuantity())
-                .imageUrl(replaceFileName)
-                .bookInfo(request.bookInfo())
-                .build();
-
-        Book newBook = bookRepository.save(book);
-
-        return buildBookResponse(newBook);
-
-    }
-
-    @Override
-    @Transactional
-    public BookResponse modifyBook(BookRequest request, MultipartFile bookImg) {
-
-        Optional<Book> findBook = bookRepository.findBookByIsbn(request.isbn());
-
-        if(findBook.isEmpty()) {
-           throw new BookNotFoundException(BookErrorCode.NOT_EXIST_ISBN);
-        }
-
-        if(bookImg != null) {
-            String replaceFileName = fileStorageService.storeFile(bookImg);
-            String oldFileName = findBook.get().getImageUrl().replace(IMAGE_URL,"");
-            fileStorageService.deleteFile(oldFileName);
-
-            findBook.get().changeImageUrl(replaceFileName);
-        }
-
-        findBook.get().updateBook(
-                request.publisherId(),
-                request.categoryId(),
-                request.bookName(),
-                request.bookInfo(),
-                request.isbn(),
-                request.publishedAt(),
-                request.price(),
-                request.stockQuantity(),
-                LocalDateTime.now()
-        );
-
-        Book modBook = bookRepository.save(findBook.get());
-        log.info("{}", findBook.get());
-
-        return buildBookResponse(modBook);
-
-    }
 
     @Override
     @Transactional
@@ -124,8 +48,8 @@ public class BookCommandAdminServiceImpl implements BookCommandAdminService {
     }
 
     @Override
-    public Book findBookByIsbn(String isbn) {
-        return null;
+    public Optional<Book> findBookByIsbn(String isbn) {
+        return bookRepository.findBookByIsbn(isbn);
     }
 
     @Override
@@ -142,7 +66,8 @@ public class BookCommandAdminServiceImpl implements BookCommandAdminService {
         bookRepository.save(findBook.get());
     }
 
-    private BookResponse buildBookResponse(Book book) {
+    @Override
+    public BookResponse buildBookResponse(Book book) {
 
         return BookResponse.builder()
                 .categoryId(book.getCategoryId())
@@ -156,6 +81,19 @@ public class BookCommandAdminServiceImpl implements BookCommandAdminService {
                 .bookInfo(book.getBookInfo())
                 .build();
     }
+
+    @Override
+    public BookResponse findBookByBookId(Long bookId) {
+
+        Optional<Book> findBook = bookRepository.findBookByBookId(bookId);
+
+        if(findBook.isEmpty()) {
+            throw new BookNotFoundException(BookErrorCode.NOT_EXIST_BOOK);
+        }
+
+        return buildBookResponse(findBook.get());
+    }
+
 
     @Override
     @Transactional
