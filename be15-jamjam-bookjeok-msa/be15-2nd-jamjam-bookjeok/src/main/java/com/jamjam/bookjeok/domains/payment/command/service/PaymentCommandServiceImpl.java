@@ -59,7 +59,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
         savePayment(paymentDTO, savedOrder);
         pendingOrderService.deletePendingOrder(findPendingOrder.getOrderId());
 
-        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByOrderId(savedOrder.getOrderUid(), paymentDTO.orderId());
+        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByOrderId(savedOrder.getMemberUid(), paymentDTO.orderId());
 
         return PaymentConfirmResponse.builder()
                 .orderDetails(orderDetails)
