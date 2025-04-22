@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Getter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class MemberDTO {
 
     private Long memberUid;
