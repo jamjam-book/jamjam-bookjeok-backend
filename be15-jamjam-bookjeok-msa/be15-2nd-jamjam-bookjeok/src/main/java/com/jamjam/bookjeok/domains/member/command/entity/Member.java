@@ -1,7 +1,5 @@
-package com.jamjam.bookjeok.domains.member.entity;
+package com.jamjam.bookjeok.domains.member.command.entity;
 
-import com.jamjam.bookjeok.domains.member.command.entity.MemberActivityStatus;
-import com.jamjam.bookjeok.domains.member.command.entity.MemberRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
