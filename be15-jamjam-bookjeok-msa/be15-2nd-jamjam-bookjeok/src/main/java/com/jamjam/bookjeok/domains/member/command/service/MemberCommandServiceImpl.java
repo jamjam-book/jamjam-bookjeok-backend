@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.domains.member.command.service;
 
 import com.jamjam.bookjeok.domains.member.command.dto.request.MemberCreateRequest;
-import com.jamjam.bookjeok.domains.member.entity.Member;
+import com.jamjam.bookjeok.domains.member.command.entity.Member;
 import com.jamjam.bookjeok.domains.member.command.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

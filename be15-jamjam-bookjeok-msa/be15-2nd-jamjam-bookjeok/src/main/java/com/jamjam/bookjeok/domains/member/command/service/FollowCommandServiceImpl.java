@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.domains.member.command.service;
 
 import com.jamjam.bookjeok.domains.member.command.entity.Follow;
-import com.jamjam.bookjeok.domains.member.entity.Member;
+import com.jamjam.bookjeok.domains.member.command.entity.Member;
 import com.jamjam.bookjeok.domains.member.command.repository.FollowRepository;
 import com.jamjam.bookjeok.domains.member.command.repository.MemberRepository;
 import com.jamjam.bookjeok.exception.member.MemberErrorCode;
