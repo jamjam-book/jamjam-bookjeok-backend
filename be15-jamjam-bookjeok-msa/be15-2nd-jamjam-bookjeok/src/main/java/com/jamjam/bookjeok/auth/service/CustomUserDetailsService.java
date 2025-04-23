@@ -1,7 +1,7 @@
 package com.jamjam.bookjeok.auth.service;
 
 import com.jamjam.bookjeok.domains.member.command.repository.MemberRepository;
-import com.jamjam.bookjeok.domains.member.entity.Member;
+import com.jamjam.bookjeok.domains.member.command.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
