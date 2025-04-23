@@ -55,11 +55,8 @@ class AdminQueryControllerTest {
                 .andExpect(jsonPath("$.data.member.phoneNumber").value("01024001349"))
                 .andExpect(jsonPath("$.data.member.email").value("test2@gmail.com"))
                 .andExpect(jsonPath("$.data.member.nickname").value("닉네임02"))
-                .andExpect(jsonPath("$.data.member.birthDate").value("19970918"))
                 .andExpect(jsonPath("$.data.member.marketingConsent").value(true))
-                .andExpect(jsonPath("$.data.member.role").value("MEMBER"))
                 .andExpect(jsonPath("$.data.member.createdAt").value("2025-02-06T14:13:32"))
-                .andExpect(jsonPath("$.data.member.modifiedAt").isEmpty())
                 .andExpect(jsonPath("$.data.member.activityStatus").value("ACTIVE"))
                 .andDo(print());
     }
@@ -80,11 +77,8 @@ class AdminQueryControllerTest {
                 .andExpect(jsonPath("$.data.member.phoneNumber").value("01024001349"))
                 .andExpect(jsonPath("$.data.member.email").value("test2@gmail.com"))
                 .andExpect(jsonPath("$.data.member.nickname").value("닉네임02"))
-                .andExpect(jsonPath("$.data.member.birthDate").value("19970918"))
                 .andExpect(jsonPath("$.data.member.marketingConsent").value(true))
-                .andExpect(jsonPath("$.data.member.role").value("MEMBER"))
                 .andExpect(jsonPath("$.data.member.createdAt").value("2025-02-06T14:13:32"))
-                .andExpect(jsonPath("$.data.member.modifiedAt").isEmpty())
                 .andExpect(jsonPath("$.data.member.activityStatus").value("ACTIVE"))
                 .andDo(print());
     }

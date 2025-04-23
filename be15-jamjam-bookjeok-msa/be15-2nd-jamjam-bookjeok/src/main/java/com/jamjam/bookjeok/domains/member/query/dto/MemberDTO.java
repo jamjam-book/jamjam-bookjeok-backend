@@ -21,11 +21,8 @@ public class MemberDTO {
     private String phoneNumber;
     private String email;
     private String nickname;
-    private String birthDate;
     private boolean marketingConsent = true;
-    private MemberRole role = MemberRole.MEMBER;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
     private String activityStatus;
 
 }

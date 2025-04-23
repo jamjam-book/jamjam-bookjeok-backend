@@ -46,11 +46,8 @@ class AdminServiceTest {
                 .phoneNumber("01012345678")
                 .email("test1@gmail.com")
                 .nickname("닉네임01")
-                .birthDate("19970816")
                 .marketingConsent(true)
-                .role(MemberRole.MEMBER)
                 .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
-                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
                 .activityStatus("ACTIVE")
                 .build();
 
@@ -61,11 +58,8 @@ class AdminServiceTest {
             .phoneNumber("01024001349")
             .email("test2@gmail.com")
             .nickname("닉네임02")
-            .birthDate("19970918")
             .marketingConsent(true)
-            .role(MemberRole.MEMBER)
             .createdAt(LocalDateTime.of(2025, 2, 6, 14, 13, 32))
-            .modifiedAt(null)
             .activityStatus("DEACTIVATE")
             .build();
 
@@ -91,11 +85,8 @@ class AdminServiceTest {
                 .phoneNumber("01012345678")
                 .email("test1@gmail.com")
                 .nickname("닉네임01")
-                .birthDate("19970816")
                 .marketingConsent(true)
-                .role(MemberRole.MEMBER)
                 .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
-                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
                 .activityStatus("ACTIVE")
                 .build();
 
@@ -119,11 +110,8 @@ class AdminServiceTest {
                 .phoneNumber("01012345678")
                 .email("test1@gmail.com")
                 .nickname("닉네임01")
-                .birthDate("19970816")
                 .marketingConsent(true)
-                .role(MemberRole.MEMBER)
                 .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
-                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
                 .activityStatus("ACTIVE")
                 .build();
 
@@ -146,11 +134,8 @@ class AdminServiceTest {
                 .phoneNumber("01012345678")
                 .email("test1@gmail.com")
                 .nickname("닉네임01")
-                .birthDate("19970816")
                 .marketingConsent(true)
-                .role(MemberRole.MEMBER)
                 .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
-                .modifiedAt(LocalDateTime.of(2025, 4, 7, 11, 30, 40))
                 .activityStatus("ACTIVE")
                 .build();
 
