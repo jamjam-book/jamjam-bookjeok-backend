@@ -1,87 +1,32 @@
 package com.jamjam.bookjeok.domains.payment.command.infrastructure.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamjam.bookjeok.domains.payment.command.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
-import com.jamjam.bookjeok.exception.payment.ExternalPaymentException;
+import com.jamjam.bookjeok.domains.payment.command.infrastructure.client.TossPaymentClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
-@Slf4j
+/**
+ * Toss 결제 요청을 처리하는 서비스 클래스입니다.
+ * 실제 API 통신은 TossPaymentClient에 위임합니다.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TossPaymentCommandServiceImpl implements TossPaymentCommandService {
 
-    private static final String TOSS_CONFIRM_URL = "https://api.tosspayments.com/v1/payments/confirm";
-    private static final String CONTENT_TYPE = "application/json";
-    private static final String AUTH_PREFIX = "Basic ";
-    private static final String AUTH_DELIMITER = ":";
-    private static final int HTTP_STATUS_CODE_OK = 200;
+    private final TossPaymentClient tossPaymentClient;
 
-    @Value("${tosspayments.api-secret-key}")
-    private String tossPaymentsApiSecretKey;
-
-    private final ObjectMapper objectMapper;
-
+    /**
+     * Toss Payments API를 통해 결제를 승인합니다.
+     *
+     * @param tossPaymentApproveRequest 결제 승인 요청 정보
+     * @return Toss로부터 받은 결제 응답 정보
+     */
     @Override
     public PaymentDTO approvePayment(TossPaymentApproveRequest tossPaymentApproveRequest) {
-        try {
-            HttpURLConnection connection = createConnection();
-            sendRequest(connection, tossPaymentApproveRequest);
-
-            int code = connection.getResponseCode();
-            boolean isSuccess = code == HTTP_STATUS_CODE_OK;
-
-            PaymentDTO paymentDTO = parsePaymentResponse(isSuccess, connection);
-            log.info("paymentDTO = {}", paymentDTO);
-
-            return paymentDTO;
-        } catch (IOException e) {
-            throw new ExternalPaymentException("Toss Payments 결제 승인 API 호출 중 오류가 발생했습니다.");
-        }
-    }
-
-    private String getEncodedAuthorizationKey() {
-        Base64.Encoder encoder = Base64.getEncoder();
-        byte[] encodedBytes = encoder.encode((tossPaymentsApiSecretKey + AUTH_DELIMITER).getBytes(StandardCharsets.UTF_8));
-        return AUTH_PREFIX + new String(encodedBytes);
-    }
-
-    private HttpURLConnection createConnection() throws IOException {
-        URL url = new URL(TOSS_CONFIRM_URL);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Authorization", getEncodedAuthorizationKey());
-        connection.setRequestProperty("Content-Type", CONTENT_TYPE);
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        return connection;
-    }
-
-    private void sendRequest(HttpURLConnection connection, TossPaymentApproveRequest tossPaymentApproveRequest) throws IOException {
-        String requestJson = objectMapper.writeValueAsString(tossPaymentApproveRequest);
-        log.info("requestJson = {}", requestJson);
-
-        try (OutputStream os = connection.getOutputStream()) {
-            os.write(requestJson.getBytes(StandardCharsets.UTF_8));
-        }
-    }
-
-    private PaymentDTO parsePaymentResponse(boolean isSuccess, HttpURLConnection connection) throws IOException {
-        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
-        PaymentDTO paymentDTO = objectMapper.readValue(reader, PaymentDTO.class);
-        responseStream.close();
-        return paymentDTO;
+        return tossPaymentClient.requestPaymentApproval(tossPaymentApproveRequest);
     }
 
 }
