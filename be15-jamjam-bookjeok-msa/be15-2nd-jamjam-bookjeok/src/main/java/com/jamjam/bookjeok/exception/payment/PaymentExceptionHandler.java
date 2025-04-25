@@ -49,4 +49,14 @@ public class PaymentExceptionHandler {
                 .body(ApiResponse.failure(errorCode, errorMessage));
     }
 
+    @ExceptionHandler(PaymentApprovalFailedException.class)
+    public ResponseEntity<ApiResponse<Void>> handlePaymentApprovalFailedException(PaymentApprovalFailedException e) {
+        String errorCode = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+        String errorMessage = e.getMessage();
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.failure(errorCode, errorMessage));
+    }
+
 }

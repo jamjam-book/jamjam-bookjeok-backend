@@ -1,7 +1,6 @@
 package com.jamjam.bookjeok.domains.payment.command.service;
 
-import com.jamjam.bookjeok.domains.book.command.entity.Book;
-import com.jamjam.bookjeok.domains.book.command.repository.BookRepository;
+import com.jamjam.bookjeok.domains.book.command.service.BookStockCommandService;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
 import com.jamjam.bookjeok.domains.orderdetail.command.service.OrderDetailCommandService;
 import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
@@ -14,96 +13,83 @@ import com.jamjam.bookjeok.domains.orderdetail.query.service.OrderDetailQuerySer
 import com.jamjam.bookjeok.domains.payment.command.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.payment.command.dto.request.PaymentConfirmRequest;
 import com.jamjam.bookjeok.domains.payment.command.dto.response.PaymentConfirmResponse;
-import com.jamjam.bookjeok.domains.payment.command.entity.Payment;
 import com.jamjam.bookjeok.domains.payment.command.infrastructure.service.TossPaymentCommandService;
-import com.jamjam.bookjeok.domains.payment.command.repository.PaymentRepository;
 
 import com.jamjam.bookjeok.domains.pendingorder.command.service.PendingOrderCommandService;
-import com.jamjam.bookjeok.exception.payment.BookInfoNotFoundException;
-import com.jamjam.bookjeok.exception.payment.InsufficientBookStockException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
-@Slf4j
+/**
+ * 결제 커맨드 처리를 담당하는 서비스 클래스입니다.
+ * 이 서비스는 결제 승인 과정을 조율합니다.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class PaymentCommandServiceImpl implements PaymentCommandService {
 
-    private final PendingOrderCommandService pendingOrderService;
+    private final PendingOrderCommandService pendingOrderCommandService;
     private final TossPaymentCommandService tossPaymentCommandService;
     private final OrderCommandService orderCommandService;
-    private final OrderDetailCommandService orderDetailService;
+    private final OrderDetailCommandService orderDetailCommandService;
     private final OrderDetailQueryService orderDetailQueryService;
+    private final BookStockCommandService bookStockCommandService;
+    private final PaymentEntityCommandService paymentEntityService;
 
-    private final BookRepository bookRepository;
-    private final PaymentRepository paymentRepository;
-
+    /**
+     * 결제 요청을 처리하고, 재고를 검증한 후 주문을 생성하며,
+     * 결제 정보를 저장하고 주문 상세 정보를 반환합니다.
+     *
+     * @param paymentKey 결제 서비스에서 전달받은 결제 키
+     * @param paymentConfirmRequest 결제 승인 요청 정보
+     * @return 주문 상세 정보가 포함된 결제 승인 응답
+     */
     @Override
     public PaymentConfirmResponse confirmPayment(String paymentKey, PaymentConfirmRequest paymentConfirmRequest) {
-        PendingOrder findPendingOrder = pendingOrderService.getPendingOrder(paymentConfirmRequest);
-        List<PendingOrderBookItemsRequest> orderItems = validateBookStocks(findPendingOrder);
+        // 보류 중인 주문 조회
+        PendingOrder pendingOrder = pendingOrderCommandService.getPendingOrder(paymentConfirmRequest);
 
-        TossPaymentApproveRequest tossPaymentApproveRequest = createTossPaymentApproveRequest(paymentKey, findPendingOrder);
+        // 토스 결제 승인 요청
+        TossPaymentApproveRequest tossPaymentApproveRequest = createTossPaymentApproveRequest(paymentKey, pendingOrder);
         PaymentDTO paymentDTO = tossPaymentCommandService.approvePayment(tossPaymentApproveRequest);
 
-        Order savedOrder = orderCommandService.createOrder(findPendingOrder, paymentDTO);
-        orderDetailService.createOrderDetails(orderItems, savedOrder);
+        // 결제 승인 후 재고 감소
+        List<PendingOrderBookItemsRequest> orderItems = bookStockCommandService.validateAndUpdateBookStocks(pendingOrder);
 
-        savePayment(paymentDTO, savedOrder);
-        pendingOrderService.deletePendingOrder(findPendingOrder.getOrderId());
+        // 주문 및 주문 상세 생성
+        Order savedOrder = orderCommandService.createOrder(pendingOrder, paymentDTO);
+        orderDetailCommandService.createOrderDetails(orderItems, savedOrder);
 
-        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(savedOrder.getMemberUid(), paymentDTO.orderId());
+        // 결제 정보 저장 및 보류 주문 삭제
+        paymentEntityService.createPayment(paymentDTO, savedOrder);
+        pendingOrderCommandService.deletePendingOrder(pendingOrder.getOrderId());
+
+        // 주문 상세 정보 조회 및 응답 반환
+        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(
+                savedOrder.getMemberUid(), paymentDTO.orderId()
+        );
 
         return PaymentConfirmResponse.builder()
                 .orderDetails(orderDetails)
                 .build();
     }
 
-    private List<PendingOrderBookItemsRequest> validateBookStocks(PendingOrder findPendingOrder) {
-        List<PendingOrderBookItemsRequest> orderDataList = findPendingOrder.getOrderData();
-
-        orderDataList.forEach(orderData -> {
-            Book findBook = bookRepository.findBookByBookId(orderData.bookId())
-                    .orElseThrow(() -> new BookInfoNotFoundException("도서 정보를 찾을 수 없습니다."));
-
-            int stockQuantity = findBook.getStockQuantity() - orderData.quantity();
-
-            if (stockQuantity < 0) {
-                log.info("stockQuantity = {}", stockQuantity);
-                throw new InsufficientBookStockException("도서 재고 수량이 부족하여 결제를 진행할 수 없습니다.");
-            }
-
-            findBook.updateStockQuantity(stockQuantity, LocalDateTime.now().withNano(0));
-        });
-        return orderDataList;
-    }
-
+    /**
+     * 결제 키와 보류 주문 정보를 기반으로 토스 결제 승인 요청 객체를 생성합니다.
+     *
+     * @param paymentKey 결제 서비스에서 전달받은 결제 키
+     * @param pendingOrder 보류 중인 주문 정보
+     * @return 토스 결제 승인 요청 객체
+     */
     private TossPaymentApproveRequest createTossPaymentApproveRequest(String paymentKey, PendingOrder pendingOrder) {
         return TossPaymentApproveRequest.builder()
                 .paymentKey(paymentKey)
                 .orderId(pendingOrder.getOrderId())
                 .amount(pendingOrder.getTotalAmount())
                 .build();
-    }
-
-    private void savePayment(PaymentDTO paymentDTO, Order order) {
-        Payment payment = Payment.builder()
-                .orderUid(order.getOrderUid())
-                .paymentKey(paymentDTO.paymentKey())
-                .paymentType(paymentDTO.type())
-                .paymentMethod(paymentDTO.method())
-                .totalAmount(paymentDTO.totalAmount())
-                .requestedAt(OffsetDateTime.parse(paymentDTO.requestedAt()).toLocalDateTime())
-                .approvedAt(OffsetDateTime.parse(paymentDTO.approvedAt()).toLocalDateTime())
-                .build();
-        paymentRepository.save(payment);
     }
 
 }
