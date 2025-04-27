@@ -9,6 +9,8 @@ import com.jamjam.bookjeok.exception.member.interestAuthorException.InterestAuth
 import com.jamjam.bookjeok.exception.member.interestBookException.AlreadyInterestedBookException;
 import com.jamjam.bookjeok.exception.member.interestBookException.InterestBookLimitExceededException;
 import com.jamjam.bookjeok.exception.member.interestBookException.NotFoundBookException;
+import com.jamjam.bookjeok.exception.member.passwordResetException.ExpiredTokenException;
+import com.jamjam.bookjeok.exception.member.passwordResetException.NotExistTokenException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -103,4 +105,26 @@ public class MemberExceptionHandler {
 
         return new ResponseEntity<>(response,errorCode.getHttpStatus());
     }
+
+    @ExceptionHandler(NotExistTokenException.class)
+    public ResponseEntity<ApiResponse> handleNotExistTokenException(NotExistTokenException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ApiResponse> handleExpiredTokenException(ExpiredTokenException e){
+        MemberErrorCode errorCode = e.getMemberErrorCode();
+
+        ApiResponse<Void> response
+                = ApiResponse.failure(errorCode.getCode(), errorCode.getMessage());
+
+        return new ResponseEntity<>(response,errorCode.getHttpStatus());
+    }
+
+
 }
