@@ -17,4 +17,6 @@ public interface BookQueryMemberService {
     List<PopularBookDTO> getPopularBooks();
 
     boolean validCheckBuyer(ReviewRequest reviewRequest);
+
+    List<BookDetailDTO> getAuthorBookList(Map<String, Object> params);
 }

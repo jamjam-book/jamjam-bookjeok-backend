@@ -113,4 +113,19 @@ public class BookQueryMemberServiceImplTest {
 
     }
 
+    @DisplayName("작가별 도서 조회 테스트")
+    @Test
+    void testGetAuthorBooks() {
+
+        Long authorId = 7L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("authorId", authorId);
+
+        List<BookDetailDTO> books = bookQueryMemberService.getAuthorBookList(params);
+
+        assertThat(books).isNotNull();
+
+        books.forEach(System.out::println);
+    }
+
 }

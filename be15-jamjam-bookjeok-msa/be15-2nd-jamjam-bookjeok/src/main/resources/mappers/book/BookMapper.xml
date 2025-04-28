@@ -205,6 +205,35 @@
         LIMIT 10;
     </select>
 
+    <select id="getAuthorBooks" resultMap="bookDetailResultMap">
+        SELECT
+        a.book_id
+        , a.book_name
+        , a.book_info
+        , a.isbn
+        , a.published_at
+        , a.price
+        , a.stock_quantity
+        , a.image_url
+        , b.category_id
+        , b.category_name
+        , c.publisher_name
+        , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
+        , COUNT(DISTINCT f.member_uid) AS interestCount
+        , SUM(g.quantity) AS ordersCount
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        JOIN book_authors d ON a.book_id = d.book_id
+        JOIN authors e ON d.author_id = e.author_id
+        LEFT JOIN interest_books f ON a.book_id = f.book_id
+        LEFT JOIN order_details g ON a.book_id = g.book_id
+        WHERE a.is_deleted = false
+        AND a.book_id IN ( SELECT book_id FROM book_authors WHERE author_id = #{ authorId })
+        GROUP BY a.book_id
+        ORDER BY a.created_at DESC;
+    </select>
+
     <!-- 리뷰 자격 valid check -->
     <select id="validCheckReviewer" resultType="Long">
         SELECT

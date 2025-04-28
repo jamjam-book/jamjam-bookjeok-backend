@@ -75,6 +75,24 @@ public class BookQueryMemberServiceImpl implements BookQueryMemberService {
 
     @Override
     @Transactional
+    public List<BookDetailDTO> getAuthorBookList(Map<String, Object> params) {
+        List<BookDetailDTO> books = bookMapper.getAuthorBooks(params);
+
+        for (BookDetailDTO book : books) {
+            List<AuthorDTO> authors = new ArrayList<>();
+            if (book.getAuthorNames() != null) {
+                authors = Arrays.stream(book.getAuthorNames().split(",\\s*"))
+                        .map(AuthorDTO::new)
+                        .toList();
+            }
+            book.addList(authors);
+        }
+
+        return books;
+    }
+
+    @Override
+    @Transactional
     public boolean validCheckBuyer(ReviewRequest request) {
 
         Map<String, Object> params = new HashMap<>();
@@ -86,5 +104,7 @@ public class BookQueryMemberServiceImpl implements BookQueryMemberService {
         return memberUid != null;
 
     }
+
+
 
 }
