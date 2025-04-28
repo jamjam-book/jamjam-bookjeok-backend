@@ -26,9 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BookQueryMemberControllerTest {
 
     @Autowired
-    ObjectMapper mapper;
-
-    @Autowired
     private MockMvc mvc;
 
     private static final String BASE_URL = "/api/v1";
@@ -67,6 +64,19 @@ public class BookQueryMemberControllerTest {
     void testSelectBookOrderByOrdersWeekly() throws Exception{
 
         mvc.perform(get(BASE_URL + "/book/popular")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString("bookId")));
+
+    }
+
+    @DisplayName("작가별 도서 조회 테스트")
+    @Test
+    void testSelectAuthorBooks() throws Exception{
+
+        Long authorId = 7L;
+
+        mvc.perform(get(BASE_URL + "/book/author/{authorId}",authorId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("bookId")));

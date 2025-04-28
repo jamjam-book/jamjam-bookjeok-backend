@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,5 +53,17 @@ public class BookQueryMemberController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(books));
 
+    }
+
+    @GetMapping("/book/author/{authorId}")
+    public ResponseEntity<ApiResponse<List<BookDetailDTO>>> getAuthorBooks(@PathVariable Long authorId) {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("authorId", authorId);
+        List<BookDetailDTO> books = bookQueryMemberService.getAuthorBookList(params);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(books));
     }
 }

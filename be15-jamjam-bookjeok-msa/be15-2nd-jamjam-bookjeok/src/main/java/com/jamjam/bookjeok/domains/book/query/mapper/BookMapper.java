@@ -22,4 +22,6 @@ public interface BookMapper {
     List<PopularBookDTO> getPopularBooks();
 
     Long validCheckReviewer(Map<String, Object> params);
+
+    List<BookDetailDTO> getAuthorBooks(Map<String, Object> params);
 }

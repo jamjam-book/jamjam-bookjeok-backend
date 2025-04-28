@@ -85,7 +85,7 @@ public class BookMapperTest {
 
     }
 
-    @DisplayName("작가 별 도서 조회")
+    @DisplayName("작가 이름으로 도서 조회")
     @Test
     void testFindBookListWhereAuthor() {
 
@@ -218,6 +218,22 @@ public class BookMapperTest {
         Long memberId = bookMapper.validCheckReviewer(params);
 
         assertThat(memberId).isEqualTo(memberUid);
+
+    }
+
+    @DisplayName("작겨 별 도서 조회 테스트")
+    @Test
+    void testGetAuthorBooks() {
+
+        Long authorId = 7L;
+        Map<String, Object> params = new HashMap<>();
+        params.put("authorId", authorId);
+
+        List<BookDetailDTO> books = bookMapper.getAuthorBooks(params);
+
+        assertThat(books).isNotNull();
+
+        books.forEach(System.out::println);
 
     }
 }
