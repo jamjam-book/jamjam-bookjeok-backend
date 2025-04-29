@@ -59,4 +59,14 @@ public class PaymentExceptionHandler {
                 .body(ApiResponse.failure(errorCode, errorMessage));
     }
 
+    @ExceptionHandler(PaymentNotFountException.class)
+    public ResponseEntity<ApiResponse<Void>> handlePaymentNotFountException(PaymentNotFountException e) {
+        String errorCode = HttpStatus.NOT_FOUND.getReasonPhrase();
+        String errorMessage = e.getMessage();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.failure(errorCode, errorMessage));
+    }
+
 }

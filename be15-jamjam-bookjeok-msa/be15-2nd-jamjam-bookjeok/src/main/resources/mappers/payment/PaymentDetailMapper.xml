@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamjam.bookjeok.domains.payment.query.mapper.PaymentDetailMapper">
+    <select id="findPaymentDetailByPaymentId" resultType="com.jamjam.bookjeok.domains.payment.query.dto.PaymentDetailDTO">
+        SELECT p.total_amount,
+            CASE
+            WHEN #{paymentMethod} = '카드' THEN ccc.card_company_name
+            WHEN #{paymentMethod} = '간편결제' THEN pe.provider
+            END AS paymentMethod
+        FROM payments p
+        LEFT JOIN payment_card pc ON p.payment_id = pc.payment_id
+        LEFT JOIN payment_easypay pe ON p.payment_id = pe.payment_id
+        LEFT JOIN card_company_code ccc ON ccc.company_code = pc.issuer_code
+        WHERE p.payment_id = #{ paymentId }
+    </select>
+</mapper>

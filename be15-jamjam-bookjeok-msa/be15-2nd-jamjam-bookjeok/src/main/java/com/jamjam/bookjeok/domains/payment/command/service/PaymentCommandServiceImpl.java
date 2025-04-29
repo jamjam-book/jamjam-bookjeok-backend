@@ -3,7 +3,10 @@ package com.jamjam.bookjeok.domains.payment.command.service;
 import com.jamjam.bookjeok.domains.book.command.service.BookStockCommandService;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
 import com.jamjam.bookjeok.domains.orderdetail.command.service.OrderDetailCommandService;
+import com.jamjam.bookjeok.domains.payment.command.entity.Payment;
+import com.jamjam.bookjeok.domains.payment.query.dto.PaymentDetailDTO;
 import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
+import com.jamjam.bookjeok.domains.payment.query.service.PaymentDetailService;
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.command.entity.Order;
 import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
@@ -38,6 +41,7 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
     private final OrderDetailQueryService orderDetailQueryService;
     private final BookStockCommandService bookStockCommandService;
     private final PaymentEntityCommandService paymentEntityService;
+    private final PaymentDetailService paymentDetailService;
 
     /**
      * 결제 요청을 처리하고, 재고를 검증한 후 주문을 생성하며,
@@ -64,16 +68,20 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
         orderDetailCommandService.createOrderDetails(orderItems, savedOrder);
 
         // 결제 정보 저장 및 보류 주문 삭제
-        paymentEntityService.createPayment(paymentDTO, savedOrder);
+        Payment savedPayment = paymentEntityService.createPayment(paymentDTO, savedOrder);
         pendingOrderCommandService.deletePendingOrder(pendingOrder.getOrderId());
 
-        // 주문 상세 정보 조회 및 응답 반환
+        // 주문 상세 정보 조회
         List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(
                 savedOrder.getMemberUid(), paymentDTO.orderId()
         );
 
+        // 결제 상세 정보(결제 금액, 결제 방법)
+        PaymentDetailDTO paymentDetail = paymentDetailService.getPaymentDetail(savedPayment.getPaymentId());
+
         return PaymentConfirmResponse.builder()
                 .orderDetails(orderDetails)
+                .paymentDetail(paymentDetail)
                 .build();
     }
 
