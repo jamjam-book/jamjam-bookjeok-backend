@@ -6,6 +6,8 @@ import lombok.Builder;
 public record PaymentDTO(
         String paymentKey, String type, String orderId,
         String orderName, String method, int totalAmount,
-        String requestedAt, String approvedAt
+        String requestedAt, String approvedAt, String lastTransactionKey,
+        PaymentCancelDTO cancels, PaymentCardDTO card,
+        PaymentReceiptDTO receipt, PaymentEasyPayDTO easyPay
 ) {
 }

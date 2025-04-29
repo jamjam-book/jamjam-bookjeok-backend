@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -24,6 +25,7 @@ import java.util.Base64;
  */
 @Slf4j
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class TossPaymentClientImpl implements TossPaymentClient {
 
@@ -84,6 +86,7 @@ public class TossPaymentClientImpl implements TossPaymentClient {
                 Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8)
         ) {
             PaymentDTO paymentDTO = objectMapper.readValue(reader, PaymentDTO.class);
+            log.info("paymentDTO = {}", paymentDTO);
             validateResponseCode(responseCode);
             return paymentDTO;
         }

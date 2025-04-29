@@ -37,19 +37,12 @@ public class Payment {
     private LocalDateTime requestedAt;
 
     @Column(name = "approved_at")
-    private LocalDateTime approvedAt;
-
-    @Column(name = "cancel_amount")
-    private int cancelAmount;
-
-    @Column(name = "canceled_at")
-    private LocalDateTime canceledAt;
+    private LocalDateTime approvedAt;;
 
     @Builder
     public Payment(
-            Long orderUid, String paymentKey, String paymentType,
-            String paymentMethod, int totalAmount, LocalDateTime requestedAt,
-            LocalDateTime approvedAt, int cancelAmount, LocalDateTime canceledAt
+            Long orderUid, String paymentKey, String paymentType, String paymentMethod,
+            int totalAmount, LocalDateTime requestedAt, LocalDateTime approvedAt
     ) {
         this.orderUid = orderUid;
         this.paymentKey = paymentKey;
@@ -58,8 +51,6 @@ public class Payment {
         this.totalAmount = totalAmount;
         this.requestedAt = requestedAt;
         this.approvedAt = approvedAt;
-        this.cancelAmount = cancelAmount;
-        this.canceledAt = canceledAt;
     }
 
 }
