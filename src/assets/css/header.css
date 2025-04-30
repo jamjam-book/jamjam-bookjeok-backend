@@ -1,0 +1,99 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid #ced4da;
+    z-index: 500;
+    background-color: white;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    height: 130px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.overlap-group {
+    position: relative;
+    width: 164px;
+    height: 65px;
+}
+
+.logo {
+    width: 152px;
+    height: 65px;
+    object-fit: cover;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.icon-group {
+    display: flex;
+    /* 글씨와 아이콘을 위 아래로 배치하기 위함*/
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.header-icons {
+    display: flex;
+    gap: 16px;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+}
+
+.favorite {
+    top: 10px;
+    width: 28px;
+    height: 28px;
+}
+
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cart {
+    width: 32px;
+    height: 32px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background-color: #f9f0df;
+    color: black;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.auth-links {
+    display: flex;
+    gap: 12px;
+}
+
+.auth-link {
+    font-size: 14px;
+    color: #000;
+    text-decoration: none;
+}
