@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tosspayments/tosspayments-sdk": "^2.3.4",
+    "@vueform/slider": "^2.1.10",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
     "bootstrap-vue-3": "^0.5.1",
