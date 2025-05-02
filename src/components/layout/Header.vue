@@ -1,10 +1,16 @@
 <script setup>
-import { ref } from 'vue'
+import {onBeforeUnmount, onMounted, ref} from 'vue'
 import SearchBar from "@/components/common/SearchBar.vue";
 
 const isLoggedIn = ref(false);
 const memberStatus = ref('MEMBER');
 const cartCount = ref(0);
+const isOpen = ref(false)
+
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value
+}
+
 </script>
 
 <template>
@@ -12,18 +18,29 @@ const cartCount = ref(0);
     <div class="header">
       <div class="header-content">
         <div class="overlap-group">
-          <img class="logo" src="../../assets/images/logo.png" alt="로고" />
+          <RouterLink to="/">
+            <img class="logo" src="../../assets/images/logo.png" alt="로고" />
+          </RouterLink>
+          <div class="dropdown">
+            <!-- icon으로 바꾸는게 더 좋을듯!-->
+            <button v-if="!isOpen"  @click="toggleDropdown" class="dropdown-toggle">▶</button>
+            <button v-else @click="toggleDropdown" class="dropdown-toggle">▼</button>
+            <div v-if="isOpen" class="dropdown-menu">
+              <RouterLink to="/books">도서</RouterLink>
+              <RouterLink to="/posts">게시글</RouterLink>
+            </div>
+          </div>
         </div>
 
         <SearchBar/>
 
-        <div class="header-right">
+        <nav class="header-right">
           <div class="icon-group">
             <!-- 로그인 전 -->
             <template v-if="!isLoggedIn">
               <div class="auth-links">
-                <a href="/login" class="auth-link">로그인</a>
-                <a href="/signup" class="auth-link">회원가입</a>
+                <RouterLink to="/books" class="auth-link">로그인</RouterLink>
+                <RouterLink to="/signup" class="auth-link">회원가입</RouterLink>
               </div>
               <div class="header-icons">
                 <img class="icon" src="../../assets/icons/cart.png" alt="장바구니" />
@@ -34,7 +51,8 @@ const cartCount = ref(0);
             <!-- 관리자가 로그인 한 경우 -->
             <template v-else-if="memberStatus === 'ADMIN'">
               <div class="auth-links">
-                <a href="/admin" class="auth-link">관리자</a>
+                <RouterLink to="/admin" class="auth-link">관리자</RouterLink>
+                <!-- 로그아웃 된 다음에 메인 페이지로 이동할 예정 -->
                 <a href="/logout" class="auth-link logout">로그아웃</a>
               </div>
               <div class="header-icons">
@@ -46,6 +64,7 @@ const cartCount = ref(0);
             <!-- 회원이 로그인 한 경우 -->
             <template v-else-if="memberStatus === 'MEMBER'">
               <div class="auth-links">
+                <!-- 로그아웃 된 다음에 메인 페이지로 이동할 예정 -->
                 <a href="/logout" class="auth-link logout">로그아웃</a>
               </div>
               <div class="header-icons">
@@ -58,7 +77,8 @@ const cartCount = ref(0);
               </div>
             </template>
           </div>
-        </div>
+        </nav>
+
       </div>
     </div>
   </div>
