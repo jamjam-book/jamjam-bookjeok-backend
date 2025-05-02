@@ -48,10 +48,14 @@ const orderView = async () => {
 
 <style scoped>
 #order-detail-info {
-    width: 274px;
+    width: 270px;
     height: 325px;
     padding: 1.5rem;
     margin-left: 2rem;
+
+    position: sticky;
+    top: 135px;
+    align-self: flex-start;
 }
 
 #order-button {

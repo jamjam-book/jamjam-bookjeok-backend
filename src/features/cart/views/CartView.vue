@@ -43,8 +43,8 @@ function removeItem(id) {
 </script>
 
 <template>
-    <div id="main-cart-container">
-        <div id="cart-container" class="d-flex">
+    <div class="container">
+        <div class="d-flex">
             <div class="flex-grow-1">
                 <h3 class="fw-bold mb-4">장바구니</h3>
 
@@ -69,17 +69,9 @@ function removeItem(id) {
 </template>
 
 <style scoped>
-#main-cart-container {
+.container {
     max-width: 1200px;
-    margin: 3rem auto;
-}
-
-#cart-container {
-    display: flex;
-}
-
-#select-all-box {
-    margin-left: 9px;
+    margin: 42px auto;
 }
 
 #cart-all-checkbox:checked {

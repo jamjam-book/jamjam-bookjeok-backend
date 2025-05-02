@@ -80,14 +80,11 @@ function handleInput(item) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
     border-bottom: 1px solid #dee2e6;
 }
 
 #cart-checkbox {
     top: 0.5rem;
-    left: 0.5rem;
     z-index: 1;
     position: absolute;
 }
@@ -98,7 +95,6 @@ function handleInput(item) {
 }
 
 #cart-left {
-    padding-left: 1.5rem;
     padding-bottom: 10px;
 }
 
