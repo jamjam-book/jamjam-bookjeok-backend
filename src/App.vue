@@ -9,6 +9,7 @@ import Header from "@/components/layout/Header.vue";
 <template>
   <div class="container">
     <Header/>
+      <RouterView/>
 <!--    <MyPageNav/>-->
 <!--    <AdminNav/>-->
     <Footer/>
