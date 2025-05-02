@@ -28,15 +28,15 @@ const emit = defineEmits(['confirm', 'cancel'])
 <style scoped>
 .modal {
   position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   z-index: 1000; /* 모달이 다른 요소보다 위에 보이도록 */
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {

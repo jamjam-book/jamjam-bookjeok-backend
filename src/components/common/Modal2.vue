@@ -34,15 +34,15 @@ export default {
 <style scoped>
 .modal {
     position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
