@@ -17,7 +17,7 @@ const router = createRouter({
         ...mainRoutes,
         ...memberRoutes,
         ...orderRoutes,
-        ...cartRoutes
+        ...cartRoutes,
         // ...postRoutes,
         ...questionRoutes
     ],
