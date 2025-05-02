@@ -7,13 +7,13 @@ import Header from "@/components/layout/Header.vue";
 </script>
 
 <template>
-  <div class="container">
     <Header/>
-      <RouterView/>
-<!--    <MyPageNav/>-->
-<!--    <AdminNav/>-->
+    <div class="container">
+          <RouterView/>
+    <!--    <MyPageNav/>-->
+    <!--    <AdminNav/>-->
+    </div>
     <Footer/>
-  </div>
 </template>
 
 <style scoped>
