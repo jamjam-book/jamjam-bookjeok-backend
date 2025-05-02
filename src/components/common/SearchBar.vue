@@ -23,7 +23,7 @@
 
       <!-- 검색 아이콘 버튼 (이미지로 표시) -->
       <button type="submit" class="search-button">
-        <img :src="searchIcon" alt="검색" class="search-icon" />
+        <img class="search-icon" src="../../assets/icons/search.png" alt="검색" />
       </button>
     </form>
 
@@ -44,7 +44,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-// import searchIcon from '@/assets/search-icon.png'; //  돋보기 넣기
+//import searchIcon from 'src/assets/icons/search.png';
 
 const searchQuery = ref('');
 const selectedFilter = ref('');
