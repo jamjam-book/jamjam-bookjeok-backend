@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-.footer {
+.book-footer {
     width: 100%;
     background-color: #f9f0df;
     border-top: 1px solid #d9d9d9;
@@ -9,28 +9,29 @@
     padding: 40px 0;
 }
 
-.footer-content {
+.book-footer-content {
     width: 1200px;
     position: relative;
 }
 
-.logo {
+.book-footer-logo {
     position: absolute;
     width: 254px;
     height: 90px;
     object-fit: cover;
 }
 
-.footer-links,
-.footer-info {
+.book-footer-links,
+.book-footer-info {
     display: flex;
     align-items: center;
     gap: 24px;
     margin-left: 300px;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
-.text-wrapper {
+.book-footer-text {
     font-weight: 400;
     color: #391902;
     font-size: 16px;
@@ -41,7 +42,7 @@
     align-items: center;
 }
 
-.line {
+.book-footer-line {
     width: 1px;
     height: 16px;
     background-color: #391902;
