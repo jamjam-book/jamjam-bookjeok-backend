@@ -17,4 +17,10 @@ import Header from "@/components/layout/Header.vue";
 </template>
 
 <style scoped>
+.container {
+    align-items: center;
+    justify-content: center;
+    width: 1500px;
+    margin-top: 42px;
+}
 </style>
