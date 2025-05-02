@@ -21,11 +21,11 @@ const toggleDropdown = () => {
                     <RouterLink to="/">
                         <img class="logo" src="../../assets/images/logo.png" alt="로고"/>
                     </RouterLink>
-                    <div class="dropdown">
+                    <div class="header-dropdown">
                         <!-- icon으로 바꾸는게 더 좋을듯!-->
-                        <button v-if="!isOpen" @click="toggleDropdown" class="dropdown-toggle">▶</button>
-                        <button v-else @click="toggleDropdown" class="dropdown-toggle">▼</button>
-                        <div v-if="isOpen" class="dropdown-menu">
+                        <button v-if="!isOpen" @click="toggleDropdown" class="header-dropdown-toggle">▶</button>
+                        <button v-else @click="toggleDropdown" class="header-dropdown-toggle">▼</button>
+                        <div v-if="isOpen" class="header-dropdown-menu">
                             <RouterLink to="/books">도서</RouterLink>
                             <RouterLink to="/posts">게시글</RouterLink>
                         </div>

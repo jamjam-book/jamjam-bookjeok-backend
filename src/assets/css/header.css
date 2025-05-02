@@ -30,16 +30,16 @@
     object-fit: cover;
 }
 
-.dropdown {
+.header-dropdown {
     position: absolute;
     top: 30px;
     left: 130px;
     z-index: 10;
 }
 
-.dropdown-toggle {
+.header-dropdown-toggle {
     padding: 5px ;
-    background-color: #391902;
+    background-color: #854d14;
     color: white;
     border: none;
     border-radius: 50%;
@@ -47,19 +47,19 @@
     font-size: 6px;
 }
 
-.dropdown-menu {
+.header-dropdown-menu {
     position: absolute;
     left: 0;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 6px;
     z-index: 501;
-    width: 60px;
+    width: 90px;
     padding : 10px 12px;
     box-shadow:0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-menu a {
+.header-dropdown-menu a {
     display: block;
     padding: 6px 10px;
     text-decoration: none;
