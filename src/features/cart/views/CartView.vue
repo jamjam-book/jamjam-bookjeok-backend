@@ -1,6 +1,7 @@
 <script setup>
-import {reactive, computed} from 'vue'
-import CartItemView from "@/features/cart/views/CartItemView.vue";
+import {reactive, computed} from 'vue';
+import CartItem from "@/features/cart/components/CartItem.vue";
+import CartSummary from "@/features/cart/components/CartSummary.vue";
 
 const items = reactive([
     {id: 1, title: '도메인 주도 개발 시작하기', price: 25000, quantity: 1, selected: true, image: '/src/assets/images/ddd.png'},
@@ -42,74 +43,43 @@ function removeItem(id) {
 </script>
 
 <template>
-    <div id="cart-container" class="d-flex">
-        <div class="flex-grow-1">
-            <h3 class="fw-bold mb-4">장바구니</h3>
+    <div id="main-cart-container">
+        <div id="cart-container" class="d-flex">
+            <div class="flex-grow-1">
+                <h3 class="fw-bold mb-4">장바구니</h3>
 
-            <div id="select-all-box" class="form-check border-bottom py-3">
-                <input class="form-check-input" id="cart-all-checkbox" type="checkbox" v-model="allSelected"/>
-                <label class="form-check-label">전체 선택 {{ selectedCount }} / {{ items.length }}</label>
+                <div id="select-all-box" class="form-check border-bottom py-3">
+                    <input class="form-check-input" id="cart-all-checkbox" type="checkbox" v-model="allSelected"/>
+                    <label class="form-check-label">전체 선택 {{ selectedCount }} / {{ items.length }}</label>
+                </div>
+
+                <CartItem
+                        v-for="item in items"
+                        :key="item.id"
+                        :item="item"
+                        @increase="increaseQuantity"
+                        @decrease="decreaseQuantity"
+                        @remove="removeItem"
+                />
             </div>
 
-            <CartItemView
-                    v-for="item in items"
-                    :key="item.id"
-                    :item="item"
-                    @increase="increaseQuantity"
-                    @decrease="decreaseQuantity"
-                    @remove="removeItem"
-            />
-        </div>
-
-        <div id="order-detail-info" class="border fw-bold rounded-4 border-black shadow-sm">
-            <div class="mb-3 d-flex justify-content-between">
-                <span>상품 금액</span>
-                <strong>{{ totalPrice.toLocaleString() }}원</strong>
-            </div>
-            <div class="mb-3 d-flex justify-content-between">
-                <span>배송비</span>
-                <span>0원</span>
-            </div>
-            <div class="mb-3 d-flex justify-content-between">
-                <span>상품 할인</span>
-                <span>0원</span>
-            </div>
-            <hr/>
-            <div class="mb-3 d-flex justify-content-between fw-bold">
-                <span>결제 예정 금액</span>
-                <span>{{ totalPrice.toLocaleString() }}원</span>
-            </div>
-            <div class="mb-3 d-flex justify-content-between">
-                <span>적립 예정 포인트</span>
-                <span>0P</span>
-            </div>
-            <button id="order-button" class="btn w-100 fw-bold">주문하기</button>
+            <CartSummary :items="items" :totalPrice="totalPrice"/>
         </div>
     </div>
 </template>
 
 <style scoped>
+#main-cart-container {
+    max-width: 1200px;
+    margin: 3rem auto;
+}
+
 #cart-container {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
     display: flex;
 }
 
 #select-all-box {
     margin-left: 9px;
-}
-
-#order-detail-info {
-    width: 274px;
-    height: 325px;
-    padding: 1.5rem;
-    margin-left: 2rem;
-}
-
-#order-button {
-    background-color: #f9f0df;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-    margin-top: 18px;
 }
 
 #cart-all-checkbox:checked {

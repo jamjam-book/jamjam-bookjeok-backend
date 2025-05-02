@@ -1,17 +1,21 @@
 <script setup>
-const {item} = defineProps(['item'])
-const emit = defineEmits(['increase', 'decrease', 'remove'])
+const {item} = defineProps(['item']);
+const emit = defineEmits(['increase', 'decrease', 'remove']);
 
 function increase() {
-    if (item.quantity < 999) emit('increase', item.id)
+    if (item.quantity < 999) {
+        emit('increase', item.id);
+    }
 }
 
 function decrease() {
-    if (item.quantity > 1) emit('decrease', item.id)
+    if (item.quantity > 1) {
+        emit('decrease', item.id);
+    }
 }
 
 function remove() {
-    emit('remove', item.id)
+    emit('remove', item.id);
 }
 
 function handleInput(item) {
@@ -26,17 +30,16 @@ function handleInput(item) {
 <template>
     <div id="cart-item-container"
          class="position-relative d-flex align-items-center justify-content-between border-bottom py-3">
+
         <!-- 체크박스 -->
         <input type="checkbox"
                v-model="item.selected"
                id="cart-checkbox"
                class="form-check-input position-absolute"/>
 
-        <!-- 왼쪽 영역 -->
+        <!-- 도서명, 가격 -->
         <div id="cart-left" class="d-flex align-items-center flex-grow-1">
-            <img :src="item.image"
-                 id="cart-image"
-                 alt="도서 이미지"/>
+            <img :src="item.image" id="cart-image" alt="도서 이미지"/>
             <div id="cart-book-info">
                 <div id="cart-book-title" class="fw-bold mb-2">{{ item.title }}</div>
                 <div>{{ item.price.toLocaleString() }}원</div>
@@ -46,7 +49,7 @@ function handleInput(item) {
         <!-- 중앙 회색 선 -->
         <div id="cart-divider"></div>
 
-        <!-- 오른쪽: 합계 가격 + 수량 -->
+        <!-- 수량 -->
         <div id="cart-right" class="d-flex flex-column align-items-center">
             <div id="cart-total-price" class="fw-bold mb-2 text-nowrap">
                 {{ (item.price * item.quantity).toLocaleString() }}원
@@ -67,10 +70,7 @@ function handleInput(item) {
         </div>
 
         <!-- 삭제 버튼 -->
-        <button @click="remove"
-                id="cart-remove-button"
-                class="btn btn-sm position-absolute">×
-        </button>
+        <button @click="remove" id="cart-remove-button" class="btn btn-sm position-absolute">×</button>
     </div>
 </template>
 
@@ -141,6 +141,7 @@ function handleInput(item) {
 #cart-quantity-input {
     width: 48px;
     font-size: 13px;
+    -moz-appearance: textfield;
 }
 
 /* 스핀 버튼 제거 */
@@ -148,10 +149,6 @@ function handleInput(item) {
 #cart-quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-#cart-quantity-input {
-    -moz-appearance: textfield;
 }
 
 #cart-remove-button {
