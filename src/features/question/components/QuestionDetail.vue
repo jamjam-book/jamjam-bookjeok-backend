@@ -1,64 +1,65 @@
 <template>
-    <div class="inquiry-item">
-        <!-- 상단: 문의 상태 & 답변 보기 버튼 -->
-        <div class="status-bar">
-            <!-- 문의 번호 -->
-            <div class="inquiry-number">No. {{ question.id }} ({{ question.date }})</div>
-            <div class="status-text">
-                {{ question.title }}
-                <span
-                        v-if="question.answer && !showAnswer"
-                        class="answer-button"
-                        @click="showAnswer = true"
-                >답변보기
-                </span>
-            </div>
-        </div>
-
-        <!-- 문의 내용 -->
-        <div class="inquiry-content">
-            {{ question.content }}
-        </div>
-
-        <!-- 이미지 (조건부 렌더링) -->
-        <div v-if="question.imageUrl" class="inquiry-image">
-            <img class="questionImg" :src="`/src/assets${question.imageUrl}`" alt="문의 이미지" />
-        </div>
-
-        <!-- 작성일 -->
-        <div class="inquiry-date"></div>
-
-        <!-- 답변 내용 -->
-        <div v-if="showAnswer" class="answer-wrapper">
-            <div class="answer-box">
-                <p class="answer-text">
-                    {{ question.answer }}
-                </p>
-            </div>
-            <div class="collapse-btn" @click="showAnswer = false">
-                <div class="collapse-box">
-                    <span class="collapse-text">답변 접기</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 우측 하단 수정/삭제 -->
-        <div class="bottom-actions">
-            <button class="action-button edit" @click="$emit('edit', question)">수정</button>
-            <button v-if="!question.answer" class="action-button delete" @click="$emit('delete', question.id)">삭제</button>
-        </div>
+  <div class="inquiry-item">
+    <div class="status-bar">
+      <div class="inquiry-number">No. {{ question.id }} ({{ question.date }})</div>
+      <div class="status-text">
+        {{ question.title }}
+        <span
+            v-if="question.answer && !showAnswer"
+            class="answer-button"
+            @click="showAnswer = true"
+        >
+          답변보기
+        </span>
+      </div>
     </div>
+
+    <div class="inquiry-content">
+      {{ question.content }}
+    </div>
+
+    <div v-if="question.imageUrl" class="inquiry-image">
+      <img class="questionImg" :src="getImageUrl(question.imageUrl)" alt="문의 이미지" />
+    </div>
+
+    <div class="inquiry-date"></div>
+
+    <div v-if="showAnswer" class="answer-wrapper">
+      <div class="answer-box">
+        <p class="answer-text">
+          {{ question.answer }}
+        </p>
+      </div>
+      <div class="collapse-btn" @click="showAnswer = false">
+        <div class="collapse-box">
+          <span class="collapse-text">답변 접기</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="action-button edit" @click="$emit('edit', question)">수정</button>
+      <button v-if="!question.answer" class="action-button delete" @click="$emit('delete', question.id)">삭제</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 
 const showAnswer = ref(false);
 
 const { question } = defineProps({
-    question : Object
-})
-const emit = defineEmits(['edit', 'delete'])
+  question: Object
+});
+
+const emit = defineEmits(['edit', 'delete']);
+
+const getImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('blob:') || url.startsWith('/')) return url;
+  return `/images/${url}`;
+};
 </script>
 
 <style scoped>
