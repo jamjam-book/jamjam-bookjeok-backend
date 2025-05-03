@@ -91,7 +91,7 @@ const visiblePages = computed(() => {
 
 .pagination-arrow:disabled,
 .pagination-page:disabled {
-    background-color: #b0b0b0;
+    background-color: transparent;
     cursor: not-allowed;
 }
 
