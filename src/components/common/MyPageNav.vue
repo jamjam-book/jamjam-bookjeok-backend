@@ -22,7 +22,7 @@ const handleMenuClick = (menu) => {
         </ul>
         <ul>
             <li><RouterLink to="members/:memberId/orders" :class="{ active: activeMenu === '주문' }" @click.prevent="handleMenuClick('주문')">주문</RouterLink></li>
-            <li><a href="#" :class="{ active: activeMenu === '관심 목록' }" @click.prevent="handleMenuClick('관심 목록')">관심 목록</a></li>
+            <li><RouterLink to="/members/:memberId/interest-authors" :class="{ active: activeMenu === '관심 목록' }" @click.prevent="handleMenuClick('관심 목록')">관심 목록</RouterLink></li>
             <li><RouterLink to="/members/questions" :class="{ active: activeMenu === '문의 사항' }" @click.prevent="handleMenuClick('문의 사항')">문의 사항</RouterLink></li>
         </ul>
       </nav>
