@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import MemberInfo from '../components/MemberInfo.vue'
+import MemberAddressInfo from '../components/MemberAddressInfo.vue'
 import OrderItem from '../components/OrderItem.vue'
 import OrderSummary from '../components/OrderSummary.vue'
 import {useCartStore} from '@/features/cart/cart.js'
@@ -15,7 +15,7 @@ const paymentRef = ref()
         <!-- 좌측 영역 -->
         <div class="left-area flex-grow-1 me-4">
             <h3 class="fw-bold mb-4">주문/결제</h3>
-            <MemberInfo/>
+            <MemberAddressInfo/>
             <h4 id="order-info-title" class="fw-bold mb-3 border-bottom py-3">주문 정보</h4>
             <OrderItem
                     v-for="item in cartStore.selectedItems"
