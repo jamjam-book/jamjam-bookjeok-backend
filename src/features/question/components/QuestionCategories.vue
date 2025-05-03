@@ -4,18 +4,18 @@
         <!-- 전체 버튼 -->
         <button v-if="list"
                 class="category-button"
-                :class="{ active: selectedCategoryId === null }"
+                :class="{ active: modelValue === null }"
                 @click="selectCategory(null)"
         >
             전체
         </button>
 
-        <!-- 동적으로 생성된 카테고리 버튼 -->
+        <!-- 카테고리 버튼 -->
         <button
                 v-for="category in categories"
                 :key="category.id"
                 class="category-button"
-                :class="{ active: selectedCategoryId === category.id }"
+                :class="{ active: category.id === modelValue }"
                 @click="selectCategory(category.id)"
         >
             {{ category.name }}
@@ -25,25 +25,21 @@
 
 <script setup>
 
-import {ref} from "vue";
-
-const selectedCategoryId = ref(null);
-
-const {categories, list} = defineProps({
-    categories: {
-        type: Array,
-        required: true,
-    },
-    list : true
+const { categories, list, modelValue } = defineProps({
+  categories: {
+    type: Array,
+    required: true },
+  list: {
+    type: Boolean,
+    default: false },
+  modelValue: Number,
 });
 
-const emit = defineEmits(['update:selectedCategoryId']);
+const emit = defineEmits(['update:modelValue']);
 
 const selectCategory = (id) => {
-    selectedCategoryId.value = id;
-    emit('update:selectedCategoryId', selectedCategoryId.value)
-}
-
+  emit('update:modelValue', id);
+};
 </script>
 
 <style scoped>
@@ -59,17 +55,22 @@ const selectCategory = (id) => {
 }
 
 .category-button {
-    padding: 5px 10px;
+    padding: 6px 16px;
     border-radius: 25px;
-    border: #854d14;
+    border: 1px solid #854d14;
     font-weight: 400;
     font-size: 14px;
     background-color: white;
     color: #854d14;
     cursor: pointer;
-    min-width: 30px;
+    min-width: 50px;
     text-align: center;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.category-button:hover {
+  background-color: #f0e0cf;
+  transform: translateY(-1px);
 }
 
 .category-button.active {

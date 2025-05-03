@@ -1,3 +1,4 @@
+/*
 export const questionRoutes = [
     {
         path : '/questions',
@@ -14,4 +15,4 @@ export const questionRoutes = [
         name : 'QuestionEdit',
         component: () => import('@/features/question/views/QuestionEditView.vue')
     }
-];
+];*/
