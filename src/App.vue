@@ -20,7 +20,8 @@ import Header from "@/components/layout/Header.vue";
 .container {
     align-items: center;
     justify-content: center;
-    width: 1500px;
+    width: 1200px;
     margin-top: 42px;
+    padding: 0;
 }
 </style>
