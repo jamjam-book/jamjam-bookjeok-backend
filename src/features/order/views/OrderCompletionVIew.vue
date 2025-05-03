@@ -1,7 +1,7 @@
 <script setup>
 import {useRoute, useRouter} from 'vue-router'
 import OrderItem from "@/features/order/components/OrderItem.vue";
-import MemberInfo from "@/features/order/components/MemberInfo.vue";
+import MemberAddressInfo from "@/features/order/components/MemberAddressInfo.vue";
 import PaymentInfo from "@/features/order/components/PaymentInfo.vue";
 
 const router = useRouter()
@@ -38,7 +38,7 @@ const goToMain = () => router.push('/')
         <div class="text-center fw-bold" id="order-no">주문 번호 : {{ orderId }}</div>
 
         <!-- 회원 정보 -->
-        <MemberInfo/>
+        <MemberAddressInfo/>
 
         <!-- 주문 정보 -->
         <h4 id="order-info-title" class="fw-bold mb-3 border-bottom py-3">주문 정보</h4>
