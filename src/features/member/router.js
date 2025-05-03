@@ -17,10 +17,9 @@ export const memberRoutes = [
             { path: '', redirect: 'profile' },
             { path: '/:memberId', component: () => import('@/features/member/views/PasswordResetRequestView.vue')},
             { path: ':memberId/password/modify', component: () => import('@/features/member/views/PasswordModifyView.vue')},
-            //{ path: '/:memberId/orders', component: () => import ('@/features/order/views/OrderListView.vue')},
+            { path: '/:memberId/orders', component: () => import ('@/features/order/views/MemberOrdersView.vue')},
             { path: ':memberId/interest-authors', component: () => import ('@/features/member/views/InterestAuthorView.vue')},
             { path: '/:memberId/questions', component: () => import('@/features/question/views/QuestionListView.vue')}
         ]
     },
-
 ];
