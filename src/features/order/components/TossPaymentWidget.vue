@@ -37,7 +37,7 @@ function requestPayment() {
         orderId: `order-${Date.now()}`,
         orderName,
         amount: totalPrice,
-        successUrl: 'http://localhost:5173/order/success',
+        successUrl: 'http://localhost:5173/order/completion',
         failUrl: 'http://localhost:5173/order/fail',
         customerName: '김북적',
         customerEmail: 'example@email.com'

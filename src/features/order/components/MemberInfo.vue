@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <h4 class="fw-bold mb-3 border-bottom py-3" id="member-info-title">회원 정보</h4>
+        <h4 class="fw-bold mb-3 border-bottom py-3" id="member-info-title">배송 정보</h4>
         <div class="row mb-2">
             <div class="col-3">회원명</div>
             <div class="col">김북적</div>
