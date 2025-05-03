@@ -16,7 +16,8 @@ const handleMenuClick = (menu) => {
         <ul>
             <li><RouterLink to="/members/:memberId" :class="{ active: activeMenu === '회원 정보' }" @click.prevent="handleMenuClick('회원 정보')">회원 정보</RouterLink></li>
             <li><a href="#" class="small-side" :class="{ active: activeMenu === '프로필 변경' }" @click.prevent="handleMenuClick('프로필 변경')">프로필 변경</a></li>
-            <li><RouterLink to="/members/:memberId/password/reset-link" class="small-side" :class="{ active: activeMenu === '비밀번호 변경' }" @click.prevent="handleMenuClick('비밀번호 변경')">비밀번호 변경</RouterLink></li>
+            <!-- :to="`/members/${memberId}/password/modify`" 로 변경 예정-->
+            <li><RouterLink to="/members/:memberId/password/modify" class="small-side" :class="{ active: activeMenu === '비밀번호 변경' }" @click.prevent="handleMenuClick('비밀번호 변경')">비밀번호 변경</RouterLink></li>
             <li><a href="#" class="small-side" :class="{ active: activeMenu === '팔로우 목록' }" @click.prevent="handleMenuClick('팔로우 목록')">팔로우 목록</a></li>
         </ul>
         <ul>
