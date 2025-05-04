@@ -17,6 +17,7 @@ export const memberRoutes = [
             { path: '', redirect: 'profile' },
             { path: '/:memberId', component: () => import('@/features/member/views/PasswordResetRequestView.vue')},
             { path: ':memberId/password/modify', component: () => import('@/features/member/views/PasswordModifyView.vue')},
+            { path: ':memberId/followings', component: () => import('@/features/member/views/FollowingView.vue')},
             //{ path: '/:memberId/orders', component: () => import ('@/features/order/views/OrderListView.vue')},
             { path: ':memberId/interest-authors', component: () => import ('@/features/member/views/InterestAuthorView.vue')},
             { path: 'questions', component: () => import('@/features/question/views/QuestionListView.vue')},
@@ -24,5 +25,4 @@ export const memberRoutes = [
             { path: 'questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue')},
         ]
     },
-
 ];
