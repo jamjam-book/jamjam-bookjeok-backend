@@ -16,7 +16,8 @@ const paymentRef = ref()
         <div class="left-area flex-grow-1 me-4">
             <h3 class="fw-bold mb-4">주문/결제</h3>
             <MemberAddressInfo/>
-            <h4 id="order-info-title" class="fw-bold mb-3 border-bottom py-3">주문 정보</h4>
+
+            <h4 id="order-info-title" class="fw-bold mb-3 py-3">주문 정보</h4>
             <OrderItem
                     v-for="item in cartStore.selectedItems"
                     :key="item.id"
@@ -46,5 +47,6 @@ const paymentRef = ref()
 
 #order-info-title {
     margin-top: 42px;
+    border-bottom: 2px solid black;
 }
 </style>

@@ -1,63 +1,79 @@
 <script setup>
-const {item} = defineProps(['item'])
+import {defineProps} from "vue";
+
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true
+    }
+});
 </script>
 
 <template>
-    <div id="order-item">
-        <div id="left-section">
-            <img :src="item.image" alt="도서 이미지" id="book-image"/>
-            <div id="item-info">
-                <div id="item-title">{{ item.title }}</div>
-                <div id="item-quantity">{{ item.quantity }}개</div>
+    <div class="order-row">
+        <img :src="item.image" alt="도서 이미지" class="book-image"/>
+
+        <div class="info-row">
+            <div class="header-row">
+                <div class="header">도서명</div>
+                <div class="header">수량</div>
+                <div class="header">금액</div>
             </div>
-        </div>
-        <div id="item-price">
-            {{ (item.price * item.quantity).toLocaleString() }}원
+            <div class="content-row">
+                <div class="title">{{ item.title }}</div>
+                <div class="quantity">{{ item.quantity }}개</div>
+                <div class="price">{{ (item.price * item.quantity).toLocaleString() }}원</div>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-#order-item {
+.order-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    padding: 10px 0;
     border-bottom: 1px solid #dee2e6;
-    padding: 15px 0;
 }
 
-#left-section {
-    display: flex;
-}
-
-#book-image {
+.book-image {
     width: 110px;
     height: 136px;
     object-fit: cover;
     margin-right: 24px;
+    border-radius: 4px;
 }
 
-#item-info {
+.info-row {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-#item-title {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-#item-quantity {
-    font-size: 16px;
-}
-
-#item-price {
-    font-size: 18px;
-    font-weight: bold;
-    white-space: nowrap;
+.header-row {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 4px;
+}
+
+.content-row {
+    display: flex;
+    margin-top: 10px;
+}
+
+.header {
+    font-size: 14px;
+    color: #999;
+    width: 33.3%;
+}
+
+.title,
+.quantity,
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    width: 33.3%;
 }
 </style>
