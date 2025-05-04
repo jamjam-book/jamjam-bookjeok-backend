@@ -1,105 +1,109 @@
-<script setup>
-import { computed } from 'vue';
-
-// 부모 컴포넌트로부터 전달받는 props
-const props = defineProps({
-  currentPage: {
-    type: Number,
-    required: true
-  },
-  totalPages: {
-    type: Number,
-    required: true
-  },
-  totalItems: {
-    type: Number,
-    required: true
-  }
-});
-
-// 페이지 변경 시 부모 컴포넌트로 이벤트를 전달
-const emit = defineEmits(['page-changed']);
-
-// 페이지 변경 함수
-const changePage = (page) => {
-  if (page >= 1 && page <= props.totalPages) {
-    emit('page-changed', page); // 부모에게 페이지 변경 이벤트 전달
-  }
-};
-
-// 현재 페이지 주변의 페이지 번호를 계산
-const visiblePages = computed(() => {
-  const pages = [];
-  const range = 5; // 현재 페이지를 기준으로 몇 개의 페이지를 표시할지 결정
-  const start = Math.max(1, props.currentPage - range);
-  const end = Math.min(props.totalPages, props.currentPage + range);
-
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-
-  return pages;
-});
-</script>
-
 <template>
-  <div class="paging-bar">
-    <button
-        :disabled="currentPage === 1"
-        @click="changePage(currentPage - 1)">
-      Previous
-    </button>
+    <div class="pagination">
+        <button
+                class="pagination-arrow"
+                :disabled="currentPage === 1"
+                @click="changePage(currentPage - 1)"
+        >
+            &lt;
+        </button>
 
-    <span v-for="page in visiblePages" :key="page">
-      <button
-          :class="{ active: page === currentPage }"
-          @click="changePage(page)">
-        {{ page }}
-      </button>
-    </span>
+        <button
+                v-for="page in visiblePages"
+                :key="page"
+                class="pagination-page"
+                :class="{ active: page === currentPage }"
+                @click="changePage(page)"
+        >
+            {{ page }}
+        </button>
 
-    <button
-        :disabled="currentPage === totalPages"
-        @click="changePage(currentPage + 1)">
-      Next
-    </button>
+        <button
+                class="pagination-arrow"
+                :disabled="currentPage === totalPages"
+                @click="changePage(currentPage + 1)"
+        >
+            &gt;
+        </button>
 
-    <div class="pagination-info">
-      Page {{ currentPage }} of {{ totalPages }} ({{ totalItems }} items)
     </div>
-  </div>
 </template>
 
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+    currentPage: { type: Number, required: true },
+    totalPages: { type: Number, required: true },
+    totalItems: { type: Number, required: true }
+})
+
+const emit = defineEmits(['page-changed'])
+
+const changePage = (page) => {
+    if (page >= 1 && page <= props.totalPages && page !== props.currentPage) {
+        emit('page-changed', page)
+    }
+}
+
+const visiblePages = computed(() => {
+    const range = 2
+    let start = Math.max(1, props.currentPage - range)
+    let end = Math.min(props.totalPages, props.currentPage + range)
+
+    if (end - start < range * 2) {
+        if (props.currentPage < props.totalPages / 2) {
+            end = Math.min(props.totalPages, end + (range * 2 - (end - start)))
+        } else {
+            start = Math.max(1, start - (range * 2 - (end - start)))
+        }
+    }
+
+    const pages = []
+    for (let i = start; i <= end; i++) {
+        pages.push(i)
+    }
+    return pages
+})
+</script>
+
 <style scoped>
-.paging-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 20px;
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #e0e0e0;
-  cursor: pointer;
-  font-size: 1rem;
+.pagination-arrow,
+.pagination-page {
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: #333;
+    border-radius: 6px;
+    transition: background-color 0.2s;
 }
 
-button.active {
-  background-color: #2196f3;
-  color: white;
+.pagination-arrow:disabled,
+.pagination-page:disabled {
+    background-color: transparent;
+    cursor: not-allowed;
 }
 
-button:disabled {
-  background-color: #b0b0b0;
-  cursor: not-allowed;
+.pagination-page.active {
+    background-color: #f9f0df;
+    color: white;
+    font-weight: bold;
 }
 
 .pagination-info {
-  margin-left: 1rem;
-  font-size: 0.875rem;
-  color: #757575;
+    margin-left: 1rem;
+    font-size: 0.875rem;
+    color: #757575;
 }
 </style>
