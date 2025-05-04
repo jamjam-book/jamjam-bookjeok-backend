@@ -28,7 +28,7 @@ const items = [
 
 const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
-const goToOrders = () => router.push('/orders')
+const goToOrders = () => router.push('/members/orders')
 const goToMain = () => router.push('/')
 </script>
 
