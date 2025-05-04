@@ -24,5 +24,4 @@ export const memberRoutes = [
             { path: 'questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue')},
         ]
     },
-
 ];
