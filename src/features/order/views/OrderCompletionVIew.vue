@@ -41,7 +41,7 @@ const goToMain = () => router.push('/')
         <MemberAddressInfo/>
 
         <!-- 주문 정보 -->
-        <h4 id="order-info-title" class="fw-bold mb-3 border-bottom py-3">주문 정보</h4>
+        <h4 id="order-info-title" class="fw-bold mb-3 py-3">주문 정보</h4>
         <OrderItem v-for="item in items" :key="item.id" :item="item"/>
 
         <!-- 결제 정보 -->
@@ -73,6 +73,7 @@ const goToMain = () => router.push('/')
 
 #order-info-title {
     margin-top: 42px;
+    border-bottom: 2px solid black;
 }
 
 #order-button {

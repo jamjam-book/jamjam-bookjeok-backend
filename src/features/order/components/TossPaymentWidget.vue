@@ -54,7 +54,7 @@ defineExpose({ requestPayment })
 
 <template>
     <div>
-        <h4 class="fw-bold mt-5 mb-3 border-bottom py-3">결제 방법</h4>
+        <h4 class="fw-bold mt-5 mb-3 py-3" id="payment-title">결제 방법</h4>
         <div id="payment-method" class="mb-3"></div>
         <div id="agreement" class="payment-widget-cache-1boe9vx mb-3"></div>
     </div>
@@ -65,6 +65,10 @@ defineExpose({ requestPayment })
     border: 1px solid #e1e1e1;
     padding: 1rem;
     border-radius: 8px;
+}
+
+#payment-title {
+    border-bottom: 2px solid black;
 }
 
 .payment-widget-cache-1boe9vx {

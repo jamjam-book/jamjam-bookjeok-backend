@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
     <div class="payment-info-wrapper">
-        <h4 class="fw-bold mb-3 border-bottom py-3">결제 정보</h4>
+        <h4 class="fw-bold mb-3 py-3" id="payment-info-title">결제 정보</h4>
 
         <div class="info-grid">
             <!-- 1행 -->
@@ -49,6 +49,10 @@ const props = defineProps({
     max-width: 980px;
     margin: 0 auto;
     margin-top: 42px;
+}
+
+#payment-info-title {
+    border-bottom: 2px solid black;
 }
 
 .info-grid {

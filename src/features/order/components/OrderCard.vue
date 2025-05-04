@@ -26,13 +26,23 @@ const getOrderDetail = () => {
             <button class="btn" id="order-detail-btn" @click="getOrderDetail">주문 상세 내역</button>
         </div>
 
-        <div v-for="item in order.items" :key="item.id" class="order-item">
-            <img :src="item.image" alt="도서 이미지">
-            <div class="flex-grow-1">
-                <div class="title">{{ item.title }}</div>
-                <div class="quantity">{{ item.quantity }}개</div>
+        <div v-for="item in order.items" :key="item.id" class="order-row">
+            <img :src="item.image" alt="도서 이미지" class="book-image"/>
+
+            <div class="info-row">
+                <div class="header-row">
+                    <div class="header">도서명</div>
+                    <div class="header">수량</div>
+                    <div class="header">금액</div>
+                </div>
+                <div class="content-row">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="quantity">{{ item.quantity }}개</div>
+                    <div class="price">
+                        {{ (item.price * item.quantity).toLocaleString() }}원
+                    </div>
+                </div>
             </div>
-            <div class="price">{{ item.price.toLocaleString() }}원</div>
         </div>
     </div>
 </template>
@@ -64,38 +74,60 @@ const getOrderDetail = () => {
     margin-top: 42px;
     margin-bottom: 12px;
     font-size: 14px;
+    border-bottom: 2px solid black;
 }
-
-.order-item {
-    display: flex;
-    border-top: 1px solid #dee2e6;
-    padding-top: 16px;
-    margin-bottom: 16px;
-}
-
 .order-item img {
     width: 110px;
     height: 136px;
     object-fit: cover;
     margin-right: 16px;
-    border: 1px solid #dee2e6;
     border-radius: 4px;
 }
 
-.order-item .title {
-    font-weight: bold;
-    font-size: 16px;
+.order-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
 }
 
-.order-item .quantity {
-    margin-top: 8px;
+.book-image {
+    width: 110px;
+    height: 136px;
+    object-fit: cover;
+    margin-right: 24px;
+}
+
+.info-row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 4px;
+}
+
+.content-row {
+    display: flex;
+    margin-top: 10px;
+}
+
+.header {
     font-size: 14px;
+    color: #999;
+    width: 33.3%;
 }
 
-.order-item .price {
-    font-weight: bold;
+.title,
+.quantity,
+.price {
     font-size: 16px;
-    text-align: right;
-    align-self: flex-start;
+    font-weight: bold;
+    width: 33.3%;
 }
 </style>
