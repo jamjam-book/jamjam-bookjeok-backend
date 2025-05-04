@@ -27,8 +27,12 @@ const handleMenuClick = (menu) => {
                                 @click.prevent="handleMenuClick('비밀번호 변경')">비밀번호 변경
                     </RouterLink>
                 </li>
-                <li><a href="#" class="small-side" :class="{ active: activeMenu === '팔로우 목록' }"
-                       @click.prevent="handleMenuClick('팔로우 목록')">팔로우 목록</a></li>
+                <li>
+                    <RouterLink to="/members/:memberId/followings" class="small-side"
+                                :class="{ active: activeMenu === '팔로잉 목록' }"
+                                @click.prevent="handleMenuClick('팔로잉 목록')">팔로잉 목록
+                    </RouterLink>
+                </li>
             </ul>
             <ul>
                 <li>
