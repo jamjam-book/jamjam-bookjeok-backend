@@ -27,13 +27,4 @@
         FROM carts
         WHERE member_uid = #{ memberUid }
     </select>
-
-    <select id="findCartByMemberUidAndBookId" resultType="com.jamjam.bookjeok.domains.cart.command.entity.Cart">
-        SELECT
-            cart_id, member_uid, book_id,
-            quantity, created_at, modified_at
-        FROM carts
-        WHERE member_uid = #{ memberUid }
-        AND book_id = #{ bookId }
-    </select>
 </mapper>

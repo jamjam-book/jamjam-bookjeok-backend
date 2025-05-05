@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.cart.command.service;
 
 import com.jamjam.bookjeok.domains.book.command.entity.Book;
+import com.jamjam.bookjeok.domains.book.command.repository.BookRepository;
 import com.jamjam.bookjeok.domains.cart.command.entity.Cart;
 import com.jamjam.bookjeok.domains.cart.command.repository.CartRepository;
 import com.jamjam.bookjeok.domains.cart.command.dto.request.CartRequest;
@@ -27,6 +28,7 @@ public class CartCommandServiceImpl implements CartCommandService {
 
     private final CartMapper cartMapper;
     private final CartRepository cartRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public CartResponse createBookToCart(CartRequest cartRequest) {
@@ -34,7 +36,7 @@ public class CartCommandServiceImpl implements CartCommandService {
         Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName());
 
         // 장바구니에 동일한 도서명이 있는지 검증하는 로직
-        Optional<Cart> findCart = cartMapper.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId());
+        Optional<Cart> findCart = cartRepository.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId());
 
         if (findCart.isPresent()) { // 장바구니에 동일한 도서가 있다면?
             Cart cart = findCart.get();
@@ -84,12 +86,12 @@ public class CartCommandServiceImpl implements CartCommandService {
     }
 
     private Book findBookOrThrow(Long bookId, String bookName) {
-        return cartMapper.findByBookIdAndBookName(bookId, bookName)
+        return bookRepository.findByBookIdAndBookName(bookId, bookName)
                 .orElseThrow(() -> new CartItemLimitExceededException("존재하지 않는 도서 정보 입니다."));
     }
 
     private Cart findCartOrThrow(Long memberUid, Long bookId) {
-        return cartMapper.findCartByMemberUidAndBookId(memberUid, bookId)
+        return cartRepository.findCartByMemberUidAndBookId(memberUid, bookId)
                 .orElseThrow(() -> new CartBookNotFoundException("장바구니에 해당 도서 정보가 없습니다."));
     }
 
