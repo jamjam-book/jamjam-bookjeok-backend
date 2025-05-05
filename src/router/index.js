@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-// import {adminRoutes} from "@/features/admin/router.js";
+import {adminRoutes} from "@/features/admin/router.js";
 import {mainRoutes} from "@/features/main/router.js";
 import {memberRoutes} from "@/features/member/router.js";
 import {orderRoutes} from "@/features/order/router.js";
@@ -11,7 +11,7 @@ const router = createRouter({
     /*import.meta.env.BASE_URL*/
     history: createWebHistory(),
     routes: [
-        // ...adminRoutes,
+        ...adminRoutes,
         ...bookRoutes,
         ...mainRoutes,
         ...memberRoutes,
