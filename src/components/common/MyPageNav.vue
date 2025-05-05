@@ -36,12 +36,12 @@ const handleMenuClick = (menu) => {
             </ul>
             <ul>
                 <li>
-                    <RouterLink to="/members/:memberId/orders" :class="{ active: activeMenu === '주문 내역' }"
+                    <RouterLink to="members/:memberId/orders" :class="{ active: activeMenu === '주문 내역' }"
                                 @click.prevent="handleMenuClick('주문')">주문 내역
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/members/:memberId/interest-authors" :class="{ active: activeMenu === '관심 목록' }"
+                    <RouterLink to="/members/:memberId/interest/authors" :class="{ active: activeMenu === '관심 목록' }"
                                 @click.prevent="handleMenuClick('관심 목록')">관심 목록
                     </RouterLink>
                 </li>
