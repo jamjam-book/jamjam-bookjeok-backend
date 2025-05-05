@@ -1,40 +1,49 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const interestTab = [
-    { id: 'interestAuthors', name: '관심작가' },
-    { id: 'interestBooks', name: '관심도서' },
-    { id: 'interestPosts', name: '관심게시글' }
+    { id: 'authors', name: '관심작가' },
+    { id: 'books', name: '관심도서' },
+    { id: 'posts', name: '관심게시글' }
 ];
 
 const selectedTab = ref(interestTab[0].id);
 
-const selectTab = (id) => {
-    selectedTab.value = id;
-};
+const route = useRoute();
+
+watch(
+        () => route.path,
+        (newPath) => {
+            const matchedTab = interestTab.find(tab => newPath.includes(tab.id));
+            if (matchedTab) {
+                selectedTab.value = matchedTab.id;
+            }
+        },
+        { immediate: true }
+);
 </script>
 
-<!-- 다 만든 뒤에 여기에서 탭을 클릭하는 경우 경로를 이동할 수 있게 router 설정을 할 예정임!-->
 <template>
-    <div class="interest-container">
-        <button
+    <div class="interest-tab-container">
+        <RouterLink
                 v-for="tab in interestTab"
                 :key="tab.id"
+                :to="`/members/:memberId/interest/${tab.id}`"
                 class="interest-category-button"
                 :class="{ active: selectedTab === tab.id }"
-                @click="selectTab(tab.id)"
         >
             {{ tab.name }}
-        </button>
+        </RouterLink>
     </div>
 </template>
 
 <style scoped>
-.interest-container {
+.interest-tab-container {
     display: flex;
     justify-content: flex-start;
     gap: 10px;
-    padding: 20px 0;
+    padding: 10px;
     flex-wrap: wrap;
 }
 
@@ -48,6 +57,8 @@ const selectTab = (id) => {
     color: #854d14;
     cursor: pointer;
     transition: 0.2s;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .interest-category-button.active {
