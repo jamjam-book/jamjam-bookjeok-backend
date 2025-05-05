@@ -6,14 +6,14 @@ import com.jamjam.bookjeok.domains.member.query.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface AdminMapper {
 
-    List<MemberDTO> findAllMember(PageRequest pageRequest);
+    List<MemberDTO> findAllMember(MemberSearchRequest memberSearchRequest);
 
-    long countMembers();
+    long countMembers(MemberSearchRequest memberSearchRequest);
 
-    MemberDTO findMemberByIdOrNickname(MemberSearchRequest memberSearchRequest);
-
+    MemberDTO findMemberByMemberId(String memberId);
 }
