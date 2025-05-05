@@ -37,7 +37,7 @@ public class AdminQueryController {
     }
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin/member/{memberId}")
+    @GetMapping("/admin/members/{memberId}")
     public ResponseEntity<ApiResponse<MemberDetailResponse>> getMemberByMemberId(
             @PathVariable String memberId
     ){
