@@ -9,7 +9,7 @@ import AdminNav from "@/components/layout/AdminNav.vue";
             <AdminNav/>
         </div>
         <div class="admin-layout-right">
-            <RouterView/>
+            <RouterView :key="$route.fullPath"/>
         </div>
     </div>
 </template>

@@ -21,7 +21,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+import {checkIsbn} from "@/features/admin/bookapi.js";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const isbn = ref('')
 
@@ -30,16 +33,26 @@ const registerBook = async () => {
         alert('ISBN을 입력해주세요.')
         return
     }
-
     try {
-        const res = await axios.get(`/api/book/naver?isbn=${isbn.value}`)
-        console.log('도서 정보:', res.data)
+        const res = await checkIsbn(isbn.value);
+        const result = res.data.data;
 
-        // TODO: 여기서 폼에 채워넣거나 등록 로직 연결
-        alert('도서 정보를 성공적으로 불러왔습니다.')
-
+        if (result.status === 'exists') {
+            alert(`이미 등록된 도서입니다. 재고 수정 페이지로 이동합니다.`)
+            await router.push({
+                path: `/admin/book/edit/${result.bookId}`,
+                query: {status: result.status}
+            });
+        } else if (result.status === 'new') {
+            alert('도서가 등록되었습니다. 상세 페이지로 이동합니다.')
+            await router.push({
+                path : `/admin/book/${result.bookId}`,
+                query: { status : result.status }
+            });
+        }
     } catch (err) {
-        alert('도서를 찾을 수 없습니다.')
+        alert('도서를 확인하는 도중 오류가 발생했습니다.')
+        console.error(err)
     }
 }
 </script>

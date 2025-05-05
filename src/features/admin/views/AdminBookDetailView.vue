@@ -1,5 +1,5 @@
 <template>
-    <div class="book-detail-wrapper">
+    <div v-if="book" class="book-detail-wrapper">
         <div class="book-detail-top">
             <div class="book-image-box">
                 <img :src="fullImageUrl" alt="도서 이미지" class="book-image" />
@@ -12,7 +12,7 @@
         </div>
 
         <div class="book-info-list">
-            <AdminBookInfoRow label="카테고리" :value="book.bookCategory.name" />
+            <AdminBookInfoRow label="카테고리" :value="book.bookCategory.categoryName" />
             <AdminBookInfoRow label="출판일" :value="formatDate(book.publishedAt)" />
             <AdminBookInfoRow label="ISBN" :value="book.isbn" />
             <AdminBookInfoRow label="가격" :value="formatPrice(book.price)" />
@@ -35,38 +35,31 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
 import AdminBookInfoRow from "@/features/admin/components/AdminBookInfoRow.vue";
+import {getBookDetail, updateQuantity} from "@/features/admin/bookapi.js";
 
 const route = useRoute()
 const router = useRouter()
 
-const bookId = route.params.id
+const bookId = route.params.bookId;
 const isAdminEditMode = route.path.includes('/admin/book/edit')
 
-const book = ref({
-    "bookId": 1,
-    "bookName": "아무튼, 디지몬",
-    "authorNames": "천선란",
-    "publisherName": "위고",
-    "bookCategory": { "name": "시/에세이" },
-    "publishedAt": "2024-05-31",
-    "isbn": "9791193044162",
-    "price": 15000,
-    "stockQuantity": 100,
-    "imageUrl": "/images/main_482791348279137620.20240609071045.jpg"
+console.log(`isAdminEditMode : ${isAdminEditMode}`)
+
+const book = ref(null);
+
+onMounted(async () => {
+    const res = await getBookDetail(bookId)
+    book.value = res.data.data
 })
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
 
 const fullImageUrl = computed(() => {
     return book.value.imageUrl.startsWith('http')
             ? book.value.imageUrl
-            : /*IMAGE_BASE_URL +*/ book.value.imageUrl
+            : IMAGE_BASE_URL + book.value.imageUrl
 })
-
-/*onMounted(async () => {
-    const res = await axios.get(`/api/book/${bookId}`)
-    book.value = res.data
-})*/
 
 const formatDate = (dateStr) => {
     if (!dateStr) return ''
@@ -82,14 +75,13 @@ const formatPrice = (num) => {
 const handleAction = async () => {
     if (isAdminEditMode) {
         try {
-            await axios.put(`/api/book/${bookId}/stock`, { quantity: book.value.stockQuantity })
-            alert('수정되었습니다.')
-            router.push(`/book/${bookId}`)
+            await updateQuantity(bookId, book.value.stockQuantity);
+            await router.push(`/admin/book/${bookId}`)
         } catch (err) {
             alert('수정 실패!')
         }
     } else {
-        router.push(`/admin/book/edit/${bookId}`)
+        await router.push(`/admin/book/edit/${bookId}`)
     }
 }
 </script>
