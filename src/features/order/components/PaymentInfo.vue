@@ -3,8 +3,14 @@ const props = defineProps({
     totalPrice: {
         type: Number,
         required: true
+    },
+    paymentMethod: {
+        type: String,
+        required: true
     }
 })
+
+const point = props.totalPrice * 0.01;
 </script>
 
 <template>
@@ -33,16 +39,15 @@ const props = defineProps({
             </div>
             <div class="info-box border-right">
                 <div class="label">적립 포인트</div>
-                <div class="value">0P</div>
+                <div class="value">{{ point }}P</div>
             </div>
             <div class="info-box">
                 <div class="label">결제 방법</div>
-                <div class="value">토스페이</div>
+                <div class="value">{{ paymentMethod }}</div>
             </div>
         </div>
     </div>
 </template>
-
 
 <style scoped>
 .payment-info-wrapper {
