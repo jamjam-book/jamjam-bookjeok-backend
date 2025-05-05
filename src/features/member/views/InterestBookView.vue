@@ -42,7 +42,6 @@ onMounted(() => fetchInterestBooks())
 </script>
 
 <template>
-    <InterestTab/>
     <InterestBookList :interestBooks="interestBooks" />
     <PagingBar
             v-bind="pagination"

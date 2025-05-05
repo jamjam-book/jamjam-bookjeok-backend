@@ -16,13 +16,13 @@ const confirmDelete = () => {
 </script>
 
 <template>
-    <!-- 팔로우 하는 사람의 게시글 목록 페이지로 이동하기 위한 router-link -->
-    <!--    <router-link-->
-    <!--            :to="`/${following.memberId}/posts`">-->
     <tr>
-        <td class="following-nickname" :title="following.nickname">
-            {{ following.nickname }}
-        </td>
+        <router-link class="no-line"
+                     :to="`/${following.memberId}/posts`">
+            <td class="following-nickname" :title="following.nickname">
+                {{ following.nickname }}
+            </td>
+        </router-link>
         <td class="delete-cell">
             <button @click="confirmDelete" class="delete-button">언팔로우</button>
         </td>
@@ -33,24 +33,24 @@ const confirmDelete = () => {
 td {
     vertical-align: middle;
     padding: 0 12px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     border: none;
     width: 100%;
+}
+
+.no-line {
+    text-decoration: none;
 }
 
 .following-nickname {
     font-weight: bold;
     color: #391902;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding : 0 574px 0 0;
 }
 
 .delete-cell {
     text-align: right;
-    max-width: 100px;
+    width: auto;  /* 너비를 자동으로 조정 */
 }
 
 .delete-button {
