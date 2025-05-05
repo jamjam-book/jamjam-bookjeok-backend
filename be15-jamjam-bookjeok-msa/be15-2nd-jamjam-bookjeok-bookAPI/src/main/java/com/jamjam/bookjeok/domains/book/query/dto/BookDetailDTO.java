@@ -29,10 +29,13 @@ public class BookDetailDTO {
     private List<AuthorDTO> authors;
     private int interestCount;
     private int ordersCount;
+    private boolean isDeleted;
 
     public void addList (List<AuthorDTO> authors) {
         this.authors = authors;
     }
+
+    public void setImage (String imageUrl) {this.imageUrl = imageUrl;}
 
 }
 
