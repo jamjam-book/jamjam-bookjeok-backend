@@ -13,10 +13,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("""
         SELECT new com.jamjam.bookjeok.domains.order.command.dto.OrderResponse(
             o.orderUid, o.orderId, o.orderName, o.totalAmount, os.orderStatusName, 
-            o.orderedAt, o.canceledAt, o.modifiedAt, o.refundedAt
+            o.orderedAt, o.canceledAt, o.modifiedAt, o.refundedAt, b.imageUrl, od.quantity
         )
         FROM Order o
         JOIN OrderStatus os ON o.orderStatusId = os.orderStatusId
+        JOIN OrderDetail od ON od.orderUid = o.orderUid
+        JOIN Book b ON b.bookId = od.bookId
         WHERE o.memberUid = :memberUid
     """)
     Page<OrderResponse> findAllOrdersByMemberUid(Pageable pageable, @Param("memberUid") Long memberUid);
