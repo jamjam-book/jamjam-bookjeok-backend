@@ -20,7 +20,7 @@
 
         <button
                 class="pagination-arrow"
-                :disabled="currentPage === totalPages"
+                :disabled="currentPage === totalPage"
                 @click="changePage(currentPage + 1)"
         >
             &gt;
@@ -34,14 +34,14 @@ import { computed } from 'vue'
 
 const props = defineProps({
     currentPage: { type: Number, required: true },
-    totalPages: { type: Number, required: true },
+    totalPage: { type: Number, required: true },
     totalItems: { type: Number, required: true }
 })
 
 const emit = defineEmits(['page-changed'])
 
 const changePage = (page) => {
-    if (page >= 1 && page <= props.totalPages && page !== props.currentPage) {
+    if (page >= 1 && page <= props.totalPage && page !== props.currentPage) {
         emit('page-changed', page)
     }
 }
@@ -49,11 +49,11 @@ const changePage = (page) => {
 const visiblePages = computed(() => {
     const range = 2
     let start = Math.max(1, props.currentPage - range)
-    let end = Math.min(props.totalPages, props.currentPage + range)
+    let end = Math.min(props.totalPage, props.currentPage + range)
 
     if (end - start < range * 2) {
-        if (props.currentPage < props.totalPages / 2) {
-            end = Math.min(props.totalPages, end + (range * 2 - (end - start)))
+        if (props.currentPage < props.totalPage / 2) {
+            end = Math.min(props.totalPage, end + (range * 2 - (end - start)))
         } else {
             start = Math.max(1, start - (range * 2 - (end - start)))
         }
