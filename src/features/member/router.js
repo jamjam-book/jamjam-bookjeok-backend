@@ -25,4 +25,9 @@ export const memberRoutes = [
             { path: 'questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue')},
         ]
     },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/features/member/views/LoginPage.vue')
+    }
 ];

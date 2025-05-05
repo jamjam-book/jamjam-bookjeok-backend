@@ -39,7 +39,7 @@ const toggleDropdown = () => {
                         <!-- 로그인 전 -->
                         <template v-if="!isLoggedIn">
                             <div class="auth-links">
-                                <RouterLink to="/books" class="auth-link">로그인</RouterLink>
+                                <RouterLink to="/login" class="auth-link">로그인</RouterLink>
                                 <RouterLink to="/signup" class="auth-link">회원가입</RouterLink>
                             </div>
                             <div class="header-icons">
