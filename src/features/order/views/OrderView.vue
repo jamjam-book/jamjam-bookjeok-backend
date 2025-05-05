@@ -1,13 +1,25 @@
 <script setup>
-import {ref} from 'vue'
-import MemberAddressInfo from '../components/MemberAddressInfo.vue'
-import OrderItem from '../components/OrderItem.vue'
-import OrderSummary from '../components/OrderSummary.vue'
-import {useCartStore} from '@/features/cart/cart.js'
+import { ref, computed } from 'vue';
+import MemberAddressInfo from '../components/MemberAddressInfo.vue';
+import OrderItem from '../components/OrderItem.vue';
+import OrderSummary from '../components/OrderSummary.vue';
 import TossPaymentWidget from "@/features/order/components/TossPaymentWidget.vue";
 
-const cartStore = useCartStore()
-const paymentRef = ref()
+const items = ref([]);
+const totalPrice = ref(0);
+const paymentRef = ref();
+
+const storedItems = sessionStorage.getItem('orderItems');
+const storedPrice = sessionStorage.getItem('orderTotalPrice');
+
+if (storedItems && storedPrice) {
+    try {
+        items.value = JSON.parse(storedItems);
+        totalPrice.value = parseInt(storedPrice, 10);
+    } catch (e) {
+        console.error('[ERROR] 주문 정보 파싱 실패', e);
+    }
+}
 </script>
 
 <template>
@@ -19,7 +31,7 @@ const paymentRef = ref()
 
             <h4 id="order-info-title" class="fw-bold mb-3 py-3">주문 정보</h4>
             <OrderItem
-                    v-for="item in cartStore.selectedItems"
+                    v-for="item in items"
                     :key="item.id"
                     :item="item"
             />
@@ -27,13 +39,13 @@ const paymentRef = ref()
             <!-- 토스페이먼츠 위젯 호출 -->
             <TossPaymentWidget
                     ref="paymentRef"
-                    :items="cartStore.selectedItems"
+                    :items="items"
             />
         </div>
 
         <!-- 결제하기 버튼s -->
         <OrderSummary
-                :totalPrice="cartStore.totalPrice"
+                :totalPrice="totalPrice"
                 @pay="paymentRef?.requestPayment()"
         />
     </div>
