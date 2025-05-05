@@ -1,10 +1,7 @@
 package com.jamjam.bookjeok.domains.member.query.service;
 
 import com.jamjam.bookjeok.domains.member.command.dto.request.MemberSearchRequest;
-import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
-import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberListResponse;
-import com.jamjam.bookjeok.domains.member.command.entity.MemberRole;
 import com.jamjam.bookjeok.domains.member.query.dto.MemberDTO;
 import com.jamjam.bookjeok.domains.member.query.mapper.AdminMapper;
 import com.jamjam.bookjeok.exception.member.MemberException;
@@ -37,7 +34,7 @@ class AdminServiceTest {
     @DisplayName("findAllMember 서비스 단위 테스트")
     @Test
     void getAllMemberTest() {
-        PageRequest request = new PageRequest(1, 10);
+        MemberSearchRequest memberSearchRequest = new MemberSearchRequest(1, 10, null, null);
 
         MemberDTO member1 = MemberDTO.builder()
                 .memberUid(1L)
@@ -51,24 +48,24 @@ class AdminServiceTest {
                 .activityStatus("ACTIVE")
                 .build();
 
-    MemberDTO member2 = MemberDTO.builder()
-            .memberUid(2L)
-            .memberId("user02")
-            .memberName("유형진")
-            .phoneNumber("01024001349")
-            .email("test2@gmail.com")
-            .nickname("닉네임02")
-            .marketingConsent(true)
-            .createdAt(LocalDateTime.of(2025, 2, 6, 14, 13, 32))
-            .activityStatus("DEACTIVATE")
-            .build();
+        MemberDTO member2 = MemberDTO.builder()
+                .memberUid(2L)
+                .memberId("user02")
+                .memberName("유형진")
+                .phoneNumber("01024001349")
+                .email("test2@gmail.com")
+                .nickname("닉네임02")
+                .marketingConsent(true)
+                .createdAt(LocalDateTime.of(2025, 2, 6, 14, 13, 32))
+                .activityStatus("DEACTIVATE")
+                .build();
 
         List<MemberDTO> fakeMembers = Arrays.asList(member1, member2);
 
-        when(adminMapper.findAllMember(request)).thenReturn(fakeMembers);
-        when(adminMapper.countMembers()).thenReturn(2L);
+        when(adminMapper.findAllMember(memberSearchRequest)).thenReturn(fakeMembers);
+        when(adminMapper.countMembers(memberSearchRequest)).thenReturn(2L);
 
-        MemberListResponse response = adminQueryService.getAllMembers(request);
+        MemberListResponse response = adminQueryService.getAllMembers(memberSearchRequest);
 
         assertNotNull(response);
         assertEquals(2, response.getMemberList().size());
@@ -77,7 +74,8 @@ class AdminServiceTest {
     @DisplayName("getMemberById 서비스 단위 테스트")
     @Test
     void getMemberByIdTest() {
-        MemberSearchRequest searchRequest = new MemberSearchRequest("user02", null);
+        MemberSearchRequest memberSearchRequest = new MemberSearchRequest(1, 10, "user02", null);
+
         MemberDTO member = MemberDTO.builder()
                 .memberUid(1L)
                 .memberId("user01")
@@ -90,19 +88,20 @@ class AdminServiceTest {
                 .activityStatus("ACTIVE")
                 .build();
 
+        List<MemberDTO> fakeMembers = Arrays.asList(member);
 
-        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+        when(adminMapper.findAllMember(memberSearchRequest)).thenReturn(fakeMembers);
 
-        MemberDetailResponse result = adminQueryService.getMemberByIdOrNickname(searchRequest);
+        MemberListResponse result = adminQueryService.getAllMembers(memberSearchRequest);
 
         assertNotNull(result);
-        assertEquals("홍길동", result.getMember().getMemberName());
+        assertEquals("닉네임01", result.getMemberList().get(0).getNickname());
     }
 
     @DisplayName("getMemberByNickname 서비스 단위 테스트")
     @Test
     void getMemberByIdOrNicknameTest() {
-        MemberSearchRequest searchRequest = new MemberSearchRequest(null, "닉네임01");
+        MemberSearchRequest memberSearchRequest = new MemberSearchRequest(1, 10, null, "닉네임01");
         MemberDTO member = MemberDTO.builder()
                 .memberUid(1L)
                 .memberId("user01")
@@ -115,33 +114,24 @@ class AdminServiceTest {
                 .activityStatus("ACTIVE")
                 .build();
 
-        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+        List<MemberDTO> fakeMembers = Arrays.asList(member);
 
-        MemberDetailResponse result = adminQueryService.getMemberByIdOrNickname(searchRequest);
+        when(adminMapper.findAllMember(memberSearchRequest)).thenReturn(fakeMembers);
+
+        MemberListResponse result = adminQueryService.getAllMembers(memberSearchRequest);
 
         assertNotNull(result);
-        assertEquals("닉네임01", result.getMember().getNickname());
+        assertEquals("홍길동", result.getMemberList().get(0).getMemberName());
     }
 
-    @DisplayName("아무것도 검색하지 않는 경우에 exception 발생")
+    @DisplayName("회원이 없는 경우 exception 발생")
     @Test
     void getMemberByIdOrNicknameExceptionTest() {
-        MemberSearchRequest searchRequest = new MemberSearchRequest(null, null);
-        MemberDTO member = MemberDTO.builder()
-                .memberUid(1L)
-                .memberId("user01")
-                .memberName("홍길동")
-                .phoneNumber("01012345678")
-                .email("test1@gmail.com")
-                .nickname("닉네임01")
-                .marketingConsent(true)
-                .createdAt(LocalDateTime.of(2025, 4, 6, 11, 13, 40))
-                .activityStatus("ACTIVE")
-                .build();
+        String memberId = "fakeId";
 
-        when(adminMapper.findMemberByIdOrNickname(searchRequest)).thenReturn(member);
+        when(adminMapper.findMemberByMemberId(memberId)).thenReturn(null);
 
         assertThrows(MemberException.class,
-                () -> adminQueryService.getMemberByIdOrNickname(searchRequest));
+                () -> adminQueryService.getMemberByMemberId(memberId));
     }
 }

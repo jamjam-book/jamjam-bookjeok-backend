@@ -1,12 +1,11 @@
 package com.jamjam.bookjeok.domains.member.query.service;
 
 import com.jamjam.bookjeok.domains.member.command.dto.request.MemberSearchRequest;
-import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberListResponse;
 
 public interface AdminQueryService {
-    MemberListResponse getAllMembers(PageRequest pageRequest);
+    MemberListResponse getAllMembers(MemberSearchRequest memberSearchRequest);
 
-    MemberDetailResponse getMemberByIdOrNickname(MemberSearchRequest memberSearchRequest);
+    MemberDetailResponse getMemberByMemberId(String memberId);
 }
