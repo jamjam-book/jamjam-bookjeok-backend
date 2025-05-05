@@ -12,10 +12,19 @@ const cartStore = useCartStore()
 
 const orderView = async () => {
     const selectedItems = props.items.filter(i => i.selected)
-    const total = props.totalPrice
 
-    cartStore.setOrderData(selectedItems, total)
-    await router.push('/order')
+    let invalid = false;
+    selectedItems.forEach(item => {
+        if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
+            item.quantity = 1; // 보정
+            invalid = true;
+        }
+    });
+
+    const total = props.totalPrice;
+
+    cartStore.setOrderData(selectedItems, total);
+    await router.push('/order');
 }
 </script>
 

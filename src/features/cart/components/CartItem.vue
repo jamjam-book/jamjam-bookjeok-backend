@@ -1,6 +1,13 @@
 <script setup>
 const {item} = defineProps(['item']);
-const emit = defineEmits(['increase', 'decrease', 'remove']);
+const emit = defineEmits(['increase', 'decrease', 'update', 'remove']);
+
+function confirmQuantityChange() {
+    if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
+        item.quantity = 1;
+    }
+    emit('update', item);
+}
 
 function increase() {
     if (item.quantity < 999) {
@@ -18,11 +25,14 @@ function remove() {
     emit('remove', item.id);
 }
 
-function handleInput(item) {
-    if (item.quantity > 999) {
+function handleInput(e) {
+    const val = parseInt(e.target.value);
+    if (!val || isNaN(val) || val < 1) {
+        item.quantity = 0;
+    } else if (val > 999) {
         item.quantity = 999;
-    } else if (item.quantity < 1 || isNaN(item.quantity)) {
-        item.quantity = 1;
+    } else {
+        item.quantity = val;
     }
 }
 </script>
@@ -41,7 +51,7 @@ function handleInput(item) {
         <div id="cart-left" class="d-flex align-items-center flex-grow-1">
             <img :src="item.image" id="cart-image" alt="도서 이미지"/>
             <div id="cart-book-info">
-                <div id="cart-book-title" class="fw-bold mb-2">{{ item.title }}</div>
+                <div id="cart-book-title" class="fw-bold mb-2">{{ item.bookName }}</div>
                 <div>{{ item.price.toLocaleString() }}원</div>
             </div>
         </div>
@@ -60,9 +70,11 @@ function handleInput(item) {
                         type="number"
                         id="cart-quantity-input"
                         v-model.number="item.quantity"
-                        @input="handleInput(item)"
+                        @input="handleInput"
+                        @blur="confirmQuantityChange"
+                        @keyup.enter="confirmQuantityChange"
                         class="form-control text-center border-0"
-                        min="1"
+                        min="0"
                         max="999"
                 />
                 <button class="btn btn-sm btn-outline-secondary border-0" @click="increase">+</button>

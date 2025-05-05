@@ -1,13 +1,10 @@
 <script setup>
-import {reactive, computed} from 'vue';
+import {reactive, computed, onMounted} from 'vue';
+import axios from 'axios';
 import CartItem from "@/features/cart/components/CartItem.vue";
 import CartSummary from "@/features/cart/components/CartSummary.vue";
 
-const items = reactive([
-    {id: 1, title: '도메인 주도 개발 시작하기', price: 25000, quantity: 1, selected: true, image: '/src/assets/images/ddd.png'},
-    {id: 2, title: 'Clean Code(클린 코드)', price: 30000, quantity: 2, selected: true, image: '/src/assets/images/cleancode.png'},
-    {id: 3, title: '객체지향의 사실과 오해', price: 18000, quantity: 10, selected: false, image: '/src/assets/images/oop.png'},
-]);
+const items = reactive([]); // 초기화만 해놓고 onMounted에서 채움
 
 const totalPrice = computed(() =>
         items.filter(i => i.selected).reduce((sum, i) => sum + i.price * i.quantity, 0)
@@ -20,10 +17,28 @@ const allSelected = computed({
     set: (value) => items.forEach(i => (i.selected = value))
 });
 
+const memberUid = 1; // 로그인 연동 후 교체
+
+async function updateQuantity(item) {
+    try {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL;
+        await axios.put(`${baseUrl}/carts`, {
+            memberUid,
+            bookId: item.id,
+            bookName: item.bookName,
+            quantity: item.quantity
+        });
+    } catch (error) {
+        console.error('[ERROR] 수량 수정 실패', error);
+        alert('수량 변경에 실패했습니다.');
+    }
+}
+
 function increaseQuantity(id) {
     const item = items.find(i => i.id === id);
     if (item && item.quantity < 999) {
         item.quantity++;
+        updateQuantity(item); // 수량 수정 API 호출
     }
 }
 
@@ -31,15 +46,85 @@ function decreaseQuantity(id) {
     const item = items.find(i => i.id === id);
     if (item && item.quantity > 1) {
         item.quantity--;
+        updateQuantity(item); // 수량 수정 API 호출
     }
 }
 
-function removeItem(id) {
-    const index = items.findIndex(i => i.id === id);
-    if (index !== -1) {
-        items.splice(index, 1);
+async function removeItem(id) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+
+    try {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+        await axios.delete(`${baseUrl}/carts`, {
+            data: {
+                memberUid,
+                bookId: item.id,
+                bookName: item.bookName,
+                quantity: item.quantity
+            }
+        });
+
+        const index = items.findIndex(i => i.id === id);
+        if (index !== -1) {
+            items.splice(index, 1);
+        }
+    } catch (error) {
+        console.error('[ERROR] 장바구니 삭제 실패', error);
+        alert('장바구니 항목 삭제에 실패했습니다.');
     }
 }
+
+function validateAllQuantities() {
+    items.forEach(item => {
+        if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
+            item.quantity = 1;
+        }
+    });
+}
+
+function handleOrderNow() {
+    validateAllQuantities(); // 모든 수량 검사 후 보정
+
+    const selectedItems = items.filter(i => i.selected);
+    if (selectedItems.length === 0) {
+        alert('선택된 상품이 없습니다.');
+        return;
+    }
+
+    // ✅ 이 아래에 실제 주문 처리 로직 추가 (페이지 이동 또는 API 호출 등)
+    console.log('주문할 아이템:', selectedItems);
+}
+
+onMounted(async () => {
+    try {
+        const memberId = 'user01'; // 실제 로그인 유저 ID로 대체 필요
+        const baseUrl = import.meta.env.VITE_API_BASE_URL;
+        const resp = await axios.get(`${baseUrl}/members/${memberId}/carts`);
+
+        if (resp?.data?.data?.bookList) {
+            const bookList = resp.data.data.bookList;
+
+            bookList.forEach(book => {
+                items.push({
+                    id: book.bookId,
+                    bookName: book.bookName,
+                    price: Math.floor(book.totalPrice / book.quantity),
+                    quantity: book.quantity,
+                    selected: true,
+                    image: book.imageUrl
+                });
+            });
+        } else {
+            console.error('[ERROR] 응답 구조가 예상과 다릅니다:', resp.data);
+        }
+
+    } catch (error) {
+        console.error('[ERROR] 장바구니 조회 실패', error);
+    }
+});
+
 </script>
 
 <template>
@@ -60,10 +145,11 @@ function removeItem(id) {
                         @increase="increaseQuantity"
                         @decrease="decreaseQuantity"
                         @remove="removeItem"
+                        @update="updateQuantity"
                 />
             </div>
 
-            <CartSummary :items="items" :totalPrice="totalPrice"/>
+            <CartSummary :items="items" :totalPrice="totalPrice" @order-now="handleOrderNow"/>
         </div>
     </div>
 </template>
