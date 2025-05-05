@@ -53,6 +53,9 @@ const emit = defineEmits(['confirm', 'cancel'])
   color: #391902;
   font-size: 16px;
   margin-bottom: 20px;
+  text-align: center;
+  white-space: pre-line;
+  word-break: keep-all;
 }
 
 .modal-buttons {

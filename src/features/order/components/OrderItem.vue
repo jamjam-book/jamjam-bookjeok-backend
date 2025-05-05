@@ -20,7 +20,7 @@ const props = defineProps({
                 <div class="header">금액</div>
             </div>
             <div class="content-row">
-                <div class="title">{{ item.title }}</div>
+                <div class="title">{{ item.bookName }}</div>
                 <div class="quantity">{{ item.quantity }}개</div>
                 <div class="price">{{ (item.price * item.quantity).toLocaleString() }}원</div>
             </div>
