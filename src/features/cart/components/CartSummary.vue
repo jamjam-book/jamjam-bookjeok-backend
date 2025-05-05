@@ -1,31 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import {useCartStore} from "@/features/cart/cart.js";
-
 const props = defineProps({
     items: Array,
     totalPrice: Number
 });
 
-const router = useRouter()
-const cartStore = useCartStore()
-
-const orderView = async () => {
-    const selectedItems = props.items.filter(i => i.selected)
-
-    let invalid = false;
-    selectedItems.forEach(item => {
-        if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
-            item.quantity = 1; // 보정
-            invalid = true;
-        }
-    });
-
-    const total = props.totalPrice;
-
-    cartStore.setOrderData(selectedItems, total);
-    await router.push('/order');
-}
+const emit = defineEmits(['order-now']);
 </script>
 
 <template>
@@ -51,7 +30,7 @@ const orderView = async () => {
             <span>적립 예정 포인트</span>
             <span>0P</span>
         </div>
-        <button id="order-button" class="btn w-100 fw-bold" @click="orderView">주문하기</button>
+        <button id="order-button" class="btn w-100 fw-bold" @click="emit('order-now')">주문하기</button>
     </div>
 </template>
 

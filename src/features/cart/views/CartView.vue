@@ -3,8 +3,10 @@ import {reactive, computed, onMounted} from 'vue';
 import axios from 'axios';
 import CartItem from "@/features/cart/components/CartItem.vue";
 import CartSummary from "@/features/cart/components/CartSummary.vue";
+import {useRouter} from "vue-router";
 
 const items = reactive([]); // 초기화만 해놓고 onMounted에서 채움
+const router = useRouter();
 
 const totalPrice = computed(() =>
         items.filter(i => i.selected).reduce((sum, i) => sum + i.price * i.quantity, 0)
@@ -84,17 +86,21 @@ function validateAllQuantities() {
     });
 }
 
-function handleOrderNow() {
-    validateAllQuantities(); // 모든 수량 검사 후 보정
-
+async function handleOrderNow() {
+    validateAllQuantities();
     const selectedItems = items.filter(i => i.selected);
+
     if (selectedItems.length === 0) {
         alert('선택된 상품이 없습니다.');
         return;
     }
 
-    // ✅ 이 아래에 실제 주문 처리 로직 추가 (페이지 이동 또는 API 호출 등)
-    console.log('주문할 아이템:', selectedItems);
+    const total = selectedItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    sessionStorage.setItem('orderItems', JSON.stringify(selectedItems));
+    sessionStorage.setItem('orderTotalPrice', total.toString());
+
+    await router.push('/order');
 }
 
 onMounted(async () => {
