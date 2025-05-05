@@ -5,7 +5,7 @@ import {memberRoutes} from "@/features/member/router.js";
 import {orderRoutes} from "@/features/order/router.js";
 import {cartRoutes} from "@/features/cart/router.js";
 import {bookRoutes} from "@/features/book/router.js";
-// import {postRoutes} from "@/features/post/router.js";
+import {postRoutes} from "@/features/post/router.js";
 
 const router = createRouter({
     /*import.meta.env.BASE_URL*/
@@ -17,7 +17,7 @@ const router = createRouter({
         ...memberRoutes,
         ...orderRoutes,
         ...cartRoutes,
-        // ...postRoutes,
+        ...postRoutes
     ],
 })
 
