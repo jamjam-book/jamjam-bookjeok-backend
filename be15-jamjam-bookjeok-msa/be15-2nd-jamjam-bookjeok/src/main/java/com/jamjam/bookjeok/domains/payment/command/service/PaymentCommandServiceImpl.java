@@ -3,15 +3,14 @@ package com.jamjam.bookjeok.domains.payment.command.service;
 import com.jamjam.bookjeok.domains.book.command.service.BookStockCommandService;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
 import com.jamjam.bookjeok.domains.orderdetail.command.service.OrderDetailCommandService;
+import com.jamjam.bookjeok.domains.orderdetail.query.dto.response.OrderDetailResponse;
 import com.jamjam.bookjeok.domains.payment.command.entity.Payment;
-import com.jamjam.bookjeok.domains.payment.query.dto.PaymentDetailDTO;
 import com.jamjam.bookjeok.domains.payment.command.dto.TossPaymentApproveRequest;
 import com.jamjam.bookjeok.domains.payment.query.service.PaymentDetailService;
 import com.jamjam.bookjeok.domains.pendingorder.command.dto.request.PendingOrderBookItemsRequest;
 import com.jamjam.bookjeok.domains.order.command.entity.Order;
 import com.jamjam.bookjeok.domains.pendingorder.command.entity.PendingOrder;
 
-import com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailDTO;
 import com.jamjam.bookjeok.domains.orderdetail.query.service.OrderDetailQueryService;
 import com.jamjam.bookjeok.domains.payment.command.dto.PaymentDTO;
 import com.jamjam.bookjeok.domains.payment.command.dto.request.PaymentConfirmRequest;
@@ -72,16 +71,12 @@ public class PaymentCommandServiceImpl implements PaymentCommandService {
         pendingOrderCommandService.deletePendingOrder(pendingOrder.getOrderId());
 
         // 주문 상세 정보 조회
-        List<OrderDetailDTO> orderDetails = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(
+        OrderDetailResponse orderDetailResponse = orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(
                 savedOrder.getMemberUid(), paymentDTO.orderId()
         );
 
-        // 결제 상세 정보(결제 금액, 결제 방법)
-        PaymentDetailDTO paymentDetail = paymentDetailService.getPaymentDetail(savedPayment.getPaymentId());
-
         return PaymentConfirmResponse.builder()
-                .orderDetails(orderDetails)
-                .paymentDetail(paymentDetail)
+                .orderDetails(orderDetailResponse)
                 .build();
     }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamjam.bookjeok.domains.order.query.mapper.OrderMapper">
+    <select id="findOrderUidByOrderId" resultType="long">
+        SELECT o.order_uid
+        FROM orders o
+        WHERE o.order_id = #{ orderId }
+    </select>
+
+    <select id="findPaymentIdByOrderUid" resultType="long">
+        SELECT p.payment_id
+        FROM orders o
+        JOIN payments p on o.order_uid = p.order_uid
+        WHERE o.order_uid = #{ orderUid }
+    </select>
+</mapper>

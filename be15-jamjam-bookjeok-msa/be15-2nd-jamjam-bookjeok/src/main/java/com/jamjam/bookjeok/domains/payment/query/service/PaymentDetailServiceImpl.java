@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.payment.query.service;
 
+import com.jamjam.bookjeok.domains.order.query.mapper.OrderMapper;
 import com.jamjam.bookjeok.domains.payment.query.dto.PaymentDetailDTO;
 import com.jamjam.bookjeok.domains.payment.command.entity.Payment;
 import com.jamjam.bookjeok.domains.payment.query.mapper.PaymentDetailMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentDetailServiceImpl implements PaymentDetailService {
 
+    private final OrderMapper orderMapper;
     private final PaymentMapper paymentMapper;
     private final PaymentDetailMapper paymentDetailMapper;
 
@@ -25,6 +27,12 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
         String paymentMethod = findPayment.getPaymentMethod();
 
         return paymentDetailMapper.findPaymentDetailByPaymentId(paymentId, paymentMethod);
+    }
+
+    @Override
+    public Long getPaymentId(String orderId) {
+        Long orderUid = orderMapper.findOrderUidByOrderId(orderId);
+        return orderMapper.findPaymentIdByOrderUid(orderUid);
     }
 
 }
