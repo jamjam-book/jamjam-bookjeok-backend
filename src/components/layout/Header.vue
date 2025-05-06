@@ -26,8 +26,8 @@ const toggleDropdown = () => {
                         <button v-if="!isOpen" @click="toggleDropdown" class="header-dropdown-toggle">▶</button>
                         <button v-else @click="toggleDropdown" class="header-dropdown-toggle">▼</button>
                         <div v-if="isOpen" class="header-dropdown-menu">
-                            <RouterLink to="/books">도서</RouterLink>
-                            <RouterLink to="/posts">게시글</RouterLink>
+                            <RouterLink to="/books" @click="toggleDropdown">도서</RouterLink>
+                            <RouterLink to="/posts" @click="toggleDropdown">게시글</RouterLink>
                         </div>
                     </div>
                 </div>
