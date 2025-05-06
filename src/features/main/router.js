@@ -4,7 +4,7 @@ export const mainRoutes = [
     {
         path : '/',
         name : 'main',
-        // component : MainView
+        component: () => import('@/features/main/views/MainView.vue')
     },
     {
         path: '/login',
