@@ -48,9 +48,6 @@ public class BookApiServiceImpl implements BookApiService{
     @Value("${image.image-dir}")
     private String filePath;
 
-    @Value("${image.image-url}")
-    private String fileUrl;
-
     private final BookRepository bookRepository;
     private final BookCategoryRepository bookCategoryRepository;
     private final PublisherRepository publisherRepository;
@@ -59,14 +56,12 @@ public class BookApiServiceImpl implements BookApiService{
     private final ModelMapper modelMapper;
 
     @Override
-    public BookApiDTO getBookByIsbn(String isbn) {
+    public Book getBookByIsbn(String isbn) {
         ResponseEntity<String> exchangeResponse = isbnExchange(isbn);
 
         List<BookApiDTO> apiBooks = parseJson(exchangeResponse);
 
-        maptoBooksDto(apiBooks);
-
-        return apiBooks.get(0);
+        return maptoBooksDto(apiBooks);
     }
 
     private ResponseEntity<String> isbnExchange(String isbn) {
@@ -103,9 +98,10 @@ public class BookApiServiceImpl implements BookApiService{
 
     }
 
-    private void maptoBooksDto(List<BookApiDTO> apiBooks) {
+    private Book maptoBooksDto(List<BookApiDTO> apiBooks) {
 
         BookDTO bookDTO;
+        Book book;
         for(BookApiDTO api : apiBooks) {
 
             String bookName = api.getTitle();
@@ -136,14 +132,16 @@ public class BookApiServiceImpl implements BookApiService{
 
             bookDTO = new BookDTO(publisher.getPublisherId(), bookCategory.getCategoryId(), bookName, bookInfo, isbn, pubdate, price, stockQuantity, url);
 
-            Book book = registBook(bookDTO);
+            book = registBook(bookDTO);
 
             if(book != null) {
                 registAuthor(authors, book.getBookId());
+                return book;
             }
+
         }
 
-        apiBooks.forEach(System.out::println);
+        return null;
     }
 
     private CompletableFuture<String> addTocAndCategoryName(BookApiDTO book) {
@@ -305,7 +303,7 @@ public class BookApiServiceImpl implements BookApiService{
             throw new FileStorageException("파일 저장을 실패했습니다.");
         }
 
-        return fileUrl + fileName;
+        return fileName;
 
     }
 

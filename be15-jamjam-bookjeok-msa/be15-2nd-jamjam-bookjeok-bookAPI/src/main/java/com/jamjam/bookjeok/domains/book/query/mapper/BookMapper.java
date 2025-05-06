@@ -13,6 +13,7 @@ public interface BookMapper {
 
     List<BookCategoryDTO> findAllCategory();
 
-    BookDetailDTO findBookByIsbn(Map<String, String> params);
+    BookDetailDTO findBook(Map<String, Object> params);
 
+    int countBookListByOption(Map<String, Object> params);
 }

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
@@ -26,45 +28,50 @@ class BookQueryAdminServiceImplTest {
     @Autowired
     BookQueryAdminService bookQueryAdminService;
 
-    @DisplayName("관리자 전체 도서 조회 테스트")
+    @DisplayName("관리자 전체 도서 조회 (페이징 포함)")
     @Test
-    void testFindBookListOrderByOption() {
-
+    void testFindBookListWithPaging() {
         Map<String, Object> params = new HashMap<>();
+        PageRequest pageRequest = PageRequest.of(0, 10); // 첫 페이지, 10개씩
 
-        List<BookDetailDTO> bookList = bookQueryAdminService.findBookListOrderByOption(params);
+        Page<BookDetailDTO> bookPage = bookQueryAdminService.findBookListOrderByOption(params, pageRequest);
 
-        assertThat(bookList).isNotNull();
+        assertThat(bookPage).isNotNull();
+        assertThat(bookPage.getContent()).isNotEmpty();
 
-        bookList.forEach(System.out::println);
+        bookPage.getContent().forEach(System.out::println);
     }
 
     @DisplayName("관리자 도서 판매량순 조회 테스트")
     @Test
     void testFindBookListOrderByOrders() {
-
         Map<String, Object> params = new HashMap<>();
-        params.put("array", "orders");
+        params.put("sort", "orders");
 
-        List<BookDetailDTO> bookList = bookQueryAdminService.findBookListOrderByOption(params);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<BookDetailDTO> bookPage = bookQueryAdminService.findBookListOrderByOption(params, pageRequest);
 
-        assertThat(bookList).isNotNull();
+        assertThat(bookPage).isNotNull();
+        assertThat(bookPage.getContent()).isNotEmpty();
 
-        bookList.forEach(System.out::println);
+        bookPage.getContent().forEach(System.out::println);
     }
 
     @DisplayName("관리자 도서 관심순 조회 테스트")
     @Test
-    void testFindBookListOrderByLikes() {
+    void testFindBookListOrderByInterest() {
         Map<String, Object> params = new HashMap<>();
-        params.put("array", "interest");
+        params.put("sort", "interest");
 
-        List<BookDetailDTO> bookList = bookQueryAdminService.findBookListOrderByOption(params);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<BookDetailDTO> bookPage = bookQueryAdminService.findBookListOrderByOption(params, pageRequest);
 
-        assertThat(bookList).isNotNull();
+        assertThat(bookPage).isNotNull();
+        assertThat(bookPage.getContent()).isNotEmpty();
 
-        bookList.forEach(System.out::println);
+        bookPage.getContent().forEach(System.out::println);
     }
+
 
     @DisplayName("관리자 전체 카테고리 조회 테스트")
     @Test

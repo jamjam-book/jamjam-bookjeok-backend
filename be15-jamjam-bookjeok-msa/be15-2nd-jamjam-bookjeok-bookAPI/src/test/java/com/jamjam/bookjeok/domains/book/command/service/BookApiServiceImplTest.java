@@ -34,10 +34,10 @@ class BookApiServiceImplTest {
 
         String isbn = "9788936439750";
 
-        BookApiDTO apiBook = bookApiService.getBookByIsbn(isbn);
+        Book book = bookApiService.getBookByIsbn(isbn);
 
-        assertThat(apiBook).isNotNull();
-        assertThat(apiBook.getIsbn()).isEqualTo(isbn);
+        assertThat(book).isNotNull();
+        assertThat(book.getIsbn()).isEqualTo(isbn);
 
     }
 

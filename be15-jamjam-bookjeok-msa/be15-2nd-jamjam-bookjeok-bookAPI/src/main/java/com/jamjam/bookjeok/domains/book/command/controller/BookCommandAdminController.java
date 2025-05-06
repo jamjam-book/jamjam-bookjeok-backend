@@ -35,23 +35,23 @@ public class BookCommandAdminController {
         if(foundBook.isPresent()) {
              return ResponseEntity.ok(ApiResponse.success(Map.of("status", "exists", "bookId", foundBook.get().getBookId())));
         } else {
-
-            BookApiDTO apiBook = bookApiService.getBookByIsbn(isbn);
-            return ResponseEntity.ok(ApiResponse.success(Map.of("status", "new", "book", apiBook)));
+            Book book = bookApiService.getBookByIsbn(isbn);
+            return ResponseEntity.ok(ApiResponse.success(Map.of("status", "new", "bookId", book.getBookId())));
         }
     }
 
+    /* 미사용
     @GetMapping("/book/mod/{bookId}")
     public ResponseEntity<ApiResponse<BookResponse>> modifyBookPage(
             @PathVariable(name="bookId") Long bookId
     ) {
         BookResponse response = bookCommandService.findBookByBookId(bookId);
         return ResponseEntity.ok(ApiResponse.success(response));
-    }
+    }*/
 
-    @PutMapping("/book/mod/{bookId}")
+    @PutMapping("/book/{bookId}/mod")
     public ResponseEntity<ApiResponse<BookResponse>> modifyStockQuantity (
-            @PathVariable(name="bookId") Long bookId, @RequestParam int quantity) {
+            @PathVariable(name="bookId") Long bookId, @RequestParam(name="quantity") int quantity) {
 
         BookResponse bookResponse = bookCommandService.modifyStockQuantity(bookId, quantity);
 

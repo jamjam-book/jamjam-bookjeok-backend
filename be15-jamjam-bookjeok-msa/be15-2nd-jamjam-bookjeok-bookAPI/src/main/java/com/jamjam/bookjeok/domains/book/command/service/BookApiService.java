@@ -18,5 +18,5 @@ public interface BookApiService {
 
     void registBookAuthor(Long bookId, Long authorId);
 
-    BookApiDTO getBookByIsbn(String isbn);
+    Book getBookByIsbn(String isbn);
 }

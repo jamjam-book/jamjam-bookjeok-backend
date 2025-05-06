@@ -47,6 +47,7 @@ naver:
 
 image:
   image-dir: ${IMAGE-DIRECTORY}
+  image-url: ${IMAGE-URL}
 
 springdoc:
   packages-to-scan: com.jamjam.bookjeok.domains

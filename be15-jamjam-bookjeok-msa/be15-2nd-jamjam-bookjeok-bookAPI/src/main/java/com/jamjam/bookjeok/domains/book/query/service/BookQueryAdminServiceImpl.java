@@ -7,6 +7,10 @@ import com.jamjam.bookjeok.domains.book.query.mapper.BookMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,11 +25,23 @@ public class BookQueryAdminServiceImpl implements BookQueryAdminService {
 
     private final BookMapper bookMapper;
 
+    @Value("${image.image-url}")
+    private String fileUrl;
+
     @Override
     @Transactional
-    public List<BookDetailDTO> findBookListOrderByOption(Map<String, Object> params) {
+    public Page<BookDetailDTO> findBookListOrderByOption(Map<String, Object> params, PageRequest pageRequest) {
+
+        int offset = (int) pageRequest.getOffset();
+        int limit = pageRequest.getPageSize();
+
+        params.put("offset", offset);
+        params.put("limit", limit);
 
         List<BookDetailDTO> books = bookMapper.findBookListOrderByOption(params);
+
+        // 총 개수 조회
+        int total = bookMapper.countBookListByOption(params);
 
         for (BookDetailDTO book : books) {
             List<AuthorDTO> authors = new ArrayList<>();
@@ -34,18 +50,18 @@ public class BookQueryAdminServiceImpl implements BookQueryAdminService {
                         .map(AuthorDTO::new)
                         .toList();
             }
+            book.setImage(fileUrl + book.getImageUrl());
             book.addList(authors);
         }
 
-        return books;
-
+        return new PageImpl<>(books, pageRequest, total);
     }
 
     @Override
     @Transactional
-    public BookDetailDTO findBook(Map<String, String> params) {
+    public BookDetailDTO findBook(Map<String, Object> params) {
 
-        BookDetailDTO book = bookMapper.findBookByIsbn(params);
+        BookDetailDTO book = bookMapper.findBook(params);
 
         log.info("{}", book.toString());
 
@@ -61,3 +77,4 @@ public class BookQueryAdminServiceImpl implements BookQueryAdminService {
 
 
 }
+
