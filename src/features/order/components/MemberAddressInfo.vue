@@ -11,7 +11,7 @@ watchEffect(() => {
 
     isOrderCompletePage.value =
             path.includes('/order/completion') ||
-            /^\/members\/orders\/[a-z0-9]+\/order-detail$/.test(path);
+            /^\/members\/[^/]+\/orders\/[a-z0-9]+\/order-detail$/.test(path);
 });
 </script>
 

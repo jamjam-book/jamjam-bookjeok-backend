@@ -68,7 +68,7 @@ const onPageChanged = (page) => {
 
             <PagingBar
                     :currentPage="currentPage"
-                    :totalPages="totalPages"
+                    :totalPage="totalPages"
                     :totalItems="totalItems"
                     @page-changed="onPageChanged"
             />
