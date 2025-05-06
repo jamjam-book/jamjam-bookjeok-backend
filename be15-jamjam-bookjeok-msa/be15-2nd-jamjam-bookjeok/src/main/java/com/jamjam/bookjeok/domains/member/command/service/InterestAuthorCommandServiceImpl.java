@@ -5,14 +5,15 @@ import com.jamjam.bookjeok.domains.book.command.repository.AuthorRepository;
 import com.jamjam.bookjeok.domains.member.command.dto.request.InterestAuthorRequest;
 import com.jamjam.bookjeok.domains.member.command.entity.InterestAuthor;
 import com.jamjam.bookjeok.domains.member.command.entity.InterestAuthorId;
+import com.jamjam.bookjeok.domains.member.command.entity.Member;
 import com.jamjam.bookjeok.domains.member.command.repository.InterestAuthorRepository;
-import com.jamjam.bookjeok.domains.member.query.mapper.InterestAuthorMapper;
+import com.jamjam.bookjeok.domains.member.command.repository.MemberRepository;
 import com.jamjam.bookjeok.exception.member.MemberErrorCode;
+import com.jamjam.bookjeok.exception.member.MemberException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AlreadyInterestedAuthorException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.AuthorNotFoundException;
 import com.jamjam.bookjeok.exception.member.interestAuthorException.InterestAuthorLimitExceededException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +21,24 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class InterestAuthorCommandServiceImpl implements InterestAuthorCommandService{
 
-    private final InterestAuthorMapper interestAuthorMapper;
     private final InterestAuthorRepository interestAuthorRepository;
+    private final MemberRepository memberRepository;
     private final AuthorRepository authorRepository;
 
     @Override
     @Transactional
     public String createInterestAuthor(InterestAuthorRequest interestAuthorRequest){
 
-        int totalInterestAuthor = interestAuthorMapper
-                .countInterestAuthor(interestAuthorRequest.getMemberUid());
+        // 멤버의 id로 멤버 데려오기 (멤버의 uid를 가져오기 위함)
+        Member member = memberRepository.findByMemberId(interestAuthorRequest.getMemberId())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_EXIST_MEMBER));
+
+        // 멤버의 uid 가져오기
+        Long memberUid = member.getMemberUid();
+
+        // 특정 회원의 등록된 관심 작가 수 확인하기
+        int totalInterestAuthor =
+                interestAuthorRepository.countInterestAuthorsByMemberUid(memberUid);
 
         // 작가의 인원이 30명이라면 추가할 수 없음
         if(totalInterestAuthor == 30){
@@ -42,7 +51,7 @@ public class InterestAuthorCommandServiceImpl implements InterestAuthorCommandSe
 
         // 작가의 아이디와 멤버 uid 전달하기
         InterestAuthorId newInterestAuthorId =
-                new InterestAuthorId(author.getAuthorId(), interestAuthorRequest.getMemberUid());
+                new InterestAuthorId(author.getAuthorId(), memberUid);
 
         // 이미 관심 작가가 등록되어 있는 경우 예외 처리하기
         if(interestAuthorRepository.existsById(newInterestAuthorId)){
@@ -60,18 +69,17 @@ public class InterestAuthorCommandServiceImpl implements InterestAuthorCommandSe
 
     @Override
     @Transactional
-    public void deleteInterestAuthor(InterestAuthorRequest interestAuthorRequest) {
-        Author author = authorRepository.findByAuthorName(interestAuthorRequest.getAuthorName())
-                .orElseThrow(() -> new AuthorNotFoundException(MemberErrorCode.NOT_FOUND_AUTHOR));
+    public void deleteInterestAuthor(String userId, Long authorId) {
+        Member member = memberRepository.findByMemberId(userId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_EXIST_MEMBER));
 
         InterestAuthorId interestAuthorId =
-                new InterestAuthorId(author.getAuthorId(), interestAuthorRequest.getMemberUid());
+                new InterestAuthorId(authorId, member.getMemberUid());
 
         InterestAuthor interestAuthor = interestAuthorRepository.findById(interestAuthorId)
                 .orElseThrow(() -> new AuthorNotFoundException(MemberErrorCode.NOT_REGIST_AUTHOR));
 
         interestAuthorRepository.delete(interestAuthor);
     }
-
 
 }

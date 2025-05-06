@@ -29,12 +29,15 @@ public class InterestAuthorCommandControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    String baseUrl = "/api/v1/members";
+
     @DisplayName("관심 작가 등록하기")
     @Test
     void createInterestAuthorTest() throws Exception {
-        InterestAuthorRequest request = new InterestAuthorRequest("공지영", 2L);
-
-        mockMvc.perform(post("/api/v1/interest-author")
+        String memberId = "user02";
+        InterestAuthorRequest request = new InterestAuthorRequest("공지영", memberId);
+        
+        mockMvc.perform(post("/api/v1/members/interest/authors")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -46,11 +49,11 @@ public class InterestAuthorCommandControllerTest {
     @DisplayName("관심 작가 삭제하기")
     @Test
     void deleteInterestAuthorTest() throws Exception {
-        InterestAuthorRequest request = new InterestAuthorRequest("정세랑", 2L);
+        String memberId = "user02";
+        Long authorId = 3L;
 
-        mockMvc.perform(delete("/api/v1/interest-author")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(delete(baseUrl+"/{memberId}/interest/authors/{authorId}", memberId, authorId)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true));
     }
 

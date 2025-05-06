@@ -17,11 +17,10 @@ public class InterestAuthorCommandController {
 
     private final InterestAuthorCommandService interestAuthorCommandService;
 
-    @PostMapping("/interest-author")
+    @PostMapping("/members/interest/authors")
     public ResponseEntity<ApiResponse<InterestAuthorResponse>> createInterestAuthor(
             @RequestBody @Validated InterestAuthorRequest request
     ){
-
         String authorName = interestAuthorCommandService.createInterestAuthor(request);
 
         InterestAuthorResponse response = InterestAuthorResponse.builder()
@@ -33,11 +32,13 @@ public class InterestAuthorCommandController {
                 .body(ApiResponse.success(response));
     }
 
-    @DeleteMapping("/interest-author")
+    @DeleteMapping("/members/{memberId}/interest/authors/{authorId}")
     public ResponseEntity<ApiResponse<Void>> deleteInterestAuthor(
-            @RequestBody @Validated InterestAuthorRequest request
+            @PathVariable String memberId,
+            @PathVariable Long authorId
+
     ){
-        interestAuthorCommandService.deleteInterestAuthor(request);
+        interestAuthorCommandService.deleteInterestAuthor(memberId, authorId);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

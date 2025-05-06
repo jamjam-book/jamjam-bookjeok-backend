@@ -5,5 +5,5 @@ import com.jamjam.bookjeok.domains.member.command.dto.request.InterestAuthorRequ
 public interface InterestAuthorCommandService {
     String createInterestAuthor(InterestAuthorRequest request);
 
-    void deleteInterestAuthor(InterestAuthorRequest request);
+    void deleteInterestAuthor(String memberId, Long authorId);
 }
