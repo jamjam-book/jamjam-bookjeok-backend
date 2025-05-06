@@ -9,19 +9,19 @@ import PaymentInfo from '@/features/order/components/PaymentInfo.vue'
 const router = useRouter()
 const route = useRoute()
 
-const orderId = route.query.orderId
-const amount = route.query.amount
-const paymentKey = route.query.paymentKey
+// 새로고침 대응용 fallback
+const paymentKey = ref(route.query.paymentKey || sessionStorage.getItem('lastPaymentKey'))
+const orderId = ref(route.query.orderId || sessionStorage.getItem('lastOrderId'))
+const amount = ref(route.query.amount || sessionStorage.getItem('lastAmount'))
 
 const items = ref([])
 const totalPrice = ref(0)
 const paymentMethod = ref('')
 
 const loadFromSession = () => {
-    const cached = sessionStorage.getItem(`payment:${paymentKey}`)
-    if (!cached) {
-        return false
-    }
+    const cached = sessionStorage.getItem(`payment:${paymentKey.value}`)
+    if (!cached) return false
+
     const data = JSON.parse(cached)
     items.value = data.items
     totalPrice.value = data.totalPrice
@@ -34,16 +34,17 @@ const fetchOrderCompletion = async () => {
 
     try {
         const res = await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/payment/${paymentKey}/confirm`,
+                `${import.meta.env.VITE_API_BASE_URL}/payment/${paymentKey.value}/confirm`,
                 {
-                    orderId,
-                    amount: Number(amount)
+                    orderId: orderId.value,
+                    amount: Number(amount.value)
                 }
         )
 
-        const data = res.data.data
-        const parsedItems = data.orderDetails.map(item => ({
-            id: item.bookId,
+        const orderDetails = res.data.data.orderDetails
+
+        const parsedItems = orderDetails.books.map(item => ({
+            id: item.isbn,
             bookName: item.bookName,
             quantity: item.quantity,
             price: item.totalPrice / item.quantity,
@@ -51,17 +52,20 @@ const fetchOrderCompletion = async () => {
         }))
 
         items.value = parsedItems
-        totalPrice.value = data.paymentDetail.totalAmount
-        paymentMethod.value = data.paymentDetail.paymentMethod
+        totalPrice.value = orderDetails.paymentDetail.totalAmount
+        paymentMethod.value = orderDetails.paymentDetail.paymentMethod
 
-        sessionStorage.setItem(
-                `payment:${paymentKey}`,
-                JSON.stringify({
-                    items: parsedItems,
-                    totalPrice: data.paymentDetail.totalAmount,
-                    paymentMethod: data.paymentDetail.paymentMethod
-                })
-        )
+        // 세션 저장 (새로고침 대비)
+        sessionStorage.setItem(`payment:${paymentKey.value}`, JSON.stringify({
+            items: parsedItems,
+            totalPrice: orderDetails.paymentDetail.totalAmount,
+            paymentMethod: orderDetails.paymentDetail.paymentMethod
+        }))
+        sessionStorage.setItem('lastPaymentKey', paymentKey.value)
+        sessionStorage.setItem('lastOrderId', orderDetails.orderId)
+        sessionStorage.setItem('lastAmount', amount.value)
+
+        orderId.value = orderDetails.orderId
     } catch (e) {
         console.error('[ERROR] 결제 실패', e)
     }
@@ -78,12 +82,12 @@ const goToMain = () => router.push('/')
         <h2 class="text-center fw-bold">주문이 완료되었습니다.</h2>
         <div class="text-center fw-bold" id="order-no">주문 번호 : {{ orderId }}</div>
 
-        <MemberAddressInfo />
+        <MemberAddressInfo/>
 
         <h4 id="order-info-title" class="fw-bold mb-3 py-3">주문 정보</h4>
-        <OrderItem v-for="item in items" :key="item.id" :item="item" />
+        <OrderItem v-for="item in items" :key="item.id" :item="item"/>
 
-        <PaymentInfo :totalPrice="totalPrice" :paymentMethod="paymentMethod" />
+        <PaymentInfo :totalPrice="totalPrice" :paymentMethod="paymentMethod"/>
 
         <div class="text-center" id="order-success-btn">
             <button class="btn" id="order-button" @click="goToOrders">주문 내역 이동</button>
