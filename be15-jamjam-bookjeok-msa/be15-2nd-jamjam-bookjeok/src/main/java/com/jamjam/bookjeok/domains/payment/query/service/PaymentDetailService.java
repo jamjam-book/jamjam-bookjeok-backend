@@ -6,4 +6,6 @@ public interface PaymentDetailService {
 
     PaymentDetailDTO getPaymentDetail(Long paymentId);
 
+    Long getPaymentId(String orderId);
+
 }

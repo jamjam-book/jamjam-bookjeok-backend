@@ -3,8 +3,11 @@ package com.jamjam.bookjeok.domains.orderdetail.query.controller;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.query.dto.MemberDTO;
 import com.jamjam.bookjeok.domains.member.query.service.MemberQueryServiceImpl;
+import com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailBookDTO;
 import com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailDTO;
+import com.jamjam.bookjeok.domains.orderdetail.query.dto.response.OrderDetailResponse;
 import com.jamjam.bookjeok.domains.orderdetail.query.service.OrderDetailQueryServiceImpl;
+import com.jamjam.bookjeok.domains.payment.query.dto.PaymentDetailDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,21 +41,29 @@ class OrderDetailQueryControllerTest {
     @MockBean
     private MemberQueryServiceImpl memberQueryService;
 
-    private List<OrderDetailDTO> orderDetails;
+    private OrderDetailResponse orderDetailResponse;
 
     @BeforeEach
     void setUp() {
-        orderDetails = List.of(
-                OrderDetailDTO.builder()
-                        .orderId("ORD001")
-                        .bookName("책이름01")
-                        .isbn("9781082502299")
-                        .totalPrice(15000)
-                        .quantity(1)
-                        .imageUrl("http://localhost:8080/productimgs/604248.png")
-                        .orderedAt(LocalDateTime.now().withNano(0))
-                        .build()
-        );
+        orderDetailResponse = OrderDetailResponse.builder()
+                .orderId("ORD001")
+                .orderedAt(LocalDateTime.now().withNano(0))
+                .books(List.of(
+                                OrderDetailBookDTO.builder()
+                                        .bookName("책이름01")
+                                        .isbn("9781082502299")
+                                        .quantity(1)
+                                        .totalPrice(15000)
+                                        .imageUrl("http://localhost:8080/productimgs/604248.png")
+                                        .build())
+                        )
+                .paymentDetail(
+                        PaymentDetailDTO.builder()
+                                .totalAmount(15000)
+                                .paymentMethod("토스페이")
+                                .build()
+                )
+                .build();
     }
 
     @Test
@@ -69,7 +80,7 @@ class OrderDetailQueryControllerTest {
                 .build();
 
         when(memberQueryService.getMemberDetail(memberId)).thenReturn(memberDetailResponse);
-        when(orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(memberUid, orderId)).thenReturn(orderDetails);
+        when(orderDetailQueryService.getOrderDetailByMemberUidAndOrderId(memberUid, orderId)).thenReturn(orderDetailResponse);
 
         mockMvc.perform(get("/api/v1/members/" + memberId + "/orders/" + orderId + "/order-detail")
                 .accept(MediaType.APPLICATION_JSON)
@@ -77,15 +88,18 @@ class OrderDetailQueryControllerTest {
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.orderDetails").exists())
-                .andExpect(jsonPath("$.data.orderDetails").isArray())
-                .andExpect(jsonPath("$.data.orderDetails[0].orderId").value("ORD001"))
-                .andExpect(jsonPath("$.data.orderDetails[0].bookName").value("책이름01"))
-                .andExpect(jsonPath("$.data.orderDetails[0].isbn").value("9781082502299"))
-                .andExpect(jsonPath("$.data.orderDetails[0].totalPrice").value(15000))
-                .andExpect(jsonPath("$.data.orderDetails[0].quantity").value(1))
-                .andExpect(jsonPath("$.data.orderDetails[0].imageUrl").value("http://localhost:8080/productimgs/604248.png"))
-                .andExpect(jsonPath("$.data.orderDetails[0].orderedAt").exists())
+                .andExpect(jsonPath("$.data.orderId").exists())
+                .andExpect(jsonPath("$.data.orderId").value("ORD001"))
+                .andExpect(jsonPath("$.data.orderedAt").exists())
+                .andExpect(jsonPath("$.data.books").exists())
+                .andExpect(jsonPath("$.data.books").isArray())
+                .andExpect(jsonPath("$.data.books[0].bookName").value("책이름01"))
+                .andExpect(jsonPath("$.data.books[0].isbn").value("9781082502299"))
+                .andExpect(jsonPath("$.data.books[0].quantity").value(1))
+                .andExpect(jsonPath("$.data.books[0].totalPrice").value(15000))
+                .andExpect(jsonPath("$.data.books[0].imageUrl").value("http://localhost:8080/productimgs/604248.png"))
+                .andExpect(jsonPath("$.data.paymentDetail.totalAmount").value(15000))
+                .andExpect(jsonPath("$.data.paymentDetail.paymentMethod").value("토스페이"))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
 

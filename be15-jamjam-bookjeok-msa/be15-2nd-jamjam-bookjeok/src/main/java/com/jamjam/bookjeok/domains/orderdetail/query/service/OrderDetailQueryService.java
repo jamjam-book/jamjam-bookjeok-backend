@@ -1,11 +1,9 @@
 package com.jamjam.bookjeok.domains.orderdetail.query.service;
 
-import com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailDTO;
-
-import java.util.List;
+import com.jamjam.bookjeok.domains.orderdetail.query.dto.response.OrderDetailResponse;
 
 public interface OrderDetailQueryService {
 
-    List<OrderDetailDTO> getOrderDetailByMemberUidAndOrderId(Long memberUid, String orderId);
+    OrderDetailResponse getOrderDetailByMemberUidAndOrderId(Long memberUid, String orderId);
 
 }
