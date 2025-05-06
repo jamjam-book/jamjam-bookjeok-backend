@@ -12,6 +12,6 @@ public class InterestAuthorRequest {
     private final String authorName;
 
     @NotNull(message = "멤버 아이디는 비어있을 수 없습니다.")
-    private final Long memberUid;
+    private final String memberId;
 
 }

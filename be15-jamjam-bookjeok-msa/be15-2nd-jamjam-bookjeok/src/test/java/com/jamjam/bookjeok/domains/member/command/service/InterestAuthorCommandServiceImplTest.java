@@ -23,10 +23,10 @@ public class InterestAuthorCommandServiceImplTest {
     @DisplayName("관심 작가 등록하기")
     @Test
     void createInterestAuthorTest(){
-        Long memberUid = 2L;
+        String memberId = "user02";
 
         String authorName = "공지영";
-        InterestAuthorRequest request = new InterestAuthorRequest(authorName, memberUid);
+        InterestAuthorRequest request = new InterestAuthorRequest(authorName, memberId);
         String response = interestAuthorCommandService.createInterestAuthor(request);
 
         assertEquals("공지영", response);
@@ -38,26 +38,25 @@ public class InterestAuthorCommandServiceImplTest {
     @DisplayName("관심 작가 등록시 작가가 없는 경우 예외 테스트")
     @Test
     void createInterestAuthorExceptionTest1(){
-        Long memberUid = 2L;
+        String memberId = "user01";
 
         String authorName = "정유진";
-        InterestAuthorRequest request2 = new InterestAuthorRequest(authorName, memberUid);
+        InterestAuthorRequest request = new InterestAuthorRequest(authorName, memberId);
         assertThrows(AuthorNotFoundException.class, () -> {
-            interestAuthorCommandService.createInterestAuthor(request2);
+            interestAuthorCommandService.createInterestAuthor(request);
         });
     }
 
     @DisplayName("관심 작가 삭제하기")
     @Test
     void deleteInterestAuthorTest(){
-        Long memberUid = 2L;
-        String authorName = "한강";
+        String memberId = "user02";
+        Long authorId = 3L;
 
-        InterestAuthorRequest request = new InterestAuthorRequest(authorName, memberUid);
-        interestAuthorCommandService.deleteInterestAuthor(request);
+        interestAuthorCommandService.deleteInterestAuthor(memberId, authorId);
 
         assertThrows(AuthorNotFoundException.class, () -> {
-            interestAuthorCommandService.deleteInterestAuthor(request);
+            interestAuthorCommandService.deleteInterestAuthor(memberId, authorId);
         });
     }
 }
