@@ -1,3 +1,10 @@
+<script setup>
+defineProps({
+    label: String,
+    value: String
+})
+</script>
+
 <template>
     <div class="info-row">
         <div class="info-label">{{ label }}</div>
@@ -6,13 +13,6 @@
         </div>
     </div>
 </template>
-
-<script setup>
-defineProps({
-    label: String,
-    value: String
-})
-</script>
 
 <style scoped>
 .info-row {

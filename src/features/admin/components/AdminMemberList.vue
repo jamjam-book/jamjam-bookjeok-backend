@@ -3,6 +3,19 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
+const formatPhoneNumber = (number) => {
+    if (!number) return '';
+    return number
+            .replace(/[^0-9]/g, '')
+            .replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3');
+};
+
+const formatDate = (datetime) => {
+    if (!datetime) return '';
+    return datetime.split('T')[0];
+};
+
+
 defineProps({
     headers: {
         type: Array,
@@ -39,7 +52,18 @@ const goToMember = (memberId) => {
                     @click="goToMember(row.memberId)"
             >
                 <td v-for="(header, colIndex) in headers" :key="colIndex">
-                    {{ row[keyMap[header]] }}
+                    <template v-if="keyMap[header] === 'phoneNumber'">
+                        {{ formatPhoneNumber(row[keyMap[header]]) }}
+                    </template>
+                    <template v-else-if="keyMap[header] === 'createdAt'">
+                        {{ formatDate(row[keyMap[header]]) }}
+                    </template>
+                    <template v-else-if="keyMap[header] === 'marketingConsent'">
+                        {{ row[keyMap[header]] ? 'Y' : 'N' }}
+                    </template>
+                    <template v-else>
+                        {{ row[keyMap[header]] }}
+                    </template>
                 </td>
             </tr>
         </tbody>
