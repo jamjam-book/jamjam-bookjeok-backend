@@ -24,15 +24,14 @@ public class InterestAuthorQueryControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @DisplayName("멤버의 아이디로 즐겨찾기 한 작가 목록 가져오기")
     @Test
     void getInterestAuthorByMemberIdTest() throws Exception {
         String memberId = "user02";
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/{memberId}/interest-authors", memberId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/members/{memberId}/interest/authors", memberId)
+                        .param("page", "1")
+                        .param("size", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data").isArray())

@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class InterestAuthorDTO {
 
+    private Long authorId;
     private String authorName;
     private List<BookNameDTO> bookList;
 

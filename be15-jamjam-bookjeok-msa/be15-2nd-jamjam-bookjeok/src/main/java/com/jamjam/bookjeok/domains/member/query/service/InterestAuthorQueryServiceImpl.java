@@ -1,6 +1,8 @@
 package com.jamjam.bookjeok.domains.member.query.service;
 
-
+import com.jamjam.bookjeok.common.dto.Pagination;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
+import com.jamjam.bookjeok.domains.member.command.dto.response.InterestAuthorListResponse;
 import com.jamjam.bookjeok.domains.member.query.dto.InterestAuthorDTO;
 import com.jamjam.bookjeok.domains.member.query.mapper.InterestAuthorMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,25 @@ public class InterestAuthorQueryServiceImpl implements InterestAuthorQueryServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<InterestAuthorDTO> getInterestAuthorList(
-            String memberId
+    public InterestAuthorListResponse getInterestAuthorList(
+            String memberId,
+            PageRequest pageRequest
     ){
-        return interestAuthorMapper.findInterestAuthorByMemberId(memberId);
-    }
+        List<InterestAuthorDTO> interestAuthorList
+                = interestAuthorMapper.findInterestAuthorByMemberId(memberId,pageRequest);
 
+        long totalAuthors = interestAuthorMapper.countInterestAuthorsByMemberId(memberId);
+
+        int page = pageRequest.getPage();
+        int size = pageRequest.getSize();
+
+        return InterestAuthorListResponse.builder()
+                .interestAuthorList(interestAuthorList)
+                .pagination(Pagination.builder()
+                        .currentPage(page)
+                        .totalPage((int)Math.ceil((double)totalAuthors/size))
+                        .totalItems(totalAuthors)
+                        .build())
+                .build();
+    }
 }

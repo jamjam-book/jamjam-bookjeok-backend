@@ -1,14 +1,13 @@
 package com.jamjam.bookjeok.domains.member.query.service;
 
-import com.jamjam.bookjeok.domains.member.query.dto.InterestAuthorDTO;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
+import com.jamjam.bookjeok.domains.member.command.dto.response.InterestAuthorListResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,9 +24,11 @@ public class InterestAuthorQueryServiceImplTest {
     void findInterestAuthorByMemberIdTest(){
         String memberId = "user02";
 
-        List<InterestAuthorDTO> interestAuthorList
-                = interestAuthorQueryService.getInterestAuthorList(memberId);
+        PageRequest pageRequest = new PageRequest(1,10);
 
-        assertNotNull(interestAuthorList);
+        InterestAuthorListResponse interestAuthorResponse
+                = interestAuthorQueryService.getInterestAuthorList(memberId, pageRequest);
+
+        assertNotNull(interestAuthorResponse);
     }
 }

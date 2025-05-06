@@ -1,9 +1,8 @@
 package com.jamjam.bookjeok.domains.member.query.service;
 
-import com.jamjam.bookjeok.domains.member.query.dto.InterestAuthorDTO;
-
-import java.util.List;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
+import com.jamjam.bookjeok.domains.member.command.dto.response.InterestAuthorListResponse;
 
 public interface InterestAuthorQueryService {
-    List<InterestAuthorDTO> getInterestAuthorList(String memberId);
+    InterestAuthorListResponse getInterestAuthorList(String memberId, PageRequest pageRequest);
 }
