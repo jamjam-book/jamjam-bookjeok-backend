@@ -3,7 +3,7 @@ package com.jamjam.bookjeok.domains.order.command.controller;
 import com.jamjam.bookjeok.common.dto.ApiResponse;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.query.service.MemberQueryService;
-import com.jamjam.bookjeok.domains.order.command.dto.PageOrderResponse;
+import com.jamjam.bookjeok.domains.order.command.dto.response.PageOrderResponse;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
