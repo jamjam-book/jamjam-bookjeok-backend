@@ -15,7 +15,7 @@ export const orderRoutes = [
         component: () => import('@/features/order/views/MemberOrdersView.vue')
     },
     {
-        path: '/members/orders/:orderId/order-detail',
+        path: '/members/:memberId/orders/:orderId/order-detail',
         name: 'orderDetail',
         component: () => import('@/features/order/views/OrderDetailView.vue')
     }
