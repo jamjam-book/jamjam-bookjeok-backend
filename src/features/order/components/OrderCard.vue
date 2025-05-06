@@ -45,7 +45,7 @@ const formatDate = (iso) => {
                     <div class="header">금액</div>
                 </div>
                 <div class="content-row">
-                    <div class="title">{{ item.title }}</div>
+                    <div class="title">{{ item.bookName }}</div>
                     <div class="quantity">{{ item.quantity }}개</div>
                     <div class="price">
                         {{ item.totalPrice.toLocaleString() }}원
