@@ -1,7 +1,6 @@
-<!-- components/order/OrderCard.vue -->
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-import { useRouter } from 'vue-router'
+import {defineProps} from 'vue'
+import {useRouter} from 'vue-router'
 
 const props = defineProps({
     order: {
@@ -11,21 +10,31 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const emit = defineEmits(['detail'])
 
 const getOrderDetail = () => {
-    // 추후에 동적 ID 경로 적용 예정
-    router.push(`/members/orders/${props.order.orderId}/order-detail`)
+    router.push({
+        name: 'orderDetail',
+        params: {orderId: props.order.orderId}
+    })
+}
+
+const formatDate = (iso) => {
+    const date = new Date(iso)
+    return `${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}.`
 }
 </script>
 
 <template>
     <div class="mb-5">
+        <!-- 주문 상단 헤더 -->
         <div class="order-header">
-            <span id="order-date-id">{{ order.date }} [{{ order.orderId }}]</span>
+      <span id="order-date-id">
+        {{ formatDate(order.orderedAt) }} [{{ order.orderId }}]
+      </span>
             <button class="btn" id="order-detail-btn" @click="getOrderDetail">주문 상세 내역</button>
         </div>
 
+        <!-- 주문 항목 목록 -->
         <div v-for="item in order.items" :key="item.id" class="order-row">
             <img :src="item.image" alt="도서 이미지" class="book-image"/>
 
@@ -39,7 +48,7 @@ const getOrderDetail = () => {
                     <div class="title">{{ item.title }}</div>
                     <div class="quantity">{{ item.quantity }}개</div>
                     <div class="price">
-                        {{ (item.price * item.quantity).toLocaleString() }}원
+                        {{ item.totalPrice.toLocaleString() }}원
                     </div>
                 </div>
             </div>
@@ -76,13 +85,6 @@ const getOrderDetail = () => {
     font-size: 14px;
     border-bottom: 2px solid black;
 }
-.order-item img {
-    width: 110px;
-    height: 136px;
-    object-fit: cover;
-    margin-right: 16px;
-    border-radius: 4px;
-}
 
 .order-row {
     display: flex;
@@ -96,6 +98,7 @@ const getOrderDetail = () => {
     height: 136px;
     object-fit: cover;
     margin-right: 24px;
+    border-radius: 4px;
 }
 
 .info-row {
