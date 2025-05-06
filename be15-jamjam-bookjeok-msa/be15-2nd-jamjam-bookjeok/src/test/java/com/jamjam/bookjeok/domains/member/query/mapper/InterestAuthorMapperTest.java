@@ -1,5 +1,6 @@
 package com.jamjam.bookjeok.domains.member.query.mapper;
 
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
 import com.jamjam.bookjeok.domains.member.query.dto.InterestAuthorDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,23 +23,24 @@ class InterestAuthorMapperTest {
     @DisplayName("특정 회원이 즐겨찾기한 작가 목록 가져오기")
     @Test
     void findInterestBookListTest(){
-        String memberId = "user01";
+        String memberId = "user02";
+        PageRequest pageRequest = new PageRequest(1,10);
 
-        List<InterestAuthorDTO> interestAuthorList = interestAuthorMapper.findInterestAuthorByMemberId(memberId);
+        List<InterestAuthorDTO> interestAuthorList =
+                interestAuthorMapper.findInterestAuthorByMemberId(memberId, pageRequest);
 
         assertNotNull(interestAuthorList);
         interestAuthorList.forEach(System.out::println);
 
     }
 
-    @DisplayName("회원의 관심 작가 수 가져오기")
+    @DisplayName("특정 회원의 관심 작가 수 조회하기")
     @Test
-    void countInterestAuthorTest(){
-        Long memberUid = 2L;
+    void countInterestAuthorsByMemberId(){
+        String memberId = "user02";
 
-        int totalInterestAuthor = interestAuthorMapper.countInterestAuthor(memberUid);
+        Long count = interestAuthorMapper.countInterestAuthorsByMemberId(memberId);
 
-        assertEquals(2, totalInterestAuthor);
+        assertEquals(2, count);
     }
-
 }
