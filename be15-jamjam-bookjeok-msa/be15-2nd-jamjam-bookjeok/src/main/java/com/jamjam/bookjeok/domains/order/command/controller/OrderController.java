@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.order.command.controller;
 
 import com.jamjam.bookjeok.common.dto.ApiResponse;
+import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.query.service.MemberQueryService;
 import com.jamjam.bookjeok.domains.order.command.dto.response.PageOrderResponse;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandService;
@@ -28,11 +29,10 @@ public class OrderController {
             @PathVariable(value = "memberId") String memberId,
             @PageableDefault(sort = "orderedAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        // TODO: 커밋 전에 주석 풀기!!!!!!
-//        MemberDetailResponse memberDetail = memberQueryService.getMemberDetail(memberId);
-//        Long memberUid = memberDetail.getMember().getMemberUid();
+        MemberDetailResponse memberDetail = memberQueryService.getMemberDetail(memberId);
+        Long memberUid = memberDetail.getMember().getMemberUid();
 
-        PageOrderResponse pageOrderResponseWrapper = orderCommandService.getOrdersByMemberUid(pageable, 1L);
+        PageOrderResponse pageOrderResponseWrapper = orderCommandService.getOrdersByMemberUid(pageable, memberUid);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
