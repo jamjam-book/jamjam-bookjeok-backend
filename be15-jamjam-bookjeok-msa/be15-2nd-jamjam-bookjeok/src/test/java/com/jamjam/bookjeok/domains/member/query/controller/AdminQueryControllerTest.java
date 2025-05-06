@@ -90,7 +90,7 @@ class AdminQueryControllerTest {
     void getMemberByMemberId() throws Exception {
         String memberId = "user02";
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/member/{memberId}", memberId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/members/{memberId}", memberId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.timestamp").exists())
