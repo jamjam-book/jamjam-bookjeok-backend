@@ -3,8 +3,10 @@ package com.jamjam.bookjeok.domains.order.command.controller;
 import com.jamjam.bookjeok.domains.member.command.dto.response.MemberDetailResponse;
 import com.jamjam.bookjeok.domains.member.query.dto.MemberDTO;
 import com.jamjam.bookjeok.domains.member.query.service.MemberQueryServiceImpl;
-import com.jamjam.bookjeok.domains.order.command.dto.OrderResponse;
-import com.jamjam.bookjeok.domains.order.command.dto.PageOrderResponse;
+import com.jamjam.bookjeok.domains.order.command.dto.OrderDTO;
+import com.jamjam.bookjeok.domains.order.command.dto.OrderItemDTO;
+import com.jamjam.bookjeok.domains.order.command.dto.response.OrderResponse;
+import com.jamjam.bookjeok.domains.order.command.dto.response.PageOrderResponse;
 import com.jamjam.bookjeok.domains.order.command.service.OrderCommandServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,33 +44,37 @@ class OrderControllerTest {
     @MockBean
     private OrderCommandServiceImpl orderCommandService;
 
-    private List<OrderResponse> orders;
+    private List<OrderDTO> orders;
 
     @BeforeEach
     void setUp() {
         orders = List.of(
-                OrderResponse.builder()
-                        .orderUid(56L)
+                OrderDTO.builder()
                         .orderId("ORD001")
-                        .orderName("도서 주문 1")
-                        .totalAmount(25000)
-                        .orderStatusName("결제승인")
                         .orderedAt(LocalDateTime.of(2025, 4, 9, 10, 0, 0))
-                        .canceledAt(null)
-                        .changedAt(null)
-                        .refundedAt(null)
+                        .orderStatusName("결제승인")
+                        .items(List.of(
+                                OrderItemDTO.builder()
+                                        .bookName("책1")
+                                        .quantity(2)
+                                        .totalPrice(20000)
+                                        .imageUrl("http://localhost:8080/book1.png")
+                                        .build()
+                        ))
                         .build(),
 
-                OrderResponse.builder()
-                        .orderUid(57L)
+                OrderDTO.builder()
                         .orderId("ORD002")
-                        .orderName("도서 주문 2")
-                        .totalAmount(31000)
-                        .orderStatusName("결제승인")
                         .orderedAt(LocalDateTime.of(2025, 4, 10, 10, 0, 0))
-                        .canceledAt(null)
-                        .changedAt(null)
-                        .refundedAt(null)
+                        .orderStatusName("결제승인")
+                        .items(List.of(
+                                OrderItemDTO.builder()
+                                        .bookName("책2")
+                                        .quantity(1)
+                                        .totalPrice(15000)
+                                        .imageUrl("http://localhost:8080/book2.png")
+                                        .build()
+                        ))
                         .build()
         );
     }
