@@ -23,7 +23,9 @@
         SELECT
             p.writer_uid,
             m.nickname,
-            p.title
+            p.title,
+            p.content,
+            p.created_at
         FROM posts p
         JOIN members m ON p.writer_uid = m.member_uid
         WHERE m.activity_status = 'ACTIVE'

@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.member.query.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +23,14 @@ class FollowQueryControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
+    String baseUrl = "/api/v1";
 
     @DisplayName("특정 멤버의 팔로우 목록 가져오기")
     @Test
     void getFollowListByMemberUidTest() throws Exception {
         String memberId = "user01";
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/{memberId}/followings", memberId))
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl + "/members/{memberId}/followings", memberId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data").isArray())
@@ -49,7 +47,7 @@ class FollowQueryControllerTest {
     void getPostListByWriterIdTest() throws Exception {
         String writerId = "user02";
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/{writerId}/postList", writerId))
+        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl+ "/{writerId}/posts", writerId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data").isArray())

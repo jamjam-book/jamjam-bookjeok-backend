@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +30,8 @@ class FollowCommandControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    String baseUrl = "/api/v1/members";
+
     @DisplayName("팔로우 하기 테스트")
     @Test
     void createFollowTest() throws Exception {
@@ -37,7 +40,7 @@ class FollowCommandControllerTest {
 
         FollowMemberRequest followMemberRequest = new FollowMemberRequest(followingId);
 
-        mockMvc.perform(post("/api/v1/{followerId}/follow", followerId)
+        mockMvc.perform(post(baseUrl + "/{followerId}/followings", followerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(followMemberRequest)))
                 .andExpect(status().isCreated())
@@ -54,7 +57,7 @@ class FollowCommandControllerTest {
 
         FollowMemberRequest followMemberRequest = new FollowMemberRequest(followingId);
 
-        mockMvc.perform(delete("/api/v1/{followerId}/follow", followerId)
+        mockMvc.perform(delete(baseUrl+ "/{followerId}/followings/{followingId}", followerId, followingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(followMemberRequest)))
                 .andExpect(jsonPath("$.success").value(true));
