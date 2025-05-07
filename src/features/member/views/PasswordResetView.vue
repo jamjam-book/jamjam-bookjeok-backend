@@ -2,7 +2,7 @@
 import { reactive } from 'vue';
 import * as yup from 'yup';
 import { useRoute, useRouter } from 'vue-router';
-import { resetPassword } from '@/features/member/passwordApi.js';
+import { resetPassword } from '@/features/member/passwordResetApi.js';
 
 const route = useRoute();
 const router = useRouter();
