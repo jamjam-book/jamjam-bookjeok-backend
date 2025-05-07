@@ -88,6 +88,11 @@ public class BookQueryMemberServiceImpl implements BookQueryMemberService {
     }
 
     @Override
+    public List<BookCategoryDTO> findMainCategories() {
+        return bookMapper.findMainCategories();
+    }
+
+    @Override
     public PriceRangeDTO getPriceRange(BookSearchCondition condition) {
         return bookMapper.getPriceRange(condition);
     }
@@ -112,7 +117,7 @@ public class BookQueryMemberServiceImpl implements BookQueryMemberService {
 
             result.add(new PopularBookDTO(
                     book.getBookId(), book.getBookName(),
-                    book.getImageUrl(), book.getIsbn(),book.getPublishedAt(),
+                    book.getImageUrl(), book.getIsbn(), book.getPrice(), book.getPublishedAt(),
                     book.getTotalQuantity(), book.getPublisher(), authors
             ));
         }
