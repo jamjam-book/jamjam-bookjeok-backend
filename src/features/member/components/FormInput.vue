@@ -40,7 +40,7 @@ const { fields, buttonText } = defineProps({
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 150px;
+    margin: 150px 150px 192px 150px;
 }
 
 .input-box {

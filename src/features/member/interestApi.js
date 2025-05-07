@@ -13,3 +13,9 @@ export const createInterestAuthors = ( payload ) =>
 
 export const deleteInterestAuthors = (memberId, authorId) =>
     api.delete(`/${memberId}/interest/authors/${authorId}`)
+
+/* 팔로잉 */
+export const getFollowings = memberId => api.get(`/${memberId}/followings`)
+
+export const deleteFollowings = (followerId, followingId) =>
+    api.delete(`/${followerId}/followings/${followingId}`)
