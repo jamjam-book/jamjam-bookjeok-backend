@@ -6,6 +6,11 @@ import SearchBar from "@/components/common/SearchBar.vue";
 const isLoggedIn = ref(false);
 const memberStatus = ref('MEMBER');
 const cartCount = ref(0);  // 장바구니 수량을 저장하는 상태 변수
+const isOpen = ref(false)
+
+const toggleDropdown = () => {
+    isOpen.value = !isOpen.value
+}
 
 // 장바구니 수량을 가져오는 API 호출
 const getCartCount = async () => {
