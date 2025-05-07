@@ -60,6 +60,7 @@
         <result property="bookName" column="book_name"/>
         <result property="imageUrl" column="image_url"/>
         <result property="isbn" column="isbn"/>
+        <result property="price" column="price"/>
         <result property="publishedAt" column="published_at"/>
         <result property="totalQuantity" column="total_quantity"/>
 
@@ -352,6 +353,7 @@
             c.book_name,
             c.image_url,
             c.isbn,
+            c.price,
             c.published_at,
             d.publisher_id,
             d.publisher_name,
@@ -440,5 +442,19 @@
         ORDER BY b.created_at DESC
         LIMIT #{limit}
     </select>
+
+    <select id="findMainCategories" resultType="com.jamjam.bookjeok.domains.book.query.dto.BookCategoryDTO">
+        SELECT
+        b.category_id,
+        c.category_name,
+        COUNT(*) AS bookCount
+        FROM books b
+        JOIN book_categories c ON b.category_id = c.category_id
+        WHERE b.is_deleted = false
+        GROUP BY b.category_id
+        ORDER BY bookCount DESC
+        LIMIT 5
+    </select>
+
 
 </mapper>

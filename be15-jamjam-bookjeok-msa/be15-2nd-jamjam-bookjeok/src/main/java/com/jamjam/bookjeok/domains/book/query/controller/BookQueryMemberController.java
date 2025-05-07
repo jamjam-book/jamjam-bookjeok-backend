@@ -114,4 +114,13 @@ public class BookQueryMemberController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(others));
     }
+
+    @GetMapping("book/ca/main")
+    public ResponseEntity<ApiResponse<List<BookCategoryDTO>>> selectMainCategories() {
+        List<BookCategoryDTO> categories =  bookQueryMemberService.findMainCategories();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(categories));
+    }
 }

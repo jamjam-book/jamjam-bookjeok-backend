@@ -32,4 +32,6 @@ public interface BookMapper {
     PriceRangeDTO getPriceRange(BookSearchCondition condition);
 
     List<AuthorOtherBookDTO> getAuthorOtherBooks(AuthorOthersSearchCondition condition);
+
+    List<BookCategoryDTO> findMainCategories();
 }

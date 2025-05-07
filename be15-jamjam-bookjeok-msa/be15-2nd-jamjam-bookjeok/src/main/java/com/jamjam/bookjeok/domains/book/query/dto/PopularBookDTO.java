@@ -16,6 +16,7 @@ public class PopularBookDTO {
     private String bookName;
     private String imageUrl;
     private String isbn;
+    private int price;
     private LocalDate publishedAt;
     private int totalQuantity;
 
