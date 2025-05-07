@@ -27,9 +27,7 @@ public class EmailCommandServiceImpl implements EmailCommandService {
         String formattedNow = now.format(formatter);
 
         // 비밀번호 재설정 링크
-        // 이 부분은 프론트 설정하면서 변경할 예정
-        // 그리고 resetLink 앞에 부분도 변경 예정
-        String resetLink = "http://localhost:8000/bookjeok-service/api/v1/password/reset?token=" + token;
+        String resetLink = "http://localhost:5173/password/reset?token=" + token;
 
         // 이메일 제목
         String subject = "Book적Book적 비밀번호 재설정 메일";
@@ -38,7 +36,6 @@ public class EmailCommandServiceImpl implements EmailCommandService {
         String to = member.getEmail();
 
         // 이메일 전체 구조 정의하는 틀
-        // 나중에 프론트 시작하면 분리할 예정
         String htmlMsg =
                 "<div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;'>"
                 + "  <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);'>"
