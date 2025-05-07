@@ -70,12 +70,28 @@ const props = defineProps({
 .content-row {
     display: flex;
     margin-top: 10px;
+    align-items: center;
+}
+
+.header:nth-child(1),
+.title {
+    width: 50%;
+}
+
+.header:nth-child(2),
+.quantity {
+    width: 25%;
+}
+
+.header:nth-child(3),
+.price {
+    width: 25%;
+    padding-left: 60px;
 }
 
 .header {
     font-size: 14px;
     color: #999;
-    width: 33.3%;
 }
 
 .title,
@@ -83,6 +99,5 @@ const props = defineProps({
 .price {
     font-size: 16px;
     font-weight: bold;
-    width: 33.3%;
 }
 </style>
