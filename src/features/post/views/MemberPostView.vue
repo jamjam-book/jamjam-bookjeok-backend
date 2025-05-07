@@ -16,7 +16,8 @@ const allPosts = [
               처음엔 귀찮았지만, 지금은 생각을 정리하는 데 정말 큰 도움이 되네요.
               글을 쓰면서 내 생각을 더 잘 이해하게 되는 것 같아요.`,
         createdAt: '2025-03-09',
-        imageUrl: '/src/assets/images/post13.jpg'
+        comment: 1,
+        like: 9
     },
     {
         postId: 14,
@@ -25,7 +26,8 @@ const allPosts = [
               특히 『AI 슈퍼파워』라는 책이 기억에 많이 남네요.
               중국과 미국의 AI 경쟁 구도도 흥미롭고, 앞으로의 미래에 대해 고민하게 만들어요.`,
         createdAt: '2025-03-10',
-        imageUrl: '/src/assets/images/post14.jpg'
+        comment: 8,
+        like: 5
     },
     {
         postId: 15,
@@ -34,14 +36,14 @@ const allPosts = [
               조용한 공원길을 걷다 보면, 책의 문장들이 더 깊게 마음에 새겨지는 것 같아요.
               몸과 마음이 동시에 정리되는 기분이랄까요?`,
         createdAt: '2025-03-11',
-        imageUrl: '/src/assets/images/post15.jpg'
+        comment: 1,
+        like: 1
     }
-
 ]
 
 const pagination = reactive({
     currentPage: 1,
-    totalPages: 1,
+    totalPage: 1,
     totalItems: 0
 })
 
@@ -52,7 +54,7 @@ const fetchMemberPosts= (page = 1) => {
     memberPosts.value = allPosts.slice(start, end)
     pagination.currentPage = page
     pagination.totalItems = allPosts.length
-    pagination.totalPages = Math.ceil(allPosts.length / itemsPerPage)
+    pagination.totalPage = Math.ceil(allPosts.length / itemsPerPage)
 
     window.scrollTo(0,0)
 }
@@ -61,29 +63,23 @@ onMounted(() => fetchMemberPosts(1))
 </script>
 
 <template>
-    <div class="members-post-container">
-        <RouterLink to="/members/:memberId/followings"  class="back">
-            <div>팔로잉 목록</div>
-        </RouterLink>
-        <h4>nick01</h4>
-        <PostList
-                :posts="memberPosts"
-                :showDelete="showDelete"
-                id="member-post"
-        />
+    <RouterLink to="/members/:memberId/followings"  class="back">
+        <div>팔로잉 목록</div>
+    </RouterLink>
+        <h4>nick02</h4>
+    <PostList
+            :posts="memberPosts"
+            :showDelete="showDelete"
+            id="member-post"
+    />
 
-        <PagingBar
-                v-bind="pagination"
-                @page-changed="fetchMemberPosts"
-        />
-    </div>
+    <PagingBar
+            v-bind="pagination"
+            @page-changed="fetchMemberPosts"
+    />
 </template>
 
 <style scoped>
-.members-post-container {
-    margin-bottom: 40px;
-}
-
 .back {
     font-size: 14px;
     text-decoration: none;
