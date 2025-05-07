@@ -1,16 +1,8 @@
 <script setup>
-import InterestTab from '../components/InterestTab.vue' // 탭 버튼 컴포넌트
+import InterestTab from '../components/InterestTab.vue'
 </script>
 
 <template>
-    <div class="interest-container">
-        <InterestTab />
-        <RouterView />
-    </div>
+    <InterestTab />
+    <RouterView />
 </template>
-
-<style>
-.interest-container {
-    padding: 0 0 40px 0;
-}
-</style>
