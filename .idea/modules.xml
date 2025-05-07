@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bookjeok.iml" filepath="$PROJECT_DIR$/.idea/bookjeok.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.jamjam.bookjeok.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.jamjam.bookjeok.main.iml" />
     </modules>
   </component>
 </project>

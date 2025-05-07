@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:///C:/jamjam/images"); // 이미지 저장 절대경로
+                .addResourceLocations("file:///C:/jamjam/images/"); // 이미지 저장 절대경로
     }
 
 }
