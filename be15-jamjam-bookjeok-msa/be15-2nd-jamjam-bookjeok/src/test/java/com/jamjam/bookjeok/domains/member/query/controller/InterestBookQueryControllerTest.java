@@ -1,6 +1,5 @@
 package com.jamjam.bookjeok.domains.member.query.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +23,13 @@ class InterestBookQueryControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @DisplayName("멤버의 아이디로 책 즐겨찾기 목록 가져오기 테스트")
     @Test
     void getInterestBooListByMemberIdTest() throws Exception {
         String memberId = "user01";
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/{memberId}/interest-books", memberId)
+                        .get("/api/v1/members/{memberId}/interest/books", memberId)
                         .param("page", "1")
                         .param("size", "2"))
                 .andExpect(status().isOk())

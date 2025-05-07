@@ -17,13 +17,11 @@ public class InterestBookCommandController {
 
     private final InterestBookCommandService interestBookCommandService;
 
-    @PostMapping("/interest-book")
+    @PostMapping("/members/interest/books")
     public ResponseEntity<ApiResponse<InterestBookResponse>> createInterestBook(
-            @RequestBody @Validated InterestBookRequest request
+            @RequestBody @Validated InterestBookRequest interestBookRequest
     ){
-        Long memberUid = 1L;
-
-        String bookName = interestBookCommandService.createInterestBook(memberUid, request);
+        String bookName = interestBookCommandService.createInterestBook(interestBookRequest);
 
         InterestBookResponse response = InterestBookResponse.builder()
                 .bookName(bookName)
@@ -34,14 +32,13 @@ public class InterestBookCommandController {
                 .body(ApiResponse.success(response));
     }
 
-    @DeleteMapping("/interest-book")
+    @DeleteMapping("/members/{memberId}/interest/books/{bookId}")
     public ResponseEntity<ApiResponse<Void>> deleteInterestBook(
-            @RequestBody @Validated InterestBookRequest request
+            @PathVariable String memberId,
+            @PathVariable Long bookId
     ){
-        // 로그인 연결 후 수정
-        Long memberUid = 1L;
 
-        interestBookCommandService.deleteInterestBook(memberUid, request);
+        interestBookCommandService.deleteInterestBook(memberId, bookId);
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

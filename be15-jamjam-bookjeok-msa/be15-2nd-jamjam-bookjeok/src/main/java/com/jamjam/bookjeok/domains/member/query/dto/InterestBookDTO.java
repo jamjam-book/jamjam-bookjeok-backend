@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class InterestBookDTO {
 
+    private Long bookId;
     private String bookName;
     private String bookInfo;
     private String imageUrl;
