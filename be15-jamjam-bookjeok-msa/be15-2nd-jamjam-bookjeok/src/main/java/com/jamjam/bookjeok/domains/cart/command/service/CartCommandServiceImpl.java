@@ -7,6 +7,7 @@ import com.jamjam.bookjeok.domains.cart.command.repository.CartRepository;
 import com.jamjam.bookjeok.domains.cart.command.dto.request.CartRequest;
 import com.jamjam.bookjeok.domains.cart.command.dto.response.CartResponse;
 import com.jamjam.bookjeok.domains.cart.query.mapper.CartMapper;
+import com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailBookDTO;
 import com.jamjam.bookjeok.exception.cart.CartBookNotFoundException;
 import com.jamjam.bookjeok.exception.cart.CartItemLimitExceededException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.jamjam.bookjeok.domains.cart.command.entity.Cart.calculateBookTotalPrice;
@@ -83,6 +85,18 @@ public class CartCommandServiceImpl implements CartCommandService {
 
         // 삭제할 도서 정보가 있으면 삭제한다.
         cartRepository.delete(findCart);
+    }
+
+    @Override
+    public void completePaymentAndRemoveFromCart(List<OrderDetailBookDTO> books, Long memberUid) {
+        // 결제 완료 후 도서 정보가 장바구니에 있으면 장바구니에서 삭제한다.
+        for (OrderDetailBookDTO book : books) {
+            Cart findCart = cartRepository.findByMemberUidAndBookId(memberUid, book.bookId());
+
+            if (findCart != null) {
+                cartRepository.deleteByMemberUidAndBookId(memberUid, book.bookId());
+            }
+        }
     }
 
     private Book findBookOrThrow(Long bookId, String bookName) {

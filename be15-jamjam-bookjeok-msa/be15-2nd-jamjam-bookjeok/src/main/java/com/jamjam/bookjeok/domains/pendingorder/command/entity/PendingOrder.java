@@ -44,7 +44,8 @@ public class PendingOrder {
     @Builder
     public PendingOrder(
             Long memberUid, int totalAmount,
-            List<PendingOrderBookItemsRequest> orderData, LocalDateTime createdAt) {
+            List<PendingOrderBookItemsRequest> orderData, LocalDateTime createdAt
+    ) {
         this.memberUid = memberUid;
         this.orderId = createOrderId();
         this.totalAmount = totalAmount;

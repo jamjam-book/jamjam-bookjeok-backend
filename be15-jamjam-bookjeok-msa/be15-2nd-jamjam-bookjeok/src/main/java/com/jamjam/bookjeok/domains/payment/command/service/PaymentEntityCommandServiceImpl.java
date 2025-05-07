@@ -34,7 +34,7 @@ public class PaymentEntityCommandServiceImpl implements PaymentEntityCommandServ
      * @param order 결제와 연관된 주문 객체
      */
     @Override
-    public Payment createPayment(PaymentDTO paymentDTO, Order order) {
+    public void createPayment(PaymentDTO paymentDTO, Order order) {
         Payment payment = createPaymentEntity(paymentDTO, order);
         Payment savedPayment = paymentRepository.save(payment);
 
@@ -48,7 +48,6 @@ public class PaymentEntityCommandServiceImpl implements PaymentEntityCommandServ
                 paymentEasyPayRepository.save(paymentEasyPay);
             }
         }
-        return savedPayment;
     }
 
     /**

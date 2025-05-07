@@ -22,7 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("""
                 SELECT new com.jamjam.bookjeok.domains.order.command.dto.response.OrderResponse(
-                    o.orderUid, o.memberUid, o.orderId, b.bookName, od.totalPrice, os.orderStatusName, 
+                    o.orderUid, o.memberUid, o.orderId, b.bookId, b.bookName, od.totalPrice, os.orderStatusName, 
                     o.orderedAt, o.canceledAt, o.modifiedAt, o.refundedAt, b.imageUrl, od.quantity
                 )
                 FROM Order o

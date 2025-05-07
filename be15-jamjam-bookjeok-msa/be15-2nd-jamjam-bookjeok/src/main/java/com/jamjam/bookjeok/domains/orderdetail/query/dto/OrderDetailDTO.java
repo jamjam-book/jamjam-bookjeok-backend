@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record OrderDetailDTO(
-        String orderId, String bookName, String isbn,
+        String orderId, Long bookId, String bookName, String isbn,
         int totalPrice, int quantity, String imageUrl, LocalDateTime orderedAt
 ) {
 }

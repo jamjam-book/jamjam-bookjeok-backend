@@ -34,6 +34,7 @@ public class OrderDetailQueryServiceImpl implements OrderDetailQueryService {
 
         List<OrderDetailBookDTO> books = orderDetails.stream()
                 .map(o -> OrderDetailBookDTO.builder()
+                        .bookId(o.bookId())
                         .bookName(o.bookName())
                         .isbn(o.isbn())
                         .quantity(o.quantity())

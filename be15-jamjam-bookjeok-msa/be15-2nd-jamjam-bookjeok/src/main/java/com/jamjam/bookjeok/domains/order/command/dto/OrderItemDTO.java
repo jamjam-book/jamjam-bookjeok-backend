@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record OrderItemDTO(
-        String bookName, int quantity,
+        Long bookId, String bookName, int quantity,
         int totalPrice, String imageUrl
 ) {
 }
