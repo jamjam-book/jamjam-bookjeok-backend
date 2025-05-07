@@ -1,6 +1,6 @@
 <script setup>
-import {onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const activeMenu = ref('주문 내역');
@@ -18,9 +18,12 @@ const handleMenuClick = (menu) => {
                                 @click.prevent="handleMenuClick('회원 정보')">회원 정보
                     </RouterLink>
                 </li>
-                <li><a href="#" class="small-side" :class="{ active: activeMenu === '프로필 변경' }"
-                       @click.prevent="handleMenuClick('프로필 변경')">프로필 변경</a></li>
-                <!-- :to="`/members/${memberId}/password/modify`" 로 변경 예정-->
+                <li>
+                    <RouterLink to="/profile" class="small-side"
+                                :class="{ active: activeMenu === '프로필 변경' }"
+                                @click.prevent="handleMenuClick('프로필 변경')">프로필 변경
+                    </RouterLink>
+                </li>
                 <li>
                     <RouterLink to="/members/:memberId/password/modify" class="small-side"
                                 :class="{ active: activeMenu === '비밀번호 변경' }"
@@ -37,7 +40,7 @@ const handleMenuClick = (menu) => {
             <ul>
                 <li>
                     <RouterLink to="members/:memberId/orders" :class="{ active: activeMenu === '주문 내역' }"
-                                @click.prevent="handleMenuClick('주문')">주문 내역
+                                @click.prevent="handleMenuClick('주문 내역')">주문 내역
                     </RouterLink>
                 </li>
                 <li>
@@ -61,16 +64,13 @@ aside {
     padding: 14px;
     margin-right: 20px;
 }
-
 .small-side {
     font-size: 12px;
 }
-
 li {
     list-style: none;
     margin: 10px 0;
 }
-
 aside a {
     text-decoration: none;
     font-size: 19px;
@@ -80,13 +80,11 @@ aside a {
     transition: all 0.2s;
     cursor: pointer;
 }
-
 aside a.active {
     font-weight: bold;
     color: #000;
     border-bottom: 2px solid #666;
 }
-
 main {
     flex: 1;
     padding: 20px;

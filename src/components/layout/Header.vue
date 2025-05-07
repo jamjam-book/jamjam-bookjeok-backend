@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeUnmount, onMounted, ref} from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import SearchBar from "@/components/common/SearchBar.vue";
 
 const isLoggedIn = ref(false);
@@ -10,7 +10,6 @@ const isOpen = ref(false)
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value
 }
-
 </script>
 
 <template>
@@ -46,7 +45,9 @@ const toggleDropdown = () => {
                                 <RouterLink to="/carts">
                                     <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
                                 </RouterLink>
-                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                <RouterLink to="/profile">
+                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                </RouterLink>
                             </div>
                         </template>
 
@@ -54,19 +55,19 @@ const toggleDropdown = () => {
                         <template v-else-if="memberStatus === 'ADMIN'">
                             <div class="auth-links">
                                 <RouterLink to="/admin" class="auth-link">관리자</RouterLink>
-                                <!-- 로그아웃 된 다음에 메인 페이지로 이동할 예정 -->
                                 <a href="/logout" class="auth-link logout">로그아웃</a>
                             </div>
                             <div class="header-icons">
                                 <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
-                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                <RouterLink to="/profile">
+                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                </RouterLink>
                             </div>
                         </template>
 
                         <!-- 회원이 로그인 한 경우 -->
                         <template v-else-if="memberStatus === 'MEMBER'">
                             <div class="auth-links">
-                                <!-- 로그아웃 된 다음에 메인 페이지로 이동할 예정 -->
                                 <a href="/logout" class="auth-link logout">로그아웃</a>
                             </div>
                             <div class="header-icons">
@@ -75,12 +76,13 @@ const toggleDropdown = () => {
                                     <img class="icon cart" src="../../assets/icons/cart.png" alt="장바구니"/>
                                     <span class="cart-count">{{ cartCount }}</span>
                                 </div>
-                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                <RouterLink to="/profile">
+                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
+                                </RouterLink>
                             </div>
                         </template>
                     </div>
                 </nav>
-
             </div>
         </div>
     </div>
