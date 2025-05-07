@@ -40,7 +40,6 @@ class CartCommandServiceImplTest {
 
         assertThat(cartResponse).isNotNull();
 
-        assertThat(cartResponse.memberUid()).isEqualTo(1L);
         assertThat(cartResponse.bookId()).isEqualTo(33L);
         assertThat(cartResponse.bookName()).isEqualTo("문학으로 본 심리학");
         assertThat(cartResponse.totalPrice()).isEqualTo(215000);
@@ -63,7 +62,6 @@ class CartCommandServiceImplTest {
 
         assertThat(cartResponse).isNotNull();
 
-        assertThat(cartResponse.memberUid()).isEqualTo(1L);
         assertThat(cartResponse.bookId()).isEqualTo(1L);
         assertThat(cartResponse.bookName()).isEqualTo("우리가 빛의 속도로 갈 수 없다면");
         assertThat(cartResponse.totalPrice()).isEqualTo(315000);
@@ -85,7 +83,6 @@ class CartCommandServiceImplTest {
         log.info("cartResponse: {}", cartResponse.toString());
 
         assertThat(cartResponse).isNotNull();
-        assertThat(cartResponse.memberUid()).isEqualTo(1L);
         assertThat(cartResponse.bookId()).isEqualTo(1L);
         assertThat(cartResponse.bookName()).isEqualTo("우리가 빛의 속도로 갈 수 없다면");
         assertThat(cartResponse.totalPrice()).isEqualTo(63000);

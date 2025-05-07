@@ -106,7 +106,6 @@ public class CartCommandServiceImpl implements CartCommandService {
 
     private CartResponse toCartResponse(Cart cart, Book book, int totalPrice) {
         return CartResponse.builder()
-                .memberUid(cart.getMemberUid())
                 .bookId(cart.getBookId())
                 .bookName(book.getBookName())
                 .quantity(cart.getQuantity())
