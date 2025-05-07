@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import Modal from "@/components/common/Modal.vue";
+import {BDropdownDivider} from "bootstrap-vue-3";
 
 const emit = defineEmits(["confirm-delete"]);
 const showModal = ref(false);
@@ -29,7 +30,7 @@ const confirmDelete = () => {
 <template>
     <tr>
         <td class="post-image">
-            <img :src="post.imageUrl" alt="post.title" />
+            <img :src="post.imageUrl || '../../../../public/images/placeholder.png'" alt="post.title" />
         </td>
 
         <td class="post-infos" :title="post.title">
@@ -40,6 +41,18 @@ const confirmDelete = () => {
             <p class="post-content">
                 {{ post.content }}
             </p>
+
+            <div class="post-actions">
+                <span class="comment">
+                    💬 {{ post.comment }}
+                </span>
+                <span class="like">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="m18 1-6 4-6-4-6 5v7l12 10 12-10V6z"></path>
+                    </svg>
+                    {{ post.like }}
+                </span>
+            </div>
         </td>
 
         <td v-if="showDeleteButton" class="delete-cell">
@@ -117,4 +130,21 @@ td {
 .delete-button:hover {
     background-color: #e3d3b2;
 }
+
+.comment, .like{
+    color: #391902;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px 4px 0px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    justify-content: flex-end;
+}
+
+.like svg {
+    width: 16px;
+    height: 16px;
+    transition: fill 0.2s;
+}
+
 </style>
