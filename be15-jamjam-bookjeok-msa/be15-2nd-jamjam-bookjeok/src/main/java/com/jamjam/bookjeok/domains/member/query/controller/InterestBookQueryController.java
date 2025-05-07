@@ -16,7 +16,7 @@ public class InterestBookQueryController {
 
     private final InterestBookQueryService interestBookQueryService;
 
-    @GetMapping("/{memberId}/interest-books")
+    @GetMapping("/members/{memberId}/interest/books")
     public ResponseEntity<ApiResponse<InterestBookListResponse>> getInterestBooListByMemberId(
             @PathVariable String memberId,
             @Validated PageRequest pageRequest
