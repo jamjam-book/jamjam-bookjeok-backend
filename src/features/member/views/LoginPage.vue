@@ -20,14 +20,14 @@
                         placeholder="비밀번호를 입력해주세요."
                 />
             </div>
-            <button class="login-button" @click="login">로그인</button>
+            <button class="login-button" @click="handleLogin">로그인</button>
             <div class="links">
                 <RouterLink to="/signup">회원가입</RouterLink>
                 <RouterLink to="/find-id">아이디 찾기</RouterLink>
                 <RouterLink to="/password/reset-link">비밀번호 찾기</RouterLink>
             </div>
         </div>
-        <!-- 모달 컴포넌트 사용 -->
+
         <Modal
                 :visible="modalVisible"
                 :message="modalMessage"
@@ -39,7 +39,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Modal from '@/components/common/Modal2.vue' // 모달 컴포넌트 경로에 맞게 import
+import Modal from '@/components/common/Modal2.vue'
+import { useAuthStore } from '@/stores/auth'
+import {loginUser} from "@/lib/user.js";
 
 const memberId = ref('')
 const password = ref('')
@@ -49,14 +51,30 @@ const router = useRouter()
 const modalVisible = ref(false)
 const modalMessage = ref('')
 
-const login = () => {
-    if (memberId.value === 'admin' && password.value === '1234') {
-        router.push('/')
-    } else {
-        modalMessage.value = "아이디 또는 비밀번호를 확인해주세요"
-        modalVisible.value = true
+// Pinia 인증 스토어
+const authStore = useAuthStore()
+
+const handleLogin = async () => {
+    try {
+        const resp = await loginUser( {
+            memberId: memberId.value,
+            password: password.value
+        })
+
+        console.log(memberId);
+        console.log(password);
+
+        const at = resp.data.data.accessToken;
+        // Pinia의 저장소에 access token 저장
+        authStore.setAuth(at);
+        await router.push('/')
+    } catch (e) {
+        modalMessage.value = '아이디 또는 비밀번호를 확인해주세요.';
+        modalVisible.value = true;
+        console.log('로그인 실패', e);
     }
 }
+
 </script>
 
 <style scoped>
@@ -71,7 +89,6 @@ const login = () => {
     padding-top: 0;
 }
 
-/* 로고 이미지만 중앙에 */
 .main-login-logo {
     width: 140px;
     height: auto;
@@ -79,7 +96,6 @@ const login = () => {
     display: block;
 }
 
-/* 로그인 폼 */
 .form-box {
     width: 430px;
     margin-top: 0;
@@ -122,7 +138,6 @@ input:focus {
     border-color: #d1bfa3;
 }
 
-/* 로그인 버튼 */
 .login-button {
     width: 100%;
     height: 38px;
@@ -141,7 +156,6 @@ input:focus {
     background-color: #f2e1c4;
 }
 
-/* 하단 링크 */
 .links {
     display: flex;
     justify-content: space-between;
