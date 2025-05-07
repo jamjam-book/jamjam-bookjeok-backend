@@ -75,6 +75,7 @@ naver:
 
 image:
   image-dir: ${IMAGE-DIRECTORY}
+  os-image-dir: ${OS-IMAGE-DIR}
   image-url: ${IMAGE-URL}
 
 springdoc:
