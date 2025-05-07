@@ -1,7 +1,7 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import * as yup from "yup";
-import { createPasswordResetLink } from "@/features/member/passwordApi.js";
+import { createPasswordResetLink } from "@/features/member/passwordResetApi.js";
 import Modal from "@/components/common/Modal2.vue";
 
 const buttonText = '비밀번호 재설정 이메일 발송';
