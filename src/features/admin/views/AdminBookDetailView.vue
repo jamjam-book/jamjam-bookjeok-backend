@@ -53,7 +53,7 @@ onMounted(async () => {
     book.value = res.data.data
 })
 
-const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+const IMAGE_BASE_URL = 'http://localhost:8888/images/';
 
 const fullImageUrl = computed(() => {
     return book.value.imageUrl.startsWith('http')
