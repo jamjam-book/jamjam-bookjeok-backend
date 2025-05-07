@@ -32,14 +32,14 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 도서를 등록하는 테스트")
     void testCreateBookToCart() throws Exception {
+        String memberId = "user01";
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(33L)
                 .bookName("문학으로 본 심리학")
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(post("/api/v1/carts")
+        mockMvc.perform(post("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -61,13 +61,13 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 도서를 등록할 때 필요한 정보[책 이름]가 없으면 예외가 발생하는 테스트")
     void testCreateBookToCartException() throws Exception {
+        String memberId = "user01";
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(2L)
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(post("/api/v1/carts")
+        mockMvc.perform(post("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -81,14 +81,14 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 있는 도서 수량을 변경하는 테스트")
     void testModifyBookQuantity() throws Exception {
+        String memberId = "user01";
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(1L)
                 .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(5)
                 .build();
 
-        mockMvc.perform(put("/api/v1/carts")
+        mockMvc.perform(put("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -110,14 +110,14 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 도서 정보가 없을 때 수량 변경을 시도하면 예외가 발생하는 테스트")
     void testModifyBookQuantityException() throws Exception {
+        String memberId = "user01";
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(3L)
                 .bookName("노르웨이의 숲")
                 .quantity(7)
                 .build();
 
-        mockMvc.perform(put("/api/v1/carts")
+        mockMvc.perform(put("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -131,14 +131,14 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 있는 도서 정보를 삭제하는 테스트")
     void testDeleteBookFromCartByMemberId() throws Exception {
+        String memberId = "user01";
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(1L)
                 .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(10)
                 .build();
 
-        mockMvc.perform(delete("/api/v1/carts")
+        mockMvc.perform(delete("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))
@@ -153,14 +153,14 @@ class CartCommandControllerTest {
     @Test
     @DisplayName("장바구니에 없는 도서 정보를 삭제할 때 예외가 발생하는 테스트")
     void testDeleteBookFromCartByMemberIdException() throws Exception {
+        String memberId = "user01";;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(100L)
                 .bookName("Clean Code")
                 .quantity(1)
                 .build();
 
-        mockMvc.perform(delete("/api/v1/carts")
+        mockMvc.perform(delete("/api/v1/members/" + memberId + "/carts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartRequest))

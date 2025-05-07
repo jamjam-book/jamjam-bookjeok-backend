@@ -5,10 +5,10 @@ import com.jamjam.bookjeok.domains.cart.command.dto.response.CartResponse;
 
 public interface CartCommandService {
 
-    CartResponse createBookToCart(CartRequest cartRequest);
+    CartResponse createBookToCart(Long memberUid, CartRequest cartRequest);
 
-    CartResponse modifyBookQuantity(CartRequest cartRequest);
+    CartResponse modifyBookQuantity(Long memberUid, CartRequest cartRequest);
 
-    void deleteBookFromCartByMemberId(CartRequest cartRequest);
+    void deleteBookFromCartByMemberId(Long memberUid, CartRequest cartRequest);
 
 }

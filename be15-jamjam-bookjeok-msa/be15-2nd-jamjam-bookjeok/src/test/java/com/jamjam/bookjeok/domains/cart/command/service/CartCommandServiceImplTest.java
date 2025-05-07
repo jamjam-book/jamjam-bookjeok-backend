@@ -27,14 +27,14 @@ class CartCommandServiceImplTest {
     @Test
     @DisplayName("장바구니에 도서 정보 추가하는 테스트")
     void testCreateBookToCart() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(33L)
                 .bookName("문학으로 본 심리학")
                 .quantity(10)
                 .build();
 
-        CartResponse cartResponse = cartCommandService.createBookToCart(cartRequest);
+        CartResponse cartResponse = cartCommandService.createBookToCart(memberUid, cartRequest);
 
         log.info("cartResponse: {}", cartResponse.toString());
 
@@ -50,14 +50,14 @@ class CartCommandServiceImplTest {
     @Test
     @DisplayName("장바구니에 도서 정보 추가할 때 동일한 도서 정보가 있으면 수량을 증가시키는 테스트")
     void testCreateBookToCartAddQuantity() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(1L)
                 .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(5)
                 .build();
 
-        CartResponse cartResponse = cartCommandService.createBookToCart(cartRequest);
+        CartResponse cartResponse = cartCommandService.createBookToCart(memberUid, cartRequest);
 
         log.info("cartResponse: {}", cartResponse.toString());
 
@@ -73,14 +73,14 @@ class CartCommandServiceImplTest {
     @Test
     @DisplayName("장바구니에 도서 정보가 존재하는 경우 도서 수량을 변경하는 테스트")
     void testModifyBookQuantity() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(1L)
                 .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(3)
                 .build();
 
-        CartResponse cartResponse = cartCommandService.modifyBookQuantity(cartRequest);
+        CartResponse cartResponse = cartCommandService.modifyBookQuantity(memberUid, cartRequest);
 
         log.info("cartResponse: {}", cartResponse.toString());
 
@@ -95,14 +95,14 @@ class CartCommandServiceImplTest {
     @Test
     @DisplayName("장바구니에서 도서 수량을 변경할 때, 도서 정보가 존재하지 않으면 예외가 발생하는 테스트")
     void testModifyBookQuantityException() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(32L)
                 .bookName("다 함께 쓰는 여행기")
                 .quantity(3)
                 .build();
 
-        assertThatThrownBy(() -> cartCommandService.modifyBookQuantity(cartRequest))
+        assertThatThrownBy(() -> cartCommandService.modifyBookQuantity(memberUid, cartRequest))
                 .isInstanceOf(CartBookNotFoundException.class)
                 .hasMessage("장바구니에 해당 도서 정보가 없습니다.");
     }
@@ -110,27 +110,27 @@ class CartCommandServiceImplTest {
     @Test
     @DisplayName("memberUid와 bookId로 장바구니에 있는 도서 정보 삭제하는 테스트")
     void testDeleteBookFromCartByMemberId() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(1L)
                 .bookName("우리가 빛의 속도로 갈 수 없다면")
                 .quantity(10)
                 .build();
 
-        assertDoesNotThrow(() -> cartCommandService.deleteBookFromCartByMemberId(cartRequest));
+        assertDoesNotThrow(() -> cartCommandService.deleteBookFromCartByMemberId(memberUid, cartRequest));
     }
 
     @Test
     @DisplayName("장바구니에 없는 도서 정보를 삭제할 때 예외가 발생하는 테스트")
     void testDeleteBookFromCartByMemberIdException() {
+        Long memberUid = 1L;
         CartRequest cartRequest = CartRequest.builder()
-                .memberUid(1L)
                 .bookId(2L)
                 .bookName("채식주의자")
                 .quantity(1)
                 .build();
 
-        assertThatThrownBy(() -> cartCommandService.deleteBookFromCartByMemberId(cartRequest))
+        assertThatThrownBy(() -> cartCommandService.deleteBookFromCartByMemberId(memberUid, cartRequest))
                 .isInstanceOf(CartBookNotFoundException.class)
                 .hasMessage("장바구니에 해당 도서 정보가 없습니다.");
     }
