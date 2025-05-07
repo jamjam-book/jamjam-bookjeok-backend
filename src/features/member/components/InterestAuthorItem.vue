@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import Modal from "@/components/common/Modal.vue";
+import { deleteInterestAuthors} from "@/features/member/interestApi.js";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const memberId = route.params.memberId;
 
 const { author } = defineProps({
     author: {
@@ -8,32 +13,41 @@ const { author } = defineProps({
         required: true,
     },
 });
-
-const emit = defineEmits(["confirm-delete"]);
+const authorId = author.authorId;
 
 const showModal = ref(false);
 const openModal = () => (showModal.value = true);
 const closeModal = () => (showModal.value = false);
-const confirmDelete = () => {
-    emit("confirm-delete", author.authorId);
-    closeModal();
+
+const handleDelete = async () => {
+    try {
+        await deleteInterestAuthors(memberId, authorId);
+        console.log("관심 작가가 삭제되었습니다.");
+
+        // 삭제 한 이후에 새로 고침하기
+        window.location.reload();
+
+        closeModal();
+    } catch (e) {
+        console.error("관심 작가를 삭제되지 않았습니다.", e);
+    }
 };
 </script>
 
+
 <template>
-<!-- 작가 상세 페이지로 이동하기 위한 router-link -->
-<!--    <router-link-->
-<!--            :to="`/authors/${author.authorId}`">-->
     <tr>
         <td class="author-name" :title="author.authorName">
-            {{ author.authorName }}
+            <RouterLink :to="`/books/authors/${author.authorId}`" id="no-line">
+                {{ author.authorName }}
+            </RouterLink>
         </td>
         <td class="divider-cell">
             <div class="vertical-divider"></div>
         </td>
         <td class="book-list">
       <span v-for="(book, i) in author.bookList" :key="i">
-        {{ book }}<span v-if="i < author.bookList.length - 1">, </span>
+        {{ book.bookName }}<span v-if="i < author.bookList.length - 1">, </span>
       </span>
         </td>
         <td class="delete-cell">
@@ -44,7 +58,7 @@ const confirmDelete = () => {
     <Modal
             :visible="showModal"
             :message="`${author.authorName} 작가를 관심 목록에서 삭제하시겠습니까?`"
-            @confirm="confirmDelete"
+            @confirm="handleDelete"
             @cancel="closeModal"
     />
 </template>
@@ -61,13 +75,14 @@ td {
 
 .author-name {
     font-weight: bold;
-    color: #391902;
     width: 15%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: center;
 }
 
+#no-line {
+    text-decoration: none;
+    color: #391902;
+}
 
 .divider-cell {
     text-align: center;
