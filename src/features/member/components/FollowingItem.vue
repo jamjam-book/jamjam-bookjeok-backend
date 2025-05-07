@@ -1,5 +1,9 @@
 <script setup>
 
+import {deleteFollowings} from "@/features/member/interestApi.js";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
 const { following } = defineProps({
     following: {
         type: Object,
@@ -7,11 +11,16 @@ const { following } = defineProps({
     },
 });
 
-const emit = defineEmits(["confirm-delete"]);
+const followerId = route.params.memberId;
+const followingId = following.memberId;
 
-// 상위로 전파하기
-const confirmDelete = () => {
-    emit("confirm-delete", following.memberId);
+const handleDelete = async () => {
+    try {
+        await deleteFollowings(followerId ,followingId);
+        window.location.reload();
+    } catch (e) {
+        console.log("언팔로우 되지 않았습니다.", e);
+    }
 };
 </script>
 
@@ -24,7 +33,7 @@ const confirmDelete = () => {
             </td>
         </router-link>
         <td class="delete-cell">
-            <button @click="confirmDelete" class="delete-button">언팔로우</button>
+            <button @click="handleDelete" class="delete-button">언팔로우</button>
         </td>
     </tr>
 </template>

@@ -7,11 +7,6 @@ const { followings } = defineProps({
         required: true
     }
 })
-
-const confirmDelete = () => {
-    defineEmits("confirm-delete", followings.memberId);
-};
-
 </script>
 
 <template>
@@ -23,10 +18,7 @@ const confirmDelete = () => {
                     <td colspan="4"><hr class="following-divider" /></td>
                 </tr>
 
-                <FollowingItem
-                        :following="following"
-                        @confirm-delete="confirmDelete"
-                />
+                <FollowingItem :following="following"/>
 
                 <tr>
                     <td colspan="4"><hr class="following-divider" /></td>
