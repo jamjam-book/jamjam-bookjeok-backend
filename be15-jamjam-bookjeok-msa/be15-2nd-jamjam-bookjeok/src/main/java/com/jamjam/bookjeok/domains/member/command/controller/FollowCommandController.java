@@ -19,8 +19,7 @@ public class FollowCommandController {
 
     private final FollowCommandService followCommandService;
 
-    // 로그인 끝나면 이 부분 수정하기
-    @PostMapping("/{followerId}/follow")
+    @PostMapping("/members/{followerId}/followings")
     public ResponseEntity<ApiResponse<FollowMemberResponse>> createFollow(
             @RequestBody @Validated FollowMemberRequest followMemberRequest,
             @PathVariable String followerId
@@ -42,12 +41,11 @@ public class FollowCommandController {
                 .body(ApiResponse.success(response));
     }
 
-    @DeleteMapping("/{followerId}/follow")
+    @DeleteMapping("members/{followerId}/followings/{followingId}")
     public ResponseEntity<ApiResponse<Void>> deleteFollow(
-            @RequestBody @Validated FollowMemberRequest followMemberRequest,
-            @PathVariable String followerId
+            @PathVariable String followerId,
+            @PathVariable String followingId
     ){
-        String followingId = followMemberRequest.getFollowingId();
 
         log.info("followingId : {}", followingId);
         log.info("followerId : {}", followerId);

@@ -19,7 +19,7 @@ public class FollowQueryController {
 
     private final FollowQueryService followQueryService;
 
-    @GetMapping("/{memberId}/followings")
+    @GetMapping("/members/{memberId}/followings")
     public ResponseEntity<ApiResponse<List<FollowDTO>>> getFollowListByMemberUid(
             @PathVariable String memberId
     ){
@@ -28,7 +28,7 @@ public class FollowQueryController {
         return ResponseEntity.ok(ApiResponse.success(followList));
     }
 
-    @GetMapping("/{writerId}/postList")
+    @GetMapping("/{writerId}/posts")
     public ResponseEntity<ApiResponse<List<PostSummaryDTO>>> getPostListByWriterId(
             @PathVariable String writerId
     ){
