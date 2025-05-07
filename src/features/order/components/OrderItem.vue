@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps} from "vue";
+import {computed, defineProps} from "vue";
 
 const props = defineProps({
     item: {
@@ -7,11 +7,21 @@ const props = defineProps({
         required: true
     }
 });
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return props.item.image.startsWith('http')
+            ? props.item.image
+            : IMAGE_BASE_URL + props.item.image
+})
+
+console.log(fullImageUrl);
 </script>
 
 <template>
     <div class="order-row">
-        <img :src="item.image" alt="도서 이미지" class="book-image"/>
+        <img :src="fullImageUrl" alt="도서 이미지" class="book-image"/>
 
         <div class="info-row">
             <div class="header-row">
@@ -37,8 +47,8 @@ const props = defineProps({
 }
 
 .book-image {
-    width: 110px;
-    height: 136px;
+    width: auto;
+    height: 160px;
     object-fit: cover;
     margin-right: 24px;
     border-radius: 4px;
