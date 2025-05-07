@@ -68,65 +68,196 @@
         </association>
     </resultMap>
 
-    <select id="findBookListOrderByOption" resultMap="bookDetailResultMap">
+    <select id="findBookListOrderByOption" resultMap="bookDetailResultMap" parameterType="com.jamjam.bookjeok.domains.book.query.dto.BookSearchCondition">
         SELECT
-            a.book_id
-            , a.book_name
-            , a.book_info
-            , a.isbn
-            , a.published_at
-            , a.price
-            , a.stock_quantity
-            , a.image_url
-            , b.category_id
-            , b.category_name
-            , c.publisher_name
-            , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
-            , COUNT(DISTINCT f.member_uid) AS interestCount
-            , SUM(g.quantity) AS ordersCount
+        a.book_id,
+        a.book_name,
+        a.book_info,
+        a.isbn,
+        a.published_at,
+        a.price,
+        a.stock_quantity,
+        a.image_url,
+        b.category_id,
+        b.category_name,
+        c.publisher_name,
+        a.is_deleted,
+        GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors,
+        COUNT(DISTINCT f.member_uid) AS interestCount,
+        SUM(g.quantity) AS ordersCount
+        FROM (
+        SELECT a.book_id
         FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        <if test="keywordType != null and keyword != null and keyword != '' and keywordType == 'author'">
+            JOIN book_authors d ON a.book_id = d.book_id
+            JOIN authors e ON d.author_id = e.author_id
+        </if>
+        WHERE a.is_deleted = false
+
+        <if test="minPrice != null and maxPrice != null">
+            AND a.price BETWEEN #{minPrice} AND #{maxPrice}
+        </if>
+
+        <!-- 카테고리 조건 -->
+        <if test="categoryIds != null and categoryIds.size > 0">
+            AND b.category_id IN
+            <foreach item="id" collection="categoryIds" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+
+        <!-- 검색 조건 -->
+        <if test="keywordType != null and keyword != null and keyword != ''">
+            <choose>
+                <when test="keywordType == 'author'">
+                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'isbn'">
+                    AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'title'">
+                    AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+
+        <choose>
+            <when test="sort == 'ordersDesc'">
+                ORDER BY a.book_id DESC
+            </when>
+            <when test="sort == 'interest'">
+                ORDER BY a.book_id DESC
+            </when>
+            <when test="sort == 'low'">
+                ORDER BY a.price ASC
+            </when>
+            <when test="sort == 'high'">
+                ORDER BY a.price DESC
+            </when>
+            <otherwise>
+                ORDER BY a.created_at DESC
+            </otherwise>
+        </choose>
+
+        LIMIT #{limit} OFFSET #{offset}
+        ) base
+        JOIN books a ON a.book_id = base.book_id
         JOIN book_categories b ON a.category_id = b.category_id
         JOIN publishers c ON a.publisher_id = c.publisher_id
         JOIN book_authors d ON a.book_id = d.book_id
         JOIN authors e ON d.author_id = e.author_id
         LEFT JOIN interest_books f ON a.book_id = f.book_id
         LEFT JOIN order_details g ON a.book_id = g.book_id
-        WHERE a.is_deleted = false
-        <if test="option != null">
-            <if test="option == 'category'">
-                AND b.category_id = #{ search }
-            </if>
-            <if test="option == 'author'">
-                AND e.author_name LIKE CONCAT('%', #{ search }, '%')
-            </if>
-            <if test="option == 'name'">
-                AND a.book_name LIKE CONCAT('%', #{ search }, '%')
-            </if>
-            <if test="option == 'publisher'">
-                AND c.publisher_name LIKE CONCAT('%', #{ search }, '%')
-            </if>
-        </if>
         GROUP BY a.book_id
-        <if test="array != null">
-            <if test="array == 'interest'">
-                ORDER BY interestCount DESC;
-            </if>
-            <if test="array == 'orders'">
-                ORDER BY ordersCount DESC;
-            </if>
+        <choose>
+            <when test="sort == 'ordersDesc'">
+                ORDER BY ordersCount DESC
+            </when>
+            <when test="sort == 'interest'">
+                ORDER BY interestCount DESC
+            </when>
+            <when test="sort == 'low'">
+                ORDER BY a.price ASC
+            </when>
+            <when test="sort == 'high'">
+                ORDER BY a.price DESC
+            </when>
+            <otherwise>
+                ORDER BY a.created_at DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="getBookListCount" resultType="int" parameterType="com.jamjam.bookjeok.domains.book.query.dto.BookSearchCondition">
+        SELECT COUNT(DISTINCT a.book_id)
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+
+        <!-- 작가 검색 시 추가 JOIN -->
+        <if test="keywordType != null and keywordType == 'author' and keyword != null and keyword != ''">
+            JOIN book_authors d ON a.book_id = d.book_id
+            JOIN authors e ON d.author_id = e.author_id
         </if>
-        <if test="array == null">
-            ORDER BY a.created_at DESC;
+
+        WHERE a.is_deleted = false
+
+        <if test="minPrice != null and maxPrice != null">
+            AND a.price BETWEEN #{minPrice} AND #{maxPrice}
+        </if>
+
+        <!-- 카테고리 조건 -->
+        <if test="categoryIds != null and categoryIds.size > 0">
+            AND b.category_id IN
+            <foreach item="id" collection="categoryIds" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+
+        <!-- 검색 조건 -->
+        <if test="keywordType != null and keyword != null and keyword != ''">
+            <choose>
+                <when test="keywordType == 'author'">
+                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'isbn'">
+                    AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'title'">
+                    AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
         </if>
     </select>
 
-    <select id="findAllCategory" resultType="BookCategoryDTO">
+    <select id="findBookCategory" resultType="com.jamjam.bookjeok.domains.book.query.dto.BookCategoryDTO" >
         SELECT
-              category_id
-            , category_name
-        FROM book_categories
-        WHERE is_deleted = false;
+        bc.category_id       AS categoryId,
+        bc.category_name     AS categoryName,
+        bc.created_at        AS createdAt,
+        bc.modified_at       AS modifiedAt,
+        bc.is_deleted        AS isDeleted,
+        COUNT(b.book_id)     AS bookCount
+        FROM book_categories bc
+        JOIN books b ON bc.category_id = b.category_id
+        WHERE b.is_deleted = false
+        GROUP BY bc.category_id, bc.category_name, bc.created_at, bc.modified_at, bc.is_deleted
+        ORDER BY bc.category_name ASC
     </select>
+
+    <select id="getPriceRange" resultType="com.jamjam.bookjeok.domains.book.query.dto.PriceRangeDTO" parameterType="com.jamjam.bookjeok.domains.book.query.dto.BookSearchCondition">
+        SELECT
+        MIN(a.price) AS min,
+        MAX(a.price) AS max
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        LEFT JOIN book_authors d ON a.book_id = d.book_id
+        LEFT JOIN authors e ON d.author_id = e.author_id
+        WHERE a.is_deleted = false
+
+        <if test="categoryIds != null and categoryIds.size() > 0">
+            AND b.category_id IN
+            <foreach item="id" collection="categoryIds" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="keywordType != null and keyword != null and keyword != ''">
+            <choose>
+                <when test="keywordType == 'author'">
+                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'isbn'">
+                    AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'title'">
+                    AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+    </select>
+
 
     <!-- 회원 : 도서 상세 조회 -->
     <select id="getBookDetail" resultMap="bookDetailPageResultMap">
@@ -152,13 +283,13 @@
         LEFT JOIN publishers c ON a.publisher_id = c.publisher_id
         LEFT JOIN book_authors d ON a.book_id = d.book_id
         LEFT JOIN interest_books e ON a.book_id = e.book_id
-        WHERE a.isbn = #{ isbn }
+        WHERE a.book_id = #{ bookId }
         AND a.is_deleted = 0
         GROUP BY a.book_id;
     </select>
 
     <select id="getAuthors" resultType="AuthorDTO">
-        SELECT DISTINCT c.author_name
+        SELECT DISTINCT c.author_id, c.author_name
         FROM books a
         JOIN book_authors b ON a.book_id = b.book_id
         JOIN authors c ON b.author_id = c.author_id
@@ -179,7 +310,9 @@
         JOIN books b ON a.book_id = b.book_id
         LEFT JOIN members c ON a.member_uid = c.member_uid
         WHERE a.book_id = #{ bookId }
-        AND a.is_deleted = 0;
+        AND a.is_deleted = 0
+        ORDER BY a.created_at DESC
+        LIMIT #{ pageRequest.limit } OFFSET #{ pageRequest.offset };
     </select>
 
     <!-- 판매량 10위 -->
@@ -249,6 +382,33 @@
                 FROM reviews s1
                 WHERE s1.book_id = #{ bookId }
             )
+    </select>
+
+    <select id="getAuthorOtherBooks" resultType="com.jamjam.bookjeok.domains.book.query.dto.AuthorOtherBookDTO">
+        SELECT DISTINCT
+        b.book_id,
+        b.book_name,
+        b.image_url,
+        b.price,
+        a.author_id
+        FROM books b
+        JOIN book_authors ba ON b.book_id = ba.book_id
+        JOIN authors a ON ba.author_id = a.author_id
+        WHERE b.is_deleted = false
+
+        <if test="bookId != null">
+            AND b.book_id != #{bookId}
+        </if>
+
+        <if test="authorIds != null and authorIds.size() > 0">
+            AND a.author_id IN
+            <foreach collection="authorIds" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+
+        ORDER BY b.created_at DESC
+        LIMIT #{limit}
     </select>
 
 </mapper>

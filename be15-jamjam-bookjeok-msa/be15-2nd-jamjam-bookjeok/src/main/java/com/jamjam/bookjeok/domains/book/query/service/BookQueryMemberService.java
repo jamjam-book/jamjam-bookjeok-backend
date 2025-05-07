@@ -1,16 +1,15 @@
 package com.jamjam.bookjeok.domains.book.query.service;
 
 import com.jamjam.bookjeok.domains.book.command.dto.request.ReviewRequest;
-import com.jamjam.bookjeok.domains.book.query.dto.BookDetailDTO;
-import com.jamjam.bookjeok.domains.book.query.dto.BookDetailPageDTO;
-import com.jamjam.bookjeok.domains.book.query.dto.PopularBookDTO;
+import com.jamjam.bookjeok.domains.book.query.dto.*;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
 
 import java.util.List;
 import java.util.Map;
 
 public interface BookQueryMemberService {
 
-    List<BookDetailDTO> getBookList(Map<String, Object> params);
+    List<BookDetailDTO> getBookList(BookSearchCondition condition);
 
     BookDetailPageDTO getBookDetail(Map<String, Object> params);
 
@@ -19,4 +18,14 @@ public interface BookQueryMemberService {
     boolean validCheckBuyer(ReviewRequest reviewRequest);
 
     List<BookDetailDTO> getAuthorBookList(Map<String, Object> params);
+
+    ReviewListDTO getBookReviews(Long bookId, PageRequest pageRequest);
+
+    int getBookListCount(BookSearchCondition condition);
+
+    List<BookCategoryDTO> findBookCategory();
+
+    PriceRangeDTO getPriceRange(BookSearchCondition condition);
+
+    List<AuthorOtherBookDTO> getAuthorOtherBooks(AuthorOthersSearchCondition condition);
 }

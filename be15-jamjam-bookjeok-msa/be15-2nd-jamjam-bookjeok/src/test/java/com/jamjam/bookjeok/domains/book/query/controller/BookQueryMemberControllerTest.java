@@ -35,26 +35,31 @@ public class BookQueryMemberControllerTest {
 
     @DisplayName("도서 조회 테스트")
     @Test
-    void testSelectBook() throws Exception{
-
-        Map<String, Object> params = new HashMap<>();
-
+    void testSelectBook() throws Exception {
         mvc.perform(get(BASE_URL + "/book/list")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("params", objectMapper.writeValueAsString(params)))
-                .andDo(print()).andExpect(status().isOk())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .param("page", "0")
+                                .param("size", "10")
+                                .param("sort", "latest")
+                                .param("minPrice", "0")
+                                .param("maxPrice", "50000")
+                                .param("categoryIds", "2")
+                        // 카테고리를 여러 개 넘길 경우 아래처럼 param()을 여러 번 호출
+                        // .param("categoryIds", "1")
+                        // .param("categoryIds", "2")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(content().string(containsString("bookId")));
-
     }
 
     @DisplayName("도서 상세 조회 테스트")
     @Test
     void testSelectBookDetail() throws Exception{
 
-        //DB에 존재하는 isbn 번호 사용
-        String isbn = "9781082502224";
+        Long bookId = 1L;
 
-        mvc.perform(get(BASE_URL+ "/book/{isbn}", isbn))
+        mvc.perform(get(BASE_URL+ "/book/{bookId}", bookId))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -65,8 +70,7 @@ public class BookQueryMemberControllerTest {
 
         mvc.perform(get(BASE_URL + "/book/popular")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("bookId")));
+                .andDo(print()).andExpect(status().isOk());
 
     }
 

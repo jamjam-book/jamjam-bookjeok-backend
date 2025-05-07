@@ -9,7 +9,7 @@ import java.util.Map;
 @Mapper
 public interface BookMapper {
 
-    List<BookDetailDTO> findBookListOrderByOption(Map<String, Object> params);
+    List<BookDetailDTO> findBookListOrderByOption(BookSearchCondition params);
 
     List<BookCategoryDTO> findAllCategory();
 
@@ -24,4 +24,12 @@ public interface BookMapper {
     Long validCheckReviewer(Map<String, Object> params);
 
     List<BookDetailDTO> getAuthorBooks(Map<String, Object> params);
+
+    int getBookListCount(BookSearchCondition condition);
+
+    List<BookCategoryDTO> findBookCategory();
+
+    PriceRangeDTO getPriceRange(BookSearchCondition condition);
+
+    List<AuthorOtherBookDTO> getAuthorOtherBooks(AuthorOthersSearchCondition condition);
 }

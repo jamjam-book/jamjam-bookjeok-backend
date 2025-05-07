@@ -9,6 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthorDTO {
 
+    private Long authorId;
     private String authorName;
+
+    public AuthorDTO(String authorName) {
+        this.authorName = authorName;
+    }
 
 }
