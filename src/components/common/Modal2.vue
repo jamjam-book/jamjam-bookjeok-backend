@@ -1,5 +1,5 @@
 <template>
-    <div v-if="visible" class="modal">
+    <div v-if="visible" class="modal" tabindex="0" @keydown.enter="handleConfirm">
         <div class="modal-content">
             <p>{{ message }}</p>
             <div class="modal-buttons">
@@ -9,26 +9,29 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: "Modal",
-    props: {
-        visible: {
-            type: Boolean,
-            required: true
-        },
-        message: {
-            type: String,
-            default: "완료되었습니다."
-        }
-    },
-    emits: ['close'],
-    methods: {
-        handleConfirm() {
-            this.$emit('close');
-        }
-    }
+<script setup>
+import { nextTick, watch } from 'vue'
+
+const props = defineProps({
+    visible: { type: Boolean, required: true },
+    message: { type: String, default: "완료되었습니다." }
+})
+const emit = defineEmits(['close'])
+
+function handleConfirm() {
+    emit('close')
 }
+
+// 모달 열릴 때 자동 포커스
+function focusModal() {
+    nextTick(() => {
+        const modal = document.querySelector('.modal')
+        if (modal) modal.focus()
+    })
+}
+watch(() => props.visible, (val) => {
+    if (val) focusModal()
+})
 </script>
 
 <style scoped>
@@ -43,8 +46,8 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
+    outline: none;
 }
-
 .modal-content {
     background-color: #fff;
     margin: 15% auto;
@@ -54,7 +57,6 @@ export default {
     text-align: center;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-
 .modal-content p {
     color: #391902;
     font-size: 16px;
@@ -63,12 +65,10 @@ export default {
     white-space: pre-line;
     word-break: keep-all;
 }
-
 .modal-buttons {
     display: flex;
     justify-content: center;
 }
-
 .confirm-btn {
     padding: 6px 16px;
     font-size: 12px;
