@@ -1,3 +1,5 @@
+import ProfileView from "@/features/member/views/ProfileView.vue";
+
 export const memberRoutes = [
     {
         path: '/password/reset-link',
@@ -15,6 +17,7 @@ export const memberRoutes = [
         component: () => import('@/features/member/views/MyPageView.vue'),
         children: [
             { path: '', redirect: 'profile' },
+            { path: '/profile', component: () => import('@/features/member/views/ProfileView.vue')},
             { path: '/:memberId', component: () => import('@/features/member/views/PasswordResetRequestView.vue')},
             { path: ':memberId/password/modify', component: () => import('@/features/member/views/PasswordModifyView.vue')},
             { path: ':memberId/followings', component: () => import('@/features/member/views/FollowingView.vue')},
@@ -43,5 +46,9 @@ export const memberRoutes = [
         path: '/signup',
         name: 'SignUp',
         component: () => import('@/features/member/views/SignUp.vue')
-    }
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: ProfileView }
 ];
