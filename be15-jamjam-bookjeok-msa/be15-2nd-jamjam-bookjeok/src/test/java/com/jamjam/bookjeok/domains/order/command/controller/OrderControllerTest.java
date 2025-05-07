@@ -55,6 +55,7 @@ class OrderControllerTest {
                         .orderStatusName("결제승인")
                         .items(List.of(
                                 OrderItemDTO.builder()
+                                        .bookId(1L)
                                         .bookName("책1")
                                         .quantity(2)
                                         .totalPrice(20000)
@@ -69,6 +70,7 @@ class OrderControllerTest {
                         .orderStatusName("결제승인")
                         .items(List.of(
                                 OrderItemDTO.builder()
+                                        .bookId(2L)
                                         .bookName("책2")
                                         .quantity(1)
                                         .totalPrice(15000)

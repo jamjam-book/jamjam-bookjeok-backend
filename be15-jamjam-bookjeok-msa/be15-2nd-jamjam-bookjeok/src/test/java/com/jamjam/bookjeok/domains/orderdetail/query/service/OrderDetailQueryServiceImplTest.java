@@ -41,6 +41,7 @@ class OrderDetailQueryServiceImplTest {
         books = List.of(
                 OrderDetailDTO.builder()
                         .orderId("ORD001")
+                        .bookId(1L)
                         .bookName("책이름01")
                         .isbn("9781082502299")
                         .totalPrice(15000)
@@ -71,6 +72,7 @@ class OrderDetailQueryServiceImplTest {
 
         assertNotNull(orderDetailResponse);
         assertThat(orderDetailResponse.orderId()).isEqualTo("ORD001");
+        assertThat(orderDetailResponse.books().get(0).bookId()).isEqualTo(1L);
         assertThat(orderDetailResponse.books().get(0).bookName()).isEqualTo("책이름01");
         assertThat(orderDetailResponse.books().get(0).isbn()).isEqualTo("9781082502299");
         assertThat(orderDetailResponse.books().get(0).totalPrice()).isEqualTo(15000);

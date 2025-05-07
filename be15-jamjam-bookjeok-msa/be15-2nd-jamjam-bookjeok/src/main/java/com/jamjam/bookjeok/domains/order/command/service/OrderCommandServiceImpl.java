@@ -86,6 +86,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     private OrderItemDTO mapToOrderItemDTO(OrderResponse response) {
         return OrderItemDTO.builder()
+                .bookId(response.bookId())
                 .bookName(response.bookName())
                 .quantity(response.quantity())
                 .totalPrice(response.totalPrice())
