@@ -3,12 +3,12 @@
         <!-- 좌측 정보 영역 -->
         <div class="info-left">
             <div class="author">
-                {{ book.author }}
+                {{ authorNames }}
                 <button class="wish-button" :class="{ active: isAuthorLiked }" @click="toggleAuthorLike">
                     관심작가 ♥
                 </button>
             </div>
-            <div class="publisher">{{ book.publisher }} | {{ book.publishDate }}</div>
+            <div class="publisher">{{ book.publisher.publisherName }} | {{ formatDate(book.publishedAt) }}</div>
             <div class="rating">{{ averageRating.toFixed(1) }}</div>
             <div class="stars">
                 <span
@@ -23,10 +23,10 @@
 
         <!-- 가운데: 도서 이미지 및 제목 -->
         <div class="info-center">
-            <h2 class="book-title">{{ book.title }}</h2>
-            <div class="book-sub">{{ book.author }} | {{ book.category }}</div>
+            <h2 class="book-title">{{ book.bookName }}</h2>
+            <div class="book-sub">{{ authorNames }} | {{ book.bookCategory.categoryName }}</div>
             <div class="book-image">
-                <img :src="book.imageUrl || defaultImage" alt="도서 이미지" class="book-img" />
+                <img :src="fullImageUrl || defaultImage" alt="도서 이미지" class="book-img" />
             </div>
         </div>
 
@@ -68,7 +68,7 @@ import { ref, computed } from 'vue';
 
 const props = defineProps({
     book: Object,
-    reviews: Array,
+    reviews: Object,
 });
 
 const defaultImage = 'images/placeholder.png';
@@ -76,10 +76,18 @@ const quantity = ref(1);
 const isAuthorLiked = ref(false);
 const isBookLiked = ref(false);
 
+const reviewArray = computed(() => props.reviews?.reviews || []);
+
+const authorNames = computed(() => {
+    console.log(`authors : ` + props.book.authors)
+    const authorName = (props.book.authors || []).map(author => author.authorName);
+    return authorName.join(', ');
+});
+
 const averageRating = computed(() => {
-    if (!props.reviews.length) return 0;
-    const sum = props.reviews.reduce((acc, r) => acc + r.rating, 0);
-    return sum / props.reviews.length;
+    if (!reviewArray.value.length) return 0;
+    const sum = reviewArray.value.reduce((acc, r) => acc + r.rating, 0);
+    return sum / reviewArray.value.length;
 });
 
 const getStarClass = (index, rating) => {
@@ -87,7 +95,8 @@ const getStarClass = (index, rating) => {
     if (rating >= index - 0.5) return 'half';
     return 'empty';
 };
-const reviewCount = ref(props.reviews.length);
+
+const reviewCount = computed(() => reviewArray.value.length);
 
 const increaseQuantity = () => {
     if (quantity.value < 5) quantity.value++;
@@ -110,6 +119,19 @@ const totalPrice = computed(() => props.book.price * quantity.value);
 const formatPrice = (price) => {
     return price.toLocaleString() + '원';
 };
+
+const formatDate = (dateStr) => {
+    const date = new Date(dateStr)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return props.book.imageUrl.startsWith('http')
+            ? props.book.imageUrl
+            : IMAGE_BASE_URL + props.book.imageUrl
+});
 </script>
 
 <style scoped>

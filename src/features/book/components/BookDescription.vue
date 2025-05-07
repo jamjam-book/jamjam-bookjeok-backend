@@ -11,11 +11,11 @@
             </div>
             <div class="info-row">
                 <span class="label">출판사</span>
-                <span>{{ book.publisher }}</span>
+                <span>{{ book.publisher.publisherName }}</span>
             </div>
             <div class="info-row">
                 <span class="label">출판일</span>
-                <span>{{ book.publishDate }}</span>
+                <span>{{ formatDate(book.publishedAt) }}</span>
             </div>
         </div>
     </div>
@@ -29,10 +29,14 @@ const props = defineProps({
 });
 
 const formattedDescription = computed(() => {
-    return props.book.description
-            ? props.book.description.replace(/\n/g, '<br/>')
+    return props.book.bookInfo
+            ? props.book.bookInfo.replace(/\n/g, '<br/>')
             : '';
 });
+const formatDate = (dateStr) => {
+    const date = new Date(dateStr)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
 </script>
 
 <style scoped>

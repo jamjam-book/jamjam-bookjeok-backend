@@ -18,7 +18,7 @@
                             :key="i"
                             class="star"
                             :class="{ selected: rating >= i }"
-                            @click="rating = i"
+                            @click="updateRating(i)"
                     >★</span>
                 </div>
                 <button class="submit-button" @click="submitReview">리뷰등록</button>
@@ -42,13 +42,13 @@
 
             <div class="summary-right">
                 <div class="donut-wrapper">
-                    <Doughnut :data="chartData" :options="options" :plugins="[centerTextPlugin]" />
+                    <Doughnut :data="chartData" :options="options"/>
                 </div>
             </div>
         </div>
 
         <!-- 리뷰 목록 -->
-        <div
+        <div    v-if="reviews"
                 v-for="review in paginatedReviews"
                 :key="review.id"
                 class="review-item"
@@ -68,7 +68,7 @@
         <!-- 페이징 -->
         <PagingBar
                 :currentPage="currentPage"
-                :totalPages="totalPages"
+                :totalPage="totalPages"
                 :totalItems="totalReviews"
                 @page-changed="(page) => currentPage = page"
         />
@@ -91,7 +91,10 @@ import PagingBar from "@/components/common/PagingBar.vue";
 ChartJS.register(Title, Tooltip, Legend, ArcElement, ChartDataLabels);
 
 const props = defineProps({
-    reviews: Array,
+    reviews: {
+        type: Object,
+        required: true
+    },
     isPurchaser: {
         type: Boolean,
         default: false
@@ -99,26 +102,30 @@ const props = defineProps({
     ratingCounts: Array,
 });
 
-const total = props.reviews.length;
+const reviewArray = computed(() => props.reviews?.reviews || []);
+
+const total = reviewArray.value.length;
 const showForm = ref(false);
 const newReview = ref('');
+const newRating = ref(0);
 const rating = ref(0);
 const currentPage = ref(1);
 const reviewsPerPage = 5;
 const reviewPlaceholder = '도서에 대한 리뷰를 100자 이내로 작성해주세요';
 
-const totalReviews = computed(() => props.reviews.length);
+const totalReviews = computed(() => reviewArray.value.length);
 const totalPages = computed(() => Math.ceil(totalReviews.value / reviewsPerPage));
 
 const averageRating = computed(() => {
-    if (!props.reviews.length) return 0;
-    return props.reviews.reduce((acc, r) => acc + r.rating, 0) / props.reviews.length;
+    if (!reviewArray.value.length) return 0;
+    return reviewArray.value.reduce((acc, r) => acc + r.rating, 0) / reviewArray.value.length;
 });
 
 const paginatedReviews = computed(() => {
     const start = (currentPage.value - 1) * reviewsPerPage;
-    return props.reviews.slice(start, start + reviewsPerPage);
+    return reviewArray.value.slice(start, start + reviewsPerPage) || [];
 });
+
 
 const chartData = {
     labels: ['1점', '2점', '3점', '4점', '5점'],
@@ -153,33 +160,27 @@ const options = {
     }
 };
 
-const centerTextPlugin = {
-    id: 'centerText',
-    beforeDraw(chart) {
-        const { width } = chart;
-        const ctx = chart.ctx;
-        ctx.save();
-        const centerX = width / 2;
-        const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillStyle = '#666';
-        const score = `${props.ratingCounts[4] || 0} / ${total}`;
-        ctx.fillText(score, centerX, centerY);
-        ctx.restore();
-    }
-};
-
 const getStarClass = (index, rating) => {
     if (rating >= index) return 'filled';
     if (rating >= index - 0.5) return 'half';
     return 'empty';
 };
 
+const emit = defineEmits(['submit-review']);
+
+const updateRating = (cnt) => {
+    rating.value = cnt;
+    newRating.value = cnt;
+}
+
 const submitReview = () => {
     if (!newReview.value || !rating.value) return;
-    console.log('리뷰 등록:', newReview.value, rating.value);
+
+    emit('submit-review', {
+        content : newReview.value,
+        rating : newRating.value
+    });
+
     showForm.value = false;
     newReview.value = '';
     rating.value = 0;

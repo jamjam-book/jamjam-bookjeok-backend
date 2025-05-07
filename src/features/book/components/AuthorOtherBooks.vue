@@ -13,10 +13,10 @@
                         v-for="book in paginatedBooks"
                         :key="book.id"
                         class="book-card"
-                        @click="goToDetail(book.id)"
+                        @click="goToDetail(book.bookId)"
                 >
-                    <img :src="book.imageUrl || defaultImage" alt="도서 이미지" />
-                    <p class="book-title">{{ book.title }}</p>
+                    <img :src="fullImageUrl(book.imageUrl)" alt="도서 이미지" class="book-img" />
+                    <p class="book-title">{{ book.bookName }}</p>
                 </div>
             </div>
         </div>
@@ -63,6 +63,14 @@ const prevPage = () => {
 
 const goToDetail = (bookId) => {
     router.push(`/books/${bookId}`);
+};
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl= (imageUrl) => {
+    return imageUrl.startsWith('http')
+            ? imageUrl
+            : IMAGE_BASE_URL + imageUrl
 };
 </script>
 
