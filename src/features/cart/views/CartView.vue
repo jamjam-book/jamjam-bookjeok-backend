@@ -19,13 +19,11 @@ const allSelected = computed({
     set: (value) => items.forEach(i => (i.selected = value))
 });
 
-const memberUid = 1; // 로그인 연동 후 교체
-
 async function updateQuantity(item) {
+    const memberId = 'user01';
     try {
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
-        await axios.put(`${baseUrl}/carts`, {
-            memberUid,
+        await axios.put(`${baseUrl}/members/${memberId}/carts`, {
             bookId: item.id,
             bookName: item.bookName,
             quantity: item.quantity
@@ -58,10 +56,10 @@ async function removeItem(id) {
 
     try {
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
+        const memberId = 'user01';
 
-        await axios.delete(`${baseUrl}/carts`, {
+        await axios.delete(`${baseUrl}/members/${memberId}/carts`, {
             data: {
-                memberUid,
                 bookId: item.id,
                 bookName: item.bookName,
                 quantity: item.quantity
