@@ -15,11 +15,8 @@
                             type="text"
                             v-model="userId"
                             placeholder="6~15자, 영문과 숫자만"
-                            @focus="checkPasswordLength"
-                            @input="checkPasswordLength"
-                            @blur="onUserIdBlur"
                     />
-                    <button type="button" class="check-btn">중복확인</button>
+                    <button type="button" class="check-btn" @click="onCheckUserId">중복확인</button>
                 </div>
             </div>
 
@@ -48,11 +45,8 @@
                             type="text"
                             v-model="nickname"
                             placeholder="2~10자"
-                            @focus="checkPasswordLength"
-                            @input="checkPasswordLength"
-                            @blur="onNicknameBlur"
                     />
-                    <button type="button" class="check-btn">중복확인</button>
+                    <button type="button" class="check-btn" @click="onCheckNickname">중복확인</button>
                 </div>
             </div>
 
@@ -63,8 +57,6 @@
                         type="email"
                         v-model="email"
                         placeholder="예) bookjeok@bookjeok.com"
-                        @focus="checkPasswordLength"
-                        @input="checkPasswordLength"
                 />
             </div>
 
@@ -148,38 +140,27 @@ function onBirthBlur(e) {
     }
 }
 
-// 비밀번호 길이 체크 함수
-function checkPasswordLength(e) {
-    if (password.value.length > 0 && password.value.length < 8) {
-        modalMessage.value = '비밀번호는 8자 이상이어야 합니다!'
-        modalVisible.value = true
-        if (e && e.target) e.target.blur()
-        return false
-    }
-    return true
-}
-
-// 아이디 blur시 유효성 검사
-function onUserIdBlur(e) {
-    if (!checkPasswordLength(e)) return false
+// 아이디 중복확인 버튼 클릭
+function onCheckUserId() {
     const regex = /^[a-zA-Z0-9]{6,15}$/
-    if (!regex.test(userId.value)) {
-        modalMessage.value = '올바른 양식으로 작성해주세요!'
+    if (!userId.value || !regex.test(userId.value)) {
+        modalMessage.value = '올바르지 않은 아이디 형식입니다!'
         modalVisible.value = true
-        return false
+        return
     }
-    return true
+    modalMessage.value = "사용가능한 아이디입니다!"
+    modalVisible.value = true
 }
 
-// 닉네임 blur시 유효성 검사
-function onNicknameBlur(e) {
-    if (!checkPasswordLength(e)) return false
-    if (nickname.value.length < 2 || nickname.value.length > 10) {
-        modalMessage.value = '올바른 양식으로 작성해주세요!'
+// 닉네임 중복확인 버튼 클릭
+function onCheckNickname() {
+    if (!nickname.value || nickname.value.length < 2 || nickname.value.length > 10) {
+        modalMessage.value = '닉네임은 2자리 이상 10자리 이하여야 합니다!'
         modalVisible.value = true
-        return false
+        return
     }
-    return true
+    modalMessage.value = "사용가능한 닉네임입니다!"
+    modalVisible.value = true
 }
 
 function handleModalClose() {
@@ -207,19 +188,30 @@ const handleSubmit = () => {
         return
     }
 
-    if (!checkPasswordLength()) return
-    const isUserIdValid = onUserIdBlur({})
-    const isNicknameValid = onNicknameBlur({})
+    if (password.value.length < 8) {
+        modalMessage.value = '비밀번호는 8자 이상이어야 합니다!'
+        modalVisible.value = true
+        return
+    }
+    const regex = /^[a-zA-Z0-9]{6,15}$/
+    if (!regex.test(userId.value)) {
+        modalMessage.value = '올바르지 않은 아이디 형식입니다!'
+        modalVisible.value = true
+        return
+    }
+    if (nickname.value.length < 2 || nickname.value.length > 10) {
+        modalMessage.value = '닉네임은 2자리 이상 10자리 이하여야 합니다!'
+        modalVisible.value = true
+        return
+    }
     if (password.value !== passwordCheck.value) {
         modalMessage.value = '비밀번호가 일치하지 않습니다.'
         modalVisible.value = true
         return
     }
-    if (isUserIdValid && isNicknameValid) {
-        modalMessage.value = '회원가입이 완료되었습니다!'
-        modalVisible.value = true
-        isSignupComplete.value = true
-    }
+    modalMessage.value = '회원가입이 완료되었습니다!'
+    modalVisible.value = true
+    isSignupComplete.value = true
 }
 </script>
 
