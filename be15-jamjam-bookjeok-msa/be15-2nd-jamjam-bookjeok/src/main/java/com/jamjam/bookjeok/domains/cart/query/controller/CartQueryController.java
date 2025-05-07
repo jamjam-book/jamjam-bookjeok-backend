@@ -23,8 +23,9 @@ public class CartQueryController {
             @PathVariable(value = "memberId") String memberId
     ) {
         MemberDetailResponse memberDetail = memberQueryService.getMemberDetail(memberId);
+        Long memberUid = memberDetail.getMember().getMemberUid();
 
-        CartBookListResponse cartBookListResponse = cartQueryService.getBooksInCart(memberDetail.getMember().getMemberUid());
+        CartBookListResponse cartBookListResponse = cartQueryService.getBooksInCart(memberUid);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

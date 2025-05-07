@@ -31,12 +31,12 @@ public class CartCommandServiceImpl implements CartCommandService {
     private final BookRepository bookRepository;
 
     @Override
-    public CartResponse createBookToCart(CartRequest cartRequest) {
+    public CartResponse createBookToCart(Long memberUid, CartRequest cartRequest) {
         // books 테이블에 존재하는 정보인지 검증하는 로직
         Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName());
 
         // 장바구니에 동일한 도서명이 있는지 검증하는 로직
-        Optional<Cart> findCart = cartRepository.findCartByMemberUidAndBookId(cartRequest.memberUid(), cartRequest.bookId());
+        Optional<Cart> findCart = cartRepository.findCartByMemberUidAndBookId(memberUid, cartRequest.bookId());
 
         if (findCart.isPresent()) { // 장바구니에 동일한 도서가 있다면?
             Cart cart = findCart.get();
@@ -46,11 +46,11 @@ public class CartCommandServiceImpl implements CartCommandService {
 
             return toCartResponse(cart, findBook, totalPrice); // 응답 객체에 넣고 반환한다.
         } else { // 장바구니에 동일한 도서명이 없다면?
-            int cartCount = cartMapper.findCartCountByMemberUid(cartRequest.memberUid()); // 장바구니에 있는 도서 정보 개수를 파악
+            int cartCount = cartMapper.findCartCountByMemberUid(memberUid); // 장바구니에 있는 도서 정보 개수를 파악
             validateCartItemLimit(cartCount); // 장바구니에 도서 정보가 20개 이상인지 검증
 
             // 검증이 완료되었으면 Cart 엔티티 생성
-            Cart cart = createCartEntity(cartRequest.memberUid(), findBook.getBookId(), cartRequest.quantity());
+            Cart cart = createCartEntity(memberUid, findBook.getBookId(), cartRequest.quantity());
             Cart savedCart = cartRepository.save(cart); // 엔티티 영속성 컨텍스트에 저장
 
             int totalPrice = calculateBookTotalPrice(savedCart.getQuantity(), findBook.getPrice()); // 총 금액을 구한다.
@@ -60,12 +60,12 @@ public class CartCommandServiceImpl implements CartCommandService {
     }
 
     @Override
-    public CartResponse modifyBookQuantity(CartRequest cartRequest) {
+    public CartResponse modifyBookQuantity(Long memberUid, CartRequest cartRequest) {
         // books 테이블에 존재하는 정보인지 검증하는 로직
         Book findBook = findBookOrThrow(cartRequest.bookId(), cartRequest.bookName());
 
         // 장바구니에 도서 정보가 있는지 확인한다.
-        Cart findCart = findCartOrThrow(cartRequest.memberUid(), cartRequest.bookId());
+        Cart findCart = findCartOrThrow(memberUid, cartRequest.bookId());
 
         // 장바구니에 도서 정보가 있는 경우에만 수량을 변경할 수 있다.
         findCart.updateQuantity(cartRequest.quantity());
@@ -77,9 +77,9 @@ public class CartCommandServiceImpl implements CartCommandService {
     }
 
     @Override
-    public void deleteBookFromCartByMemberId(CartRequest cartRequest) {
+    public void deleteBookFromCartByMemberId(Long memberUid, CartRequest cartRequest) {
         // 장바구니에 삭제할 도서 정보가 있는지 조회한다.
-        Cart findCart = findCartOrThrow(cartRequest.memberUid(), cartRequest.bookId());
+        Cart findCart = findCartOrThrow(memberUid, cartRequest.bookId());
 
         // 삭제할 도서 정보가 있으면 삭제한다.
         cartRepository.delete(findCart);
