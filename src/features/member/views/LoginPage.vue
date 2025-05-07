@@ -24,7 +24,7 @@
             <div class="links">
                 <RouterLink to="/signup">회원가입</RouterLink>
                 <RouterLink to="/find-id">아이디 찾기</RouterLink>
-                <RouterLink to="/find-password">비밀번호 찾기</RouterLink>
+                <RouterLink to="/password/reset-link">비밀번호 찾기</RouterLink>
             </div>
         </div>
         <!-- 모달 컴포넌트 사용 -->
