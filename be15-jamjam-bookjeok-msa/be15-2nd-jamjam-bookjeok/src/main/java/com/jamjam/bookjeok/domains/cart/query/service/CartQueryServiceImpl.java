@@ -2,6 +2,7 @@ package com.jamjam.bookjeok.domains.cart.query.service;
 
 import com.jamjam.bookjeok.domains.cart.query.dto.response.CartBookListResponse;
 import com.jamjam.bookjeok.domains.cart.query.dto.response.CartBookResponse;
+import com.jamjam.bookjeok.domains.cart.query.dto.response.CartCountResponse;
 import com.jamjam.bookjeok.domains.cart.query.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,14 @@ public class CartQueryServiceImpl implements CartQueryService {
     public CartBookListResponse getBooksInCart(Long memberUid) {
         List<CartBookResponse> bookList = cartMapper.findCartBooksByMemberUid(memberUid);
         return new CartBookListResponse(bookList);
+    }
+
+    @Override
+    public CartCountResponse getCartCount(Long memberUid) {
+        int cartCount = cartMapper.findCartCountByMemberUid(memberUid);
+        return CartCountResponse.builder()
+                .cartCount(cartCount)
+                .build();
     }
 
 }
