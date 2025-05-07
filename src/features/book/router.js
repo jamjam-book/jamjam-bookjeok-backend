@@ -10,9 +10,15 @@ export const bookRoutes = [
         component : () => import('@/features/book/views/BookDetailView.vue')
     },
     {
-        path : '/books/author/:authorId',
+        path : '/books/authorbooks',
         name : 'AuthorBookList',
         component : () => import('@/features/book/views/AuthorBookListView.vue')
+
+    },
+    {
+        path : '/books/publisherbooks',
+        name : 'PublisherBookList',
+        component : () => import('@/features/book/views/PublisherBookListView.vue')
 
     }
 ];
