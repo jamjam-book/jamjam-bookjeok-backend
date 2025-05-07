@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted, ref} from 'vue'
 import axios from 'axios'
+import SearchBar from "@/components/common/SearchBar.vue";
 
 const isLoggedIn = ref(false);
 const memberStatus = ref('MEMBER');
