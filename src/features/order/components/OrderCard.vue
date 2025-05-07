@@ -22,6 +22,8 @@ const formatDate = (iso) => {
     const date = new Date(iso)
     return `${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}.`
 }
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
 </script>
 
 <template>
@@ -37,7 +39,7 @@ const formatDate = (iso) => {
 
         <!-- 주문 항목 목록 -->
         <div v-for="item in order.items" :key="item.id" class="order-row">
-            <img :src="item.image" alt="도서 이미지" class="book-image"/>
+            <img :src="item.imageUrl.startsWith('http') ? item.imageUrl : IMAGE_BASE_URL + item.imageUrl" alt="도서 이미지" class="book-image"/>
 
             <div class="info-row">
                 <div class="header-row">
@@ -102,8 +104,8 @@ const formatDate = (iso) => {
 }
 
 .book-image {
-    width: 110px;
-    height: 136px;
+    width: auto;
+    height: 160px;
     object-fit: cover;
     margin-right: 24px;
     border-radius: 4px;

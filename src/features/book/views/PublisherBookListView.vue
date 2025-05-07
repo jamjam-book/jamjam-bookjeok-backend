@@ -1,10 +1,7 @@
 <template>
     <div class="author-books-page">
-        <div class="breadcrumb">
-            <RouterLink to="/interests">관심작가</RouterLink>&nbsp;/ {{ authorName }}
-        </div>
 
-        <h2 class="page-title">저자 <span class="highlight">{{ authorName }}</span>의 도서 {{ books.length }}건</h2>
+        <h2 class="page-title">출판사 <span class="highlight">{{ publisherName }}</span>의 도서 {{ books.length }}건</h2>
 
         <div class="filter-buttons" v-if="books.length > 0">
             <button
@@ -42,7 +39,7 @@ const route = useRoute()
 const books = ref([])
 const sortType = ref('latest')
 
-const authorName = ref('')
+const publisherName = ref('')
 const sortOptions = [
     { label: '최신순', value: 'latest' },
     { label: '가격 낮은 순', value: 'low' },
@@ -51,17 +48,17 @@ const sortOptions = [
 ]
 
 const fetchBooks = async () => {
-    if (!authorName.value) return
+    if (!publisherName.value) return
     try {
         const params = {
-            keywordType: 'author',
-            keyword: authorName.value
+            keywordType: 'publisher',
+            keyword: publisherName.value
         }
         const res = await getBookList(params)
         books.value = res.data.data.content || []
         console.log(`books : ${books.value}`)
     } catch (e) {
-        console.error('작가 도서 조회 실패:', e)
+        console.error('출판사 도서 조회 실패:', e)
     }
 }
 
@@ -79,11 +76,11 @@ const sortedBooks = computed(() => {
 
 // 초기 진입 및 쿼리 변경 시 검색 실행
 onMounted(() => {
-    authorName.value = route.query.keyword || ''
+    publisherName.value = route.query.keyword || ''
     fetchBooks()
 })
 watch(() => route.query.keyword, (newKeyword) => {
-    authorName.value = newKeyword || ''
+    publisherName.value = newKeyword || ''
     fetchBooks()
 })
 </script>
@@ -146,5 +143,6 @@ watch(() => route.query.keyword, (newKeyword) => {
     font-size: 1.1rem;
     color: #777;
 }
+
 </style>
 
