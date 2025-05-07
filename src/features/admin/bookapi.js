@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL : 'http://localhost:8080/api/v1/admin'
+    baseURL : 'http://localhost:8888/api/v1/admin'
 });
 
 export const checkIsbn = isbn => api.post(`/book/check/${isbn}`)
