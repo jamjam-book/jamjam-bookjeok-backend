@@ -44,7 +44,7 @@ const fetchOrderCompletion = async () => {
         const orderDetails = res.data.data.orderDetails
 
         const parsedItems = orderDetails.books.map(item => ({
-            id: item.isbn,
+            id: item.bookId,
             bookName: item.bookName,
             quantity: item.quantity,
             price: item.totalPrice / item.quantity,

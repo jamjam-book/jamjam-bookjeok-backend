@@ -1,15 +1,31 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import SearchBar from "@/components/common/SearchBar.vue";
+import {onMounted, ref} from 'vue'
+import axios from 'axios'
 
 const isLoggedIn = ref(false);
 const memberStatus = ref('MEMBER');
-const cartCount = ref(0);
-const isOpen = ref(false)
+const cartCount = ref(0);  // 장바구니 수량을 저장하는 상태 변수
 
-const toggleDropdown = () => {
-    isOpen.value = !isOpen.value
+// 장바구니 수량을 가져오는 API 호출
+const getCartCount = async () => {
+    try {
+        const memberId = 'user01';
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/members/${memberId}/carts/count`);
+        console.log(response.data); // 확인용 로그
+
+        if (response.data && response.data.data) {
+            cartCount.value = response.data.data.cartCount;
+            console.log(cartCount.value)
+        }
+    } catch (error) {
+        console.error('장바구니 수량을 가져오는 데 실패했습니다:', error);
+    }
 }
+
+// 컴포넌트가 마운트될 때 장바구니 수량을 가져옴
+onMounted(() => {
+    getCartCount();
+})
 </script>
 
 <template>
@@ -21,7 +37,6 @@ const toggleDropdown = () => {
                         <img class="logo" src="../../assets/images/logo.png" alt="로고"/>
                     </RouterLink>
                     <div class="header-dropdown">
-                        <!-- icon으로 바꾸는게 더 좋을듯!-->
                         <button v-if="!isOpen" @click="toggleDropdown" class="header-dropdown-toggle">▶</button>
                         <button v-else @click="toggleDropdown" class="header-dropdown-toggle">▼</button>
                         <div v-if="isOpen" class="header-dropdown-menu">
@@ -35,7 +50,6 @@ const toggleDropdown = () => {
 
                 <nav class="header-right">
                     <div class="icon-group">
-                        <!-- 로그인 전 -->
                         <template v-if="!isLoggedIn">
                             <div class="auth-links">
                                 <RouterLink to="/login" class="auth-link">로그인</RouterLink>
@@ -43,15 +57,15 @@ const toggleDropdown = () => {
                             </div>
                             <div class="header-icons">
                                 <RouterLink to="/carts">
-                                    <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
+                                    <div class="cart-wrapper">
+                                        <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
+                                        <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
+                                    </div>
                                 </RouterLink>
-                                <RouterLink to="/profile">
-                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
-                                </RouterLink>
+                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
                             </div>
                         </template>
 
-                        <!-- 관리자가 로그인 한 경우 -->
                         <template v-else-if="memberStatus === 'ADMIN'">
                             <div class="auth-links">
                                 <RouterLink to="/admin" class="auth-link">관리자</RouterLink>
@@ -59,13 +73,10 @@ const toggleDropdown = () => {
                             </div>
                             <div class="header-icons">
                                 <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
-                                <RouterLink to="/profile">
-                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
-                                </RouterLink>
+                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
                             </div>
                         </template>
 
-                        <!-- 회원이 로그인 한 경우 -->
                         <template v-else-if="memberStatus === 'MEMBER'">
                             <div class="auth-links">
                                 <a href="/logout" class="auth-link logout">로그아웃</a>
@@ -74,11 +85,9 @@ const toggleDropdown = () => {
                                 <img class="icon favorite" src="../../assets/icons/favorite.png" alt="관심 목록"/>
                                 <div class="cart-wrapper">
                                     <img class="icon cart" src="../../assets/icons/cart.png" alt="장바구니"/>
-                                    <span class="cart-count">{{ cartCount }}</span>
+                                    <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
                                 </div>
-                                <RouterLink to="/profile">
-                                    <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
-                                </RouterLink>
+                                <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
                             </div>
                         </template>
                     </div>
