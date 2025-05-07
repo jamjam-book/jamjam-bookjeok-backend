@@ -19,93 +19,175 @@
                         v-for="option in sortOptions"
                         :key="option.value"
                         :class="['sort-button', { active: selectedSort === option.value }]"
-                        @click="selectedSort = option.value"
+                        @click="handleSort(option.value)"
+                        :disabled="isLoading"
                 >
                     {{ option.label }}
                 </button>
             </div>
 
-            <div class="book-grid">
+            <div v-if="isLoading && books.length === 0" class="spinner-wrapper">
+                <span class="spinner" />
+            </div>
+
+            <div v-else class="book-grid">
                 <BookCard
-                        v-for="book in filteredBooks"
+                        v-for="book in books"
                         :key="book.id"
                         :book="book"
                 />
             </div>
+
+            <!-- 무한 스크롤 감지용 div -->
+            <div ref="scrollObserver"></div>
         </main>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { debounce } from 'lodash';
+import { useRoute } from 'vue-router';
 import BookCard from '@/features/book/components/BookCard.vue';
-import BookListFilter from "@/features/book/components/BookListFilter.vue";
+import BookListFilter from '@/features/book/components/BookListFilter.vue';
+import { getBookList, getCategoryList, getPriceRange } from '@/features/book/api.js';
 
-const categories = [
-    { id: 1, name: '소설' },
-    { id: 2, name: '시/에세이' },
-    { id: 3, name: '기술/공학' },
-];
+const route = useRoute();
 
-const books = ref([
-    { id: 1, title: '아무튼, 디지몬', price: 15000, categoryId: 2, publishDate: '2024-05-31', imageUrl:'/images/main_482791348279137620.20240609071045.jpg'},
-    { id: 2, title: '거꾸로 읽는 세계사', price: 22000, categoryId: 3, publishDate: '1988-07-30', imageUrl:'/images/main_324438732443877025.20230509165419.jpg' },
-    { id: 3, title: '행성어 서점', price: 18000, categoryId: 1, publishDate: '2021-11-05', imageUrl:'/images/main_324721232472125024.20240302074840.jpg' },
-    { id: 4, title: '희랍어 시간', price: 17000, categoryId: 1, publishDate: '2011-11-10', imageUrl:'/images/main_324760932476098329.20230829085010.jpg' },
-    { id: 5, title: '나인', price: 21000, categoryId: 1, publishDate: '2021-10-05', imageUrl:'/images/main_324803232480322263.20230725121109.jpg' },
-    { id: 6, title: '소년이 온다', price: 17500, categoryId: 1, publishDate: '2014-05-19', imageUrl:'/images/main_324914032491401626.20231004072435.jpg' },
-    { id: 7, title: '책과 우연들', price: 16200, categoryId: 2, publishDate: '2022-09-23', imageUrl:'/images/main_347741134774110623.20230919124626.jpg' },
-    { id: 8, title: '아무튼, SF게임', price: 15000, categoryId: 2, publishDate: '2024-07-10', imageUrl:'/images/main_487410648741065629.20240629092241.jpg' },
-]);
+const books = ref([]);
+const page = ref(0);
+const size = 10;
+const lastPage = ref(false);
+const isLoading = ref(false);
 
 const selectedCategoryIds = ref([]);
 const selectedSort = ref('latest');
-const minPrice = 0;
-const maxPrice = 50000;
-const priceRange = ref([minPrice, maxPrice]);
+const minPrice = ref(0);
+const maxPrice = ref(50000);
+const priceRange = ref([0, 50000]);
 
-const updateCategories = (ids) => {
-    selectedCategoryIds.value = ids;
-};
-
-const updatePriceRange = (range) => {
-    priceRange.value = range;
-};
+const categories = ref([]);
+const scrollObserver = ref(null);
+let observer = null;
+let initialized = ref(false);
 
 const sortOptions = [
     { value: 'latest', label: '최신순' },
     { value: 'low', label: '가격 낮은 순' },
     { value: 'high', label: '가격 높은 순' },
+    { value: 'orderDesc', label: '판매 순' },
     { value: 'popular', label: '인기순' },
 ];
 
-const filteredBooks = computed(() => {
-    let result = books.value
-            .filter(book =>
-            selectedCategoryIds.value.length === 0 || selectedCategoryIds.value.includes(book.categoryId)
-    )
-            .filter(book =>
-            book.price >= priceRange.value[0] && book.price <= priceRange.value[1]
-    );
-
-    const sortedResult = [...result];
-
-    switch (selectedSort.value) {
-        case 'low':
-            sortedResult.sort((a, b) => a.price - b.price);
-            break;
-        case 'high':
-            sortedResult.sort((a, b) => b.price - a.price);
-            break;
-        case 'latest':
-            sortedResult.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
-            break;
-        case 'popular':
-            sortedResult.sort((a, b) => b.id - a.id);
-            break;
+const fetchCategories = async () => {
+    try {
+        const res = await getCategoryList();
+        if (res.data?.success) {
+            categories.value = res.data.data;
+        }
+    } catch (e) {
+        console.error('카테고리 API 호출 실패:', e);
     }
+};
 
-    return sortedResult;
+const fetchPriceRange = async () => {
+    try {
+        const params = {
+            categoryIds: selectedCategoryIds.value.join(','),
+            sort: selectedSort.value,
+        };
+        const res = await getPriceRange(params);
+        if (res.data?.success) {
+            const { min, max } = res.data.data;
+            minPrice.value = min;
+            maxPrice.value = max;
+            priceRange.value = [min, max];
+        }
+    } catch (e) {
+        console.error('가격 범위 조회 실패:', e);
+    }
+};
+
+const fetchBooks = async () => {
+    if (isLoading.value || lastPage.value) return;
+    isLoading.value = true;
+
+    const params = {
+        page: page.value,
+        size,
+        categoryIds: selectedCategoryIds.value.join(','),
+        sort: selectedSort.value,
+        minPrice: priceRange.value[0],
+        maxPrice: priceRange.value[1],
+    };
+
+    try {
+        const res = await getBookList(params);
+        const content = res.data.data.content;
+        const isLast = res.data.data.last;
+
+        if (page.value === 0) {
+            books.value = content;
+        } else {
+            books.value = [...books.value, ...content];
+        }
+
+        lastPage.value = isLast;
+        page.value += 1;
+    } catch (e) {
+        console.error('도서 목록 조회 실패:', e);
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+const resetAndFetch = async () => {
+    page.value = 0;
+    lastPage.value = false;
+    books.value = [];
+    await fetchBooks();
+};
+
+const updateCategories = async (ids) => {
+    selectedCategoryIds.value = ids;
+    await fetchPriceRange();
+    await resetAndFetch();
+};
+
+const updatePriceRange = debounce(async (range) => {
+    priceRange.value = range;
+    await resetAndFetch();
+}, 300);
+
+const handleSort = async (sort) => {
+    selectedSort.value = sort;
+    await fetchPriceRange();
+    await resetAndFetch();
+};
+
+const initObserver = () => {
+    observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !lastPage.value && !isLoading.value) {
+            fetchBooks();
+        }
+    });
+    if (scrollObserver.value) {
+        observer.observe(scrollObserver.value);
+    }
+};
+
+onMounted(async () => {
+    await fetchCategories();
+    await fetchPriceRange();
+    await fetchBooks();
+    initObserver();
+    initialized.value = true;
+});
+
+onUnmounted(() => {
+    if (observer && scrollObserver.value) {
+        observer.unobserve(scrollObserver.value);
+    }
 });
 </script>
 
@@ -154,5 +236,27 @@ const filteredBooks = computed(() => {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
+}
+
+.spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 4px solid #ccc;
+    border-top: 4px solid #854d14;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 </style>
