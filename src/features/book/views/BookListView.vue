@@ -1,7 +1,7 @@
 <template>
     <div class="book-category-page">
         <!-- 왼쪽: 필터 영역 -->
-        <aside class="filter-section">
+        <aside class="filter-section" v-if="books.length > 0">
             <BookListFilter
                     :categories="categories"
                     :selected-category-ids="selectedCategoryIds"
@@ -14,7 +14,7 @@
 
         <!-- 오른쪽: 정렬 + 목록 -->
         <main class="content-section">
-            <div class="sort-bar">
+            <div class="sort-bar" v-if="books.length > 0">
                 <button
                         v-for="option in sortOptions"
                         :key="option.value"
@@ -30,10 +30,15 @@
                 <span class="spinner" />
             </div>
 
+            <!-- 결과 없음 메시지 -->
+            <div v-if="!isLoading && books.length === 0" class="empty-message">
+                조회된 도서가 없습니다.
+            </div>
+
             <div v-else class="book-grid">
                 <BookCard
                         v-for="book in books"
-                        :key="book.id"
+                        :key="book.bookId"
                         :book="book"
                 />
             </div>
@@ -60,6 +65,8 @@ const size = 10;
 const lastPage = ref(false);
 const isLoading = ref(false);
 
+const keyword = ref('');
+const keywordType = ref('');
 const selectedCategoryIds = ref([]);
 const selectedSort = ref('latest');
 const minPrice = ref(0);
@@ -94,6 +101,8 @@ const fetchPriceRange = async () => {
     try {
         const params = {
             categoryIds: selectedCategoryIds.value.join(','),
+            keyword: keyword.value,
+            keywordType: keywordType.value,
             sort: selectedSort.value,
         };
         const res = await getPriceRange(params);
@@ -115,6 +124,8 @@ const fetchBooks = async () => {
     const params = {
         page: page.value,
         size,
+        keyword: keyword.value,
+        keywordType: keywordType.value,
         categoryIds: selectedCategoryIds.value.join(','),
         sort: selectedSort.value,
         minPrice: priceRange.value[0],
@@ -140,6 +151,7 @@ const fetchBooks = async () => {
         isLoading.value = false;
     }
 };
+
 
 const resetAndFetch = async () => {
     page.value = 0;
@@ -176,13 +188,26 @@ const initObserver = () => {
     }
 };
 
+watch(() => route.query, async (newQuery, oldQuery) => {
+    if (newQuery.keyword !== oldQuery.keyword || newQuery.keywordType !== oldQuery.keywordType) {
+        keyword.value = newQuery.keyword || '';
+        keywordType.value = newQuery.keywordType || '';
+        await resetAndFetch();
+    }
+});
+
+
 onMounted(async () => {
+    keyword.value = route.query.keyword || '';
+    keywordType.value = route.query.keywordType || '';
+
     await fetchCategories();
     await fetchPriceRange();
     await fetchBooks();
     initObserver();
     initialized.value = true;
 });
+
 
 onUnmounted(() => {
     if (observer && scrollObserver.value) {
@@ -195,7 +220,7 @@ onUnmounted(() => {
 .book-category-page {
     display: flex;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 100px;
     padding: 24px;
     gap: 24px;
 }
@@ -258,5 +283,12 @@ onUnmounted(() => {
     to {
         transform: rotate(360deg);
     }
+}
+
+.empty-message {
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #777;
 }
 </style>
