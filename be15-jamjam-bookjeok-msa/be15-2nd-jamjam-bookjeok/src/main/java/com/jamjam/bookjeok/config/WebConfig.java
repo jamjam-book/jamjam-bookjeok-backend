@@ -2,6 +2,7 @@ package com.jamjam.bookjeok.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -16,4 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true); // 자격 증명(쿠키 등) 허용
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:///C:/jamjam/images"); // 이미지 저장 절대경로
+    }
 }

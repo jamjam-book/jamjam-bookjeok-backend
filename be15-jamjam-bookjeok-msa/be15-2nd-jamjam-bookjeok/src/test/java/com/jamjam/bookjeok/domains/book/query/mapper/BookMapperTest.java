@@ -1,6 +1,7 @@
 package com.jamjam.bookjeok.domains.book.query.mapper;
 
 import com.jamjam.bookjeok.domains.book.query.dto.*;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +30,9 @@ public class BookMapperTest {
     @Test
     void testFindBookListOrderByDefault() {
 
-        Map<String, Object> params = new HashMap<>();
+        BookSearchCondition condition = new BookSearchCondition();
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -42,10 +44,10 @@ public class BookMapperTest {
     @Test
     void testFindBookListOrderByInterestCounts() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("array", "interest");
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setSort("interest");
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -57,10 +59,10 @@ public class BookMapperTest {
     @Test
     void testFindBookListOrderByOrderCounts() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("array", "orders");
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setSort("orders");
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -72,12 +74,12 @@ public class BookMapperTest {
     @Test
     void testFindBookListWhereCategory() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("option", "category");
-        Long categoryId = 1L;
-        params.put("search", categoryId);
+        List<Long> categoryIds = new ArrayList<>();
+        categoryIds.add(1L);
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setCategoryIds(categoryIds);
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -89,12 +91,11 @@ public class BookMapperTest {
     @Test
     void testFindBookListWhereAuthor() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("option", "author");
-        String authorName = "한강"; // 더미 데이터에 있는 데이터로 확인
-        params.put("search", authorName);
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setKeywordType("author");
+        condition.setKeyword("한강");
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -106,12 +107,11 @@ public class BookMapperTest {
     @Test
     void testFindBookListWhereBookName() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("option", "name");
-        String name = "지구"; // 더미 데이터에 있는 데이터로 확인
-        params.put("search", name);
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setKeywordType("title");
+        condition.setKeyword("지구");
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -123,12 +123,11 @@ public class BookMapperTest {
     @Test
     void testFindBookListWherePublisher() {
 
-        Map<String, Object > params = new HashMap<>();
-        params.put("option", "publisher");
-        String publisher = "위즈"; // 더미 데이터에 있는 데이터로 확인
-        params.put("search", publisher);
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setKeywordType("publisher");
+        condition.setKeyword("위즈");
 
-        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(params);
+        List<BookDetailDTO> books  = bookMapper.findBookListOrderByOption(condition);
 
         assertThat(books).isNotNull();
 
@@ -136,24 +135,12 @@ public class BookMapperTest {
 
     }
 
-    @DisplayName("카테고리 목록 조회")
-    @Test
-    void testFindAllCategory() {
-
-        List<BookCategoryDTO> categories = bookMapper.findAllCategory();
-
-        assertThat(categories).isNotNull();
-
-        categories.forEach(System.out::println);
-
-    }
-
     @DisplayName("회원 도서 상세 조회")
     @Test
     void testGetBookDetail() {
-        String isbn = "9781082502224";
+        Long bookId = 1L;
         Map<String, Object> params = new HashMap<>();
-        params.put("isbn", isbn);
+        params.put("bookId", bookId);
 
         BookDetailPageDTO book = bookMapper.getBookDetail(params);
 
@@ -182,8 +169,10 @@ public class BookMapperTest {
     @Test
     void testGetReviews() {
         Long bookId = 1L;
+        PageRequest pageRequest = new PageRequest(1, 10);
         Map<String, Object> params = new HashMap<>();
         params.put("bookId", bookId);
+        params.put("pageRequest", pageRequest);
 
         List<ReviewDTO> reviews = bookMapper.getReviews(params);
 
@@ -221,7 +210,7 @@ public class BookMapperTest {
 
     }
 
-    @DisplayName("작겨 별 도서 조회 테스트")
+    @DisplayName("작가 별 도서 조회 테스트")
     @Test
     void testGetAuthorBooks() {
 

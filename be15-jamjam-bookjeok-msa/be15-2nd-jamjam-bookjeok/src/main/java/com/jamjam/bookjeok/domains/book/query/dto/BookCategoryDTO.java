@@ -18,11 +18,13 @@ public class BookCategoryDTO {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private boolean isDeleted;
+    private int bookCount;
 
-    public BookCategoryDTO(String categoryName, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted) {
+    public BookCategoryDTO(String categoryName, LocalDateTime createdAt, LocalDateTime modifiedAt, boolean isDeleted, int bookCount) {
         this.categoryName = categoryName;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.isDeleted = isDeleted;
+        this.bookCount = bookCount;
     }
 }

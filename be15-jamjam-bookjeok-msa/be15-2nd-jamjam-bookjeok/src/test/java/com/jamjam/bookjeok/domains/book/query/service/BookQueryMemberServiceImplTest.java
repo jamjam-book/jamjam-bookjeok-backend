@@ -1,9 +1,8 @@
 package com.jamjam.bookjeok.domains.book.query.service;
 
 import com.jamjam.bookjeok.domains.book.command.dto.request.ReviewRequest;
-import com.jamjam.bookjeok.domains.book.query.dto.BookDetailDTO;
-import com.jamjam.bookjeok.domains.book.query.dto.BookDetailPageDTO;
-import com.jamjam.bookjeok.domains.book.query.dto.PopularBookDTO;
+import com.jamjam.bookjeok.domains.book.query.dto.*;
+import com.jamjam.bookjeok.domains.member.command.dto.request.PageRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -31,9 +30,9 @@ public class BookQueryMemberServiceImplTest {
     @Test
     void testGetBookList() {
 
-        Map<String, Object> params = new HashMap<>();
+        BookSearchCondition condition = new BookSearchCondition();
 
-        List<BookDetailDTO> books = bookQueryMemberService.getBookList(params);
+        List<BookDetailDTO> books = bookQueryMemberService.getBookList(condition);
 
         assertThat(books).isNotNull();
 
@@ -44,10 +43,10 @@ public class BookQueryMemberServiceImplTest {
     @Test
     void testGetBookListOrderByOrders() {
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("array", "orders");
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setSort("orders");
 
-        List<BookDetailDTO> books = bookQueryMemberService.getBookList(params);
+        List<BookDetailDTO> books = bookQueryMemberService.getBookList(condition);
 
         assertThat(books).isNotNull();
 
@@ -57,10 +56,11 @@ public class BookQueryMemberServiceImplTest {
     @DisplayName("도서 관심순 조회 테스트")
     @Test
     void testGetBookListOrderByLikes() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("array", "interest");
 
-        List<BookDetailDTO> books = bookQueryMemberService.getBookList(params);
+        BookSearchCondition condition = new BookSearchCondition();
+        condition.setSort("interest");
+
+        List<BookDetailDTO> books = bookQueryMemberService.getBookList(condition);
 
         assertThat(books).isNotNull();
 
@@ -70,15 +70,29 @@ public class BookQueryMemberServiceImplTest {
     @DisplayName("도서 상세 조회 테스트")
     @Test
     void testGetBookDetail() {
-        String isbn = "9781082502224";
+        Long bookId = 1L;
         Map<String, Object> params = new HashMap<>();
-        params.put("isbn", isbn);
+        params.put("bookId", bookId);
 
         BookDetailPageDTO book = bookQueryMemberService.getBookDetail(params);
 
         assertThat(book).isNotNull();
 
         System.out.println(book);
+    }
+
+    @DisplayName("도서 리뷰 조회 테스트")
+    @Test
+    void testGetBookReviews() {
+        Long bookId = 32L;
+        PageRequest pageRequest = new PageRequest(1, 10);
+
+        ReviewListDTO reviews = bookQueryMemberService.getBookReviews(bookId, pageRequest);
+
+        assertThat(reviews).isNotNull();
+
+        reviews.getReviews().forEach(System.out::println);
+
     }
 
     @DisplayName("일주일 간 판매량 TOP10 도서 조회")
