@@ -1,6 +1,14 @@
 <script setup>
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import Modal from "@/components/common/Modal.vue";
+import {deleteInterestBooks} from "@/features/member/interestApi.js";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
+const memberId = route.params.memberId
+const showModal = ref(false);
+const openModal = () => (showModal.value = true);
+const closeModal = () => (showModal.value = false);
 
 const { book } = defineProps({
     book: {
@@ -9,24 +17,38 @@ const { book } = defineProps({
     },
 });
 
-const emit = defineEmits(["confirm-delete"]);
+const bookId = book.bookId;
 
-const showModal = ref(false);
-const openModal = () => (showModal.value = true);
-const closeModal = () => (showModal.value = false);
-const confirmDelete = () => {
-    emit("confirm-delete", book.bookId);
-    closeModal();
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return book.imageUrl.startsWith('http')
+            ? book.imageUrl
+            : IMAGE_BASE_URL + book.imageUrl
+})
+
+const handleDelete = async () => {
+    try {
+        await deleteInterestBooks(memberId, bookId);
+        console.log("관심 도서가 삭제되었습니다.");
+
+        // 삭제 한 이후에 새로 고침하기
+        window.location.reload();
+
+        closeModal();
+    } catch (e) {
+        console.error("관심 도서가 삭제되지 않았습니다.", e);
+    }
 };
 </script>
 
 <template>
-    <!-- 도서 상세 페이지로 이동하기 위한 router-link -->
-    <!--    <router-link-->
-    <!--            :to="`/books/${author.bookId}`">-->
     <tr>
         <td class="book-image">
-            <img :src="book.imageUrl" alt="book.bookName">
+            <router-link :to="`/books/${book.bookId}`" class="router-style book-image">
+<!--                <img :src="fullImageUrl" :alt="book.bookName" />-->
+                <img :src="'../../../../public/images/placeholder.png'" :alt="book.bookName" />
+            </router-link>
         </td>
 
         <td id="divider-cell">
@@ -34,17 +56,19 @@ const confirmDelete = () => {
         </td>
 
         <td class="book-infos" :title="book.bookName">
-            <div class="book-name">{{ book.bookName }}</div>
-            <div class="book-authors">
-                <span>저자 | </span>
-                <span v-for="(authorName, i) in book.authorNames" :key="i">
-                    {{ authorName }}
-                    <span v-if="i < book.authorNames.length - 1">, </span>
-                </span>
-            </div>
-            <div class="book-info"><span>작품 소개 | </span>{{ book.bookInfo}}</div>
+            <router-link :to="`/books/${book.bookId}`" class="router-style">
+                <div class="book-name" >{{ book.bookName }}</div>
+                <div class="book-authors">
+                    <span>저자 | </span>
+                    <span v-for="(authorName, i) in book.authorName" :key="i">
+                        {{ authorName }}
+                    </span>
+                </div>
+                <div class="book-info">
+                    <span>작품 소개 | </span>{{ book.bookInfo }}
+                </div>
+            </router-link>
         </td>
-
 
         <td class="delete-cell">
             <button @click="openModal" class="delete-button">삭제</button>
@@ -54,7 +78,7 @@ const confirmDelete = () => {
     <Modal
             :visible="showModal"
             :message="`${book.bookName}을(를) 관심 도서에서 삭제하시겠습니까?`"
-            @confirm="confirmDelete"
+            @confirm="handleDelete"
             @cancel="closeModal"
     />
 </template>
@@ -74,7 +98,7 @@ td {
 }
 
 .book-image img{
-    width: 90px;
+    height: 90px;
 }
 
 #divider-cell {
@@ -95,13 +119,18 @@ td {
     text-align: left;
     flex-direction: column;
     display: flex;
-    gap: 10px;
     margin: 20px 0;
 }
 
 .book-name {
     font-size: 18px;
     font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.book-authors .book-info {
+    font-size: 14px;
+    color: #5c4033;
 }
 
 .delete-button {
@@ -116,6 +145,11 @@ td {
 
 .delete-button:hover {
     background-color: #e3d3b2;
+}
+
+.router-style {
+    text-decoration: none;
+    color: #391902;
 }
 
 </style>

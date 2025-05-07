@@ -19,3 +19,14 @@ export const getFollowings = memberId => api.get(`/${memberId}/followings`)
 
 export const deleteFollowings = (followerId, followingId) =>
     api.delete(`/${followerId}/followings/${followingId}`)
+
+
+/* 관심 도서 */
+export const getInterestBooks = (params, memberId) =>
+    api.get(`/${memberId}/interest/books`, { params });
+
+export const createInterestBooks = ( payload ) =>
+    api.post(`/interest/books`, payload );
+
+export const deleteInterestBooks = (memberId, bookId) =>
+    api.delete(`/${memberId}/interest/books/${bookId}`)
