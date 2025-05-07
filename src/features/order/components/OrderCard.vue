@@ -28,9 +28,10 @@ const formatDate = (iso) => {
     <div class="mb-5">
         <!-- 주문 상단 헤더 -->
         <div class="order-header">
-      <span id="order-date-id">
-        {{ formatDate(order.orderedAt) }} [{{ order.orderId }}]
-      </span>
+            <span id="order-date-id">
+                <span class="ordered-date">{{ formatDate(order.orderedAt) }}</span>
+                <span class="order-id">[{{ order.orderId }}]</span>
+            </span>
             <button class="btn" id="order-detail-btn" @click="getOrderDetail">주문 상세 내역</button>
         </div>
 
@@ -60,7 +61,14 @@ const formatDate = (iso) => {
 #order-date-id {
     font-size: 16px;
     font-weight: bold;
+    display: flex;
+    gap: 12px;
 }
+
+.order-id {
+    white-space: nowrap;
+}
+
 
 #order-detail-btn {
     background-color: #F9F0DF;
