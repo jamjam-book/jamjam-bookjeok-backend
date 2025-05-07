@@ -24,6 +24,7 @@
         </association>
 
         <association property="publisher" javaType="PublisherDTO">
+            <result property="publisherId" column="publisher_id"/>
             <result property="publisherName" column="publisher_name" />
         </association>
     </resultMap>
@@ -80,6 +81,7 @@
         a.image_url,
         b.category_id,
         b.category_name,
+        a.publisher_id,
         c.publisher_name,
         a.is_deleted,
         GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors,
@@ -89,7 +91,8 @@
         SELECT a.book_id
         FROM books a
         JOIN book_categories b ON a.category_id = b.category_id
-        <if test="keywordType != null and keyword != null and keyword != '' and keywordType == 'author'">
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        <if test="keywordType != null and keyword != null and keyword != '' and keywordType == 'author' or keywordType == 'all'">
             JOIN book_authors d ON a.book_id = d.book_id
             JOIN authors e ON d.author_id = e.author_id
         </if>
@@ -111,13 +114,23 @@
         <if test="keywordType != null and keyword != null and keyword != ''">
             <choose>
                 <when test="keywordType == 'author'">
-                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                    AND e.author_name = #{keyword}
                 </when>
                 <when test="keywordType == 'isbn'">
                     AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
                 </when>
                 <when test="keywordType == 'title'">
                     AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'publisher'">
+                    AND c.publisher_name = #{keyword}
+                </when>
+                <when test="keywordType == 'all'">
+                    AND (
+                    e.author_name = #{keyword}
+                    OR a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR c.publisher_name = #{keyword}
+                    )
                 </when>
             </choose>
         </if>
@@ -174,20 +187,17 @@
         SELECT COUNT(DISTINCT a.book_id)
         FROM books a
         JOIN book_categories b ON a.category_id = b.category_id
-
-        <!-- 작가 검색 시 추가 JOIN -->
-        <if test="keywordType != null and keywordType == 'author' and keyword != null and keyword != ''">
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        <if test="keywordType == 'author' or keywordType == 'all'">
             JOIN book_authors d ON a.book_id = d.book_id
             JOIN authors e ON d.author_id = e.author_id
         </if>
-
         WHERE a.is_deleted = false
 
         <if test="minPrice != null and maxPrice != null">
             AND a.price BETWEEN #{minPrice} AND #{maxPrice}
         </if>
 
-        <!-- 카테고리 조건 -->
         <if test="categoryIds != null and categoryIds.size > 0">
             AND b.category_id IN
             <foreach item="id" collection="categoryIds" open="(" separator="," close=")">
@@ -195,17 +205,26 @@
             </foreach>
         </if>
 
-        <!-- 검색 조건 -->
         <if test="keywordType != null and keyword != null and keyword != ''">
             <choose>
                 <when test="keywordType == 'author'">
-                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                    AND e.author_name = #{keyword}
                 </when>
                 <when test="keywordType == 'isbn'">
                     AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
                 </when>
                 <when test="keywordType == 'title'">
                     AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'publisher'">
+                    AND c.publisher_name = #{keyword}
+                </when>
+                <when test="keywordType == 'all'">
+                    AND (
+                    e.author_name = #{keyword}
+                    OR a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR c.publisher_name = #{keyword}
+                    )
                 </when>
             </choose>
         </if>
@@ -226,12 +245,14 @@
         ORDER BY bc.category_name ASC
     </select>
 
-    <select id="getPriceRange" resultType="com.jamjam.bookjeok.domains.book.query.dto.PriceRangeDTO" parameterType="com.jamjam.bookjeok.domains.book.query.dto.BookSearchCondition">
+    <select id="getPriceRange" resultType="com.jamjam.bookjeok.domains.book.query.dto.PriceRangeDTO"
+            parameterType="com.jamjam.bookjeok.domains.book.query.dto.BookSearchCondition">
         SELECT
         MIN(a.price) AS min,
         MAX(a.price) AS max
         FROM books a
         JOIN book_categories b ON a.category_id = b.category_id
+        JOIN publishers c ON a.publisher_id = c.publisher_id
         LEFT JOIN book_authors d ON a.book_id = d.book_id
         LEFT JOIN authors e ON d.author_id = e.author_id
         WHERE a.is_deleted = false
@@ -246,7 +267,7 @@
         <if test="keywordType != null and keyword != null and keyword != ''">
             <choose>
                 <when test="keywordType == 'author'">
-                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                    AND e.author_name = #{keyword}
                 </when>
                 <when test="keywordType == 'isbn'">
                     AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
@@ -254,10 +275,19 @@
                 <when test="keywordType == 'title'">
                     AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
                 </when>
+                <when test="keywordType == 'publisher'">
+                    AND c.publisher_name = #{keyword}
+                </when>
+                <when test="keywordType == 'all'">
+                    AND (
+                    e.author_name = #{keyword}
+                    OR a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR c.publisher_name = #{keyword}
+                    )
+                </when>
             </choose>
         </if>
     </select>
-
 
     <!-- 회원 : 도서 상세 조회 -->
     <select id="getBookDetail" resultMap="bookDetailPageResultMap">
