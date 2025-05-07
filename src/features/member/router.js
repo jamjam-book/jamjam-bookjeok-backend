@@ -38,5 +38,10 @@ export const memberRoutes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/features/member/views/LoginPage.vue')
+    },
+    {
+        path: '/signup',
+        name: 'SignUp',
+        component: () => import('@/features/member/views/SignUp.vue')
     }
 ];

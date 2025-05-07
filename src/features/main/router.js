@@ -1,4 +1,5 @@
 import LoginPage from "@/features/member/views/LoginPage.vue";
+import SignUp from "@/features/member/views/SignUp.vue";
 
 export const mainRoutes = [
     {
@@ -10,5 +11,10 @@ export const mainRoutes = [
         path: '/login',
         name: 'login',
         component: LoginPage
+    },
+    {
+        path: '/signup',
+        name: 'signup',
+        component: SignUp
     }
 ];
