@@ -74,7 +74,8 @@ const visiblePages = computed(() => {
     justify-content: center;
     gap: 2px;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .pagination-arrow,
@@ -99,11 +100,5 @@ const visiblePages = computed(() => {
     background-color: #f9f0df;
     color: white;
     font-weight: bold;
-}
-
-.pagination-info {
-    margin-left: 1rem;
-    font-size: 0.875rem;
-    color: #757575;
 }
 </style>
