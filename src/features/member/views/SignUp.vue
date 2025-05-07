@@ -8,15 +8,15 @@
             </div>
 
             <div class="form-group">
-                <label for="userId">아이디</label>
+                <label for="memberId">아이디</label>
                 <div class="input-with-btn">
                     <input
-                            id="userId"
+                            id="memberId"
                             type="text"
-                            v-model="userId"
+                            v-model="memberId"
                             placeholder="6~15자, 영문과 숫자만"
                     />
-                    <button type="button" class="check-btn" @click="onCheckUserId">중복확인</button>
+                    <button type="button" class="check-btn" @click="onCheckMemberId">중복확인</button>
                 </div>
             </div>
 
@@ -40,24 +40,14 @@
             <div class="form-group">
                 <label for="nickname">닉네임</label>
                 <div class="input-with-btn">
-                    <input
-                            id="nickname"
-                            type="text"
-                            v-model="nickname"
-                            placeholder="2~10자"
-                    />
+                    <input id="nickname" type="text" v-model="nickname" placeholder="2~10자" />
                     <button type="button" class="check-btn" @click="onCheckNickname">중복확인</button>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="email">E-mail</label>
-                <input
-                        id="email"
-                        type="email"
-                        v-model="email"
-                        placeholder="예) bookjeok@bookjeok.com"
-                />
+                <input id="email" type="email" v-model="email" placeholder="예) bookjeok@bookjeok.com" />
             </div>
 
             <div class="form-group">
@@ -93,23 +83,21 @@
             <button type="submit" class="signup-btn">회원가입</button>
         </form>
 
-        <Modal
-                :visible="modalVisible"
-                :message="modalMessage"
-                @close="handleModalClose"
-        />
+        <Modal :visible="modalVisible" :message="modalMessage" @close="handleModalClose" />
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import Modal from '@/components/common/Modal2.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const name = ref('')
-const userId = ref('')
+const memberId = ref('')
 const password = ref('')
 const passwordCheck = ref('')
 const nickname = ref('')
@@ -122,7 +110,6 @@ const modalVisible = ref(false)
 const modalMessage = ref('')
 const isSignupComplete = ref(false)
 
-// 전화번호: 숫자만 입력, 숫자 외 입력 시 모달
 function onPhoneInput(e) {
     const onlyNumbers = e.target.value.replace(/[^0-9]/g, '')
     if (e.target.value !== onlyNumbers) {
@@ -132,7 +119,6 @@ function onPhoneInput(e) {
     phone.value = onlyNumbers
 }
 
-// 생년월일: 6자리가 아니면 모달
 function onBirthBlur(e) {
     if (birth.value.length !== 6) {
         modalMessage.value = '올바른 양식으로 작성해주세요!'
@@ -140,26 +126,24 @@ function onBirthBlur(e) {
     }
 }
 
-// 아이디 중복확인 버튼 클릭
-function onCheckUserId() {
+function onCheckMemberId() {
     const regex = /^[a-zA-Z0-9]{6,15}$/
-    if (!userId.value || !regex.test(userId.value)) {
+    if (!memberId.value || !regex.test(memberId.value)) {
         modalMessage.value = '올바르지 않은 아이디 형식입니다!'
         modalVisible.value = true
         return
     }
-    modalMessage.value = "사용가능한 아이디입니다!"
+    modalMessage.value = '사용가능한 아이디입니다!'
     modalVisible.value = true
 }
 
-// 닉네임 중복확인 버튼 클릭
 function onCheckNickname() {
     if (!nickname.value || nickname.value.length < 2 || nickname.value.length > 10) {
         modalMessage.value = '닉네임은 2자리 이상 10자리 이하여야 합니다!'
         modalVisible.value = true
         return
     }
-    modalMessage.value = "사용가능한 닉네임입니다!"
+    modalMessage.value = '사용가능한 닉네임입니다!'
     modalVisible.value = true
 }
 
@@ -171,11 +155,10 @@ function handleModalClose() {
     }
 }
 
-const handleSubmit = () => {
-    // 필수값 빈칸 체크
+async function handleSubmit() {
     if (
             !name.value.trim() ||
-            !userId.value.trim() ||
+            !memberId.value.trim() ||
             !password.value.trim() ||
             !passwordCheck.value.trim() ||
             !nickname.value.trim() ||
@@ -193,30 +176,50 @@ const handleSubmit = () => {
         modalVisible.value = true
         return
     }
+
     const regex = /^[a-zA-Z0-9]{6,15}$/
-    if (!regex.test(userId.value)) {
+    if (!regex.test(memberId.value)) {
         modalMessage.value = '올바르지 않은 아이디 형식입니다!'
         modalVisible.value = true
         return
     }
+
     if (nickname.value.length < 2 || nickname.value.length > 10) {
         modalMessage.value = '닉네임은 2자리 이상 10자리 이하여야 합니다!'
         modalVisible.value = true
         return
     }
+
     if (password.value !== passwordCheck.value) {
         modalMessage.value = '비밀번호가 일치하지 않습니다.'
         modalVisible.value = true
         return
     }
-    modalMessage.value = '회원가입이 완료되었습니다!'
+
+    const success = await authStore.signup({
+        name: name.value,
+        memberId: memberId.value,
+        password: password.value,
+        nickname: nickname.value,
+        email: email.value,
+        phone: phone.value,
+        birth: birth.value,
+        marketing: marketing.value,
+    })
+
+    if (success) {
+        modalMessage.value = '회원가입이 완료되었습니다!'
+        isSignupComplete.value = true
+    } else {
+        modalMessage.value = '회원가입에 실패했습니다. 다시 시도해주세요.'
+    }
+
     modalVisible.value = true
-    isSignupComplete.value = true
 }
 </script>
 
 <style scoped>
-/* ... 기존 스타일 그대로 ... */
+
 .signup-container {
     max-width: 430px;
     margin: 56px auto 0 auto;
