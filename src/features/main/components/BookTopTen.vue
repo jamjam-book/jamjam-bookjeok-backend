@@ -2,7 +2,8 @@
     <section class="weekly-top-wrapper">
         <h2 class="weekly-top-title">금주의 베스트 셀러 TOP10</h2>
         <div class="weekly-top-container">
-            <div class="slider-inner">
+            <div class="more-link" @click="goToBookList">더보기 +</div>
+            <div class="slider-inner" v-if="topBooks">
                 <button
                         class="arrow left"
                         :disabled="currentIndex === 0"
@@ -35,26 +36,18 @@
                 </button>
             </div>
         </div>
-        <div class="more-link">더보기 +</div>
     </section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import BookCard from '@/features/book/components/BookCard.vue'
+import {getPopularBooks} from "@/features/main/api.js";
+import {useRouter} from "vue-router";
 
-const topBooks = ref([
-    { id: 1, title: '아무튼, 디지몬', price: 15000, categoryId: 2, publishDate: '2024-05-31', imageUrl:'/images/main_482791348279137620.20240609071045.jpg'},
-    { id: 2, title: '나인', price: 22000, categoryId: 3, publishDate: '2021-11-05', imageUrl:'/images/main_324803232480322263.20230725121109.jpg' },
-    { id: 3, title: '노랜드', price: 18000, categoryId: 1, publishDate: '2022-06-22', imageUrl:'/images/main_329433932943397636.20230725121902.jpg' },
-    { id: 4, title: '랑과 나의 사막', price: 17000, categoryId: 1, publishDate: '2022-10-25', imageUrl:'/images/main_354920835492080618.20250102071614.jpg' },
-    { id: 5, title: '이끼숲', price: 21000, categoryId: 1, publishDate: '2023-05-02', imageUrl:'/images/main_396281739628177623.20230704084715.jpg' },
-    { id: 6, title: '노을 건너기', price: 17500, categoryId: 1, publishDate: '2023-08-18', imageUrl:'/images/main_420729542072954632.20230905100926.jpg' },
-    { id: 7, title: '어떤 물질의 사랑', price: 16200, categoryId: 2, publishDate: '2020-07-20', imageUrl:'/images/어떤 물질.jpg' },
-    { id: 8, title: '천 개의 파랑', price: 15000, categoryId: 2, publishDate: '2020-08-19', imageUrl:'/images/천 개의 파랑.jpg' },
-    { id: 9, title: '거꾸로 읽는 세계사', price: 22000, categoryId: 3, publishDate: '2020-08-19', imageUrl:'/images/main_324438732443877025.20230509165419.jpg' },
-    { id: 10, title: '행성어 서점', price: 22000, categoryId: 2, publishDate: '2020-08-19', imageUrl:'/images/main_324721232472125024.20240302074840.jpg' },
-])
+const router = useRouter();
+
+const topBooks = ref([]);
 
 const currentIndex = ref(0)
 const visibleCount = 5
@@ -109,8 +102,27 @@ const stopAutoSlide = () => {
     }
 }
 
+const goToBookList = () => {
+    router.push('/books')
+}
+
+const fetchTopTen = async () => {
+    try {
+        const res = await getPopularBooks();
+
+        if(res.data && res.data.success) {
+            topBooks.value = res.data.data;
+        } else {
+            console.log('인기도서 조회에 실패했습니다.')
+        }
+    } catch (e) {
+        console.log('인기 도서 조회에 실패했습니다. : ', e);
+    }
+}
+
 onMounted(() => {
     startAutoSlide()
+    fetchTopTen();
 })
 
 onBeforeUnmount(() => {
@@ -189,7 +201,7 @@ onBeforeUnmount(() => {
 }
 
 .more-link {
-    margin-top: 12px;
+    margin-bottom: 12px;
     text-align: right;
     font-weight: bold;
     cursor: pointer;

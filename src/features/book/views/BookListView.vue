@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import {ref, watch, onMounted, onUnmounted, nextTick, computed} from 'vue';
 import { debounce } from 'lodash';
 import { useRoute } from 'vue-router';
 import BookCard from '@/features/book/components/BookCard.vue';
@@ -65,9 +65,11 @@ const size = 10;
 const lastPage = ref(false);
 const isLoading = ref(false);
 
+const initialCategoryId = computed(() => Number(route.query.categoryId))
+console.log(`categoryId : ${initialCategoryId}`)
+const selectedCategoryIds = ref([initialCategoryId.value]);
 const keyword = ref('');
 const keywordType = ref('');
-const selectedCategoryIds = ref([]);
 const selectedSort = ref('latest');
 const minPrice = ref(0);
 const maxPrice = ref(50000);
