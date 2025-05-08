@@ -134,3 +134,23 @@
     color: #000;
     text-decoration: none;
 }
+
+.cart-wrapper {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 13px;
+    border-radius: 50%;
+    background: #F9F0DF;
+    color: black;
+    z-index: 10;
+}

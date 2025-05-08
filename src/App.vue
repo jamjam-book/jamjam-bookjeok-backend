@@ -19,7 +19,7 @@ const isAdminRoute = computed(() => {
 
     <!-- 관리자가 아니면 container 클래스 적용 -->
     <div :class="{ container: !isAdminRoute }">
-        <RouterView />
+        <RouterView :key="$route.fullPath"/>
     </div>
 
     <!-- 관리자가 아니면 푸터 표시 -->

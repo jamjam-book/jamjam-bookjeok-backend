@@ -3,12 +3,12 @@
         <!-- 좌측 정보 영역 -->
         <div class="info-left">
             <div class="author">
-                {{ book.author }}
+                {{ authorNames }}
                 <button class="wish-button" :class="{ active: isAuthorLiked }" @click="toggleAuthorLike">
                     관심작가 ♥
                 </button>
             </div>
-            <div class="publisher">{{ book.publisher }} | {{ book.publishDate }}</div>
+            <div class="publisher">{{ book.publisher.publisherName }} | {{ formatDate(book.publishedAt) }}</div>
             <div class="rating">{{ averageRating.toFixed(1) }}</div>
             <div class="stars">
                 <span
@@ -23,10 +23,10 @@
 
         <!-- 가운데: 도서 이미지 및 제목 -->
         <div class="info-center">
-            <h2 class="book-title">{{ book.title }}</h2>
-            <div class="book-sub">{{ book.author }} | {{ book.category }}</div>
+            <h2 class="book-title">{{ book.bookName }}</h2>
+            <div class="book-sub">{{ authorNames }} | {{ book.bookCategory.categoryName }}</div>
             <div class="book-image">
-                <img :src="book.imageUrl || defaultImage" alt="도서 이미지" class="book-img" />
+                <img :src="fullImageUrl || defaultImage" alt="도서 이미지" class="book-img" />
             </div>
         </div>
 
@@ -52,11 +52,11 @@
 
                 <div class="actions">
                     <button class="gray" :class="{ active: isBookLiked }" @click="toggleBookLike">관심도서 ♥</button>
-                    <button class="gray">장바구니</button>
+                    <button class="gray" @click="addToCart" :class="{ active: isBookLiked }">장바구니</button>
                 </div>
 
                 <div class="order">
-                    <button class="order-button">주문하기</button>
+                    <button class="order-button" @click="handleOrderNow">주문하기</button>
                 </div>
             </div>
         </div>
@@ -65,10 +65,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import axios from "axios";
+import {useRouter} from "vue-router";
 
 const props = defineProps({
     book: Object,
-    reviews: Array,
+    reviews: Object,
 });
 
 const defaultImage = 'images/placeholder.png';
@@ -76,10 +78,18 @@ const quantity = ref(1);
 const isAuthorLiked = ref(false);
 const isBookLiked = ref(false);
 
+const reviewArray = computed(() => props.reviews?.reviews || []);
+
+const authorNames = computed(() => {
+    console.log(`authors : ` + props.book.authors)
+    const authorName = (props.book.authors || []).map(author => author.authorName);
+    return authorName.join(', ');
+});
+
 const averageRating = computed(() => {
-    if (!props.reviews.length) return 0;
-    const sum = props.reviews.reduce((acc, r) => acc + r.rating, 0);
-    return sum / props.reviews.length;
+    if (!reviewArray.value.length) return 0;
+    const sum = reviewArray.value.reduce((acc, r) => acc + r.rating, 0);
+    return sum / reviewArray.value.length;
 });
 
 const getStarClass = (index, rating) => {
@@ -87,7 +97,8 @@ const getStarClass = (index, rating) => {
     if (rating >= index - 0.5) return 'half';
     return 'empty';
 };
-const reviewCount = ref(props.reviews.length);
+
+const reviewCount = computed(() => reviewArray.value.length);
 
 const increaseQuantity = () => {
     if (quantity.value < 5) quantity.value++;
@@ -109,6 +120,68 @@ const totalPrice = computed(() => props.book.price * quantity.value);
 
 const formatPrice = (price) => {
     return price.toLocaleString() + '원';
+};
+
+const formatDate = (dateStr) => {
+    const date = new Date(dateStr)
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return props.book.imageUrl.startsWith('http')
+            ? props.book.imageUrl
+            : IMAGE_BASE_URL + props.book.imageUrl
+});
+
+const addToCart = async () => {
+    try {
+        const memberUid = 'user01'; // 실제 로그인된 사용자에 따라 설정
+        const payload = {
+            bookId: props.book.bookId,
+            bookName: props.book.bookName,
+            quantity: quantity.value
+        };
+        const baseUrl = import.meta.env.VITE_API_BASE_URL;
+        const url = `${baseUrl}/members/${memberUid}/carts`;
+        const response = await axios.post(url, payload);
+
+        if (response.data.success) {
+            alert('장바구니에 추가되었습니다.');
+        } else {
+            alert('장바구니 추가 실패');
+        }
+    } catch (error) {
+        console.error('장바구니 추가 중 오류 발생:', error);
+        alert('장바구니 추가 중 오류가 발생했습니다.');
+    }
+};
+
+const router = useRouter();
+
+const handleOrderNow = () => {
+    const selectedItem = {
+        id: props.book.bookId,
+        bookName: props.book.bookName,
+        quantity: quantity.value,
+        price: props.book.price,
+        image: props.book.imageUrl,
+        selected: true
+    };
+
+    // 유효성 검사
+    if (!selectedItem.quantity || selectedItem.quantity < 1) {
+        alert('수량이 올바르지 않습니다.');
+        return;
+    }
+
+    const total = selectedItem.price * selectedItem.quantity;
+
+    sessionStorage.setItem('orderItems', JSON.stringify([selectedItem]));
+    sessionStorage.setItem('orderTotalPrice', total.toString());
+
+    router.push('/order');
 };
 </script>
 

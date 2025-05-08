@@ -1,10 +1,10 @@
 <template>
     <div class="book-card" @click="goToDetail">
         <div class="book-image">
-            <img :src="book.imageUrl || defaultImage" alt="도서 이미지" />
+            <img :src="fullImageUrl || defaultImage" alt="도서 이미지" />
         </div>
         <div class="book-info">
-            <p class="book-title">{{ book.title }}</p>
+            <p class="book-title"> {{ book.bookName }}</p>
             <p class="book-price">{{ formatPrice(book.price) }}</p>
         </div>
     </div>
@@ -12,6 +12,7 @@
 
 <script setup>
 import { useRouter } from "vue-router";
+import {computed} from "vue";
 
 const router = useRouter();
 
@@ -22,6 +23,14 @@ const props = defineProps({
     },
 });
 
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return props.book.imageUrl.startsWith('http')
+            ? props.book.imageUrl
+            : IMAGE_BASE_URL + props.book.imageUrl
+})
+
 const defaultImage = '/images/placeholder-book.png';
 
 const formatPrice = (price) => {
@@ -29,7 +38,7 @@ const formatPrice = (price) => {
 };
 
 const goToDetail = () => {
-    router.push(`/books/${props.book.id}`);
+    router.push(`/books/${props.book.bookId}`);
 };
 </script>
 
@@ -74,10 +83,12 @@ const goToDetail = () => {
 }
 
 .book-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 4px;
+    display: inline-block;
+    max-width: 100%;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .book-price {

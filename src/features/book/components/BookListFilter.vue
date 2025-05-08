@@ -16,15 +16,15 @@
 
         <!-- 체크박스 카테고리 목록 -->
         <ul class="checkbox-list">
-            <li v-for="category in categories" :key="category.id" class="checkbox-item">
+            <li v-for="category in categories" :key="category.categoryId" class="checkbox-item">
                 <label>
                     <input
                             type="checkbox"
-                            :value="category.id"
-                            :checked="selectedCategoryIds.includes(category.id)"
-                            @change="toggleCategory(category.id)"
+                            :value="category.categoryId"
+                            :checked="selectedCategoryIds.includes(category.categoryId)"
+                            @change="toggleCategory(category.categoryId)"
                     />
-                    {{ category.name }}
+                    {{ category.categoryName }}
                 </label>
             </li>
         </ul>
@@ -44,92 +44,98 @@
 
 <script setup>
 import '@vueform/slider/themes/default.css';
-import { ref, watch } from 'vue';
+import {computed, ref, watch} from 'vue';
 import Slider from '@vueform/slider';
+import { debounce } from 'lodash';
 
 const props = defineProps({
-    categories: {
-        type: Array,
-        default: () => [
-            { id: 1, name: '소설' },
-            { id: 2, name: '시/에세이' },
-            { id: 3, name: '기술/공학' },
-        ]
-    },
-    selectedCategoryIds: {
-        type: Array,
-        default: () => [],
-    },
-    minPrice: { type: Number, default: 0 },
-    maxPrice: { type: Number, default: 100000 },
+    categories: Array,
+    selectedCategoryIds: Array,
+    minPrice: Number,
+    maxPrice: Number,
 });
 const emit = defineEmits(['update:categoryIds', 'update:priceRange']);
 
 const priceRange = ref([props.minPrice, props.maxPrice]);
-const selectedCategoryIds = ref([...props.selectedCategoryIds]);
+
+const selectedCategoryIds = computed({
+    get: () => props.selectedCategoryIds,
+    set: (val) => emit('update:categoryIds', val)
+});
 
 const toggleCategory = (id) => {
-    const index = selectedCategoryIds.value.indexOf(id);
+    const newIds = [...props.selectedCategoryIds];
+    const index = newIds.indexOf(id);
+
     if (index === -1) {
-        selectedCategoryIds.value.push(id);
+        newIds.push(id);
     } else {
-        selectedCategoryIds.value.splice(index, 1);
+        newIds.splice(index, 1);
     }
-    emit('update:categoryIds', selectedCategoryIds.value);
+
+    emit('update:categoryIds', newIds);
 };
 
 const getCategoryName = (id) => {
-    const category = props.categories.find((cat) => cat.id === id);
-    return category ? category.name : '';
+    const category = props.categories.find((cat) => cat.categoryId === id);
+    return category ? category.categoryName : '';
 };
 
-watch(priceRange, (val) => {
-    emit('update:priceRange', val);
+watch(() => [props.minPrice, props.maxPrice], ([min, max]) => {
+    priceRange.value = [min, max];
 });
+
+watch(
+        priceRange,
+        debounce((val) => {
+            emit('update:priceRange', val);
+        }, 300)
+);
+
 </script>
 
 <style>
 .category-filter {
-  width: 240px;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
+    width: 240px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
 }
 
 .category-label,
 .price-label {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
 }
 
 .price-label {
-  margin-top: 2rem;
-  margin-bottom: 2.5rem ! important;
+    margin-top: 2rem;
+    margin-bottom: 2.5rem ! important;
 }
 
 .selected-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 0.75rem;
 }
 
 .tag-button {
-  background-color: #854d14;
-  color: white;
-  border: none;
-  border-radius: 16px;
-  padding: 0.3rem 0.7rem;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+    background-color: #854d14;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 0.3rem 0.7rem;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .tag-button:hover {
-  background-color: #a05a1d;
+    background-color: #a05a1d;
 }
 
 .checkbox-list {
@@ -153,39 +159,34 @@ watch(priceRange, (val) => {
     margin-right: 6px;
 }
 
-
-
-
 .slider-wrapper {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* slider 바 색상 */
 .vue-slider .vue-slider-rail {
-  background-color: #f0e0cc; /* 슬라이더 트랙 색상 */
+    background-color: #f0e0cc; /* 슬라이더 트랙 색상 */
 }
 
 .slider-connect {
-  background-color: #854d14; /* 진행된 영역 색상 */
+    background-color: #854d14; /* 진행된 영역 색상 */
 }
 
 /* 핸들 색상 */
 .vue-slider .vue-slider-dot-handle {
-  background-color: #854d14;
-  border: 2px solid #854d14;
+    background-color: #854d14;
+    border: 2px solid #854d14;
 }
 
 /* 툴팁 색상 */
 .slider-tooltip {
-  background-color: #854d14;
-  color: #fff;
-  border: none;
+    background-color: #854d14;
+    color: #fff;
+    border: none;
 }
 
 .vue-slider .vue-slider-tooltip::after {
-  border-top-color: #854d14; /* 툴팁 화살표 색 */
+    border-top-color: #854d14; /* 툴팁 화살표 색 */
 }
-
 </style>
-
