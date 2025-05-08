@@ -73,9 +73,9 @@ const goToMember = (memberId) => {
 
 <style scoped>
 .admin-table {
-    width: 900px;
+    width: 1060px;
     border-collapse: collapse;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .admin-table th,
@@ -84,6 +84,7 @@ const goToMember = (memberId) => {
     text-align: center;
     background-color: #f9f0df;
     color: #522404;
+    border : 1px solid #ddd;
 }
 
 .admin-table tbody tr {

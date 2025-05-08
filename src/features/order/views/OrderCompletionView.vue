@@ -73,7 +73,8 @@ const fetchOrderCompletion = async () => {
 
 onMounted(fetchOrderCompletion)
 
-const goToOrders = () => router.push('/members/orders')
+const memberId = 'user01'
+const goToOrders = () => router.push(`/members/${memberId}/orders`)
 const goToMain = () => router.push('/')
 </script>
 

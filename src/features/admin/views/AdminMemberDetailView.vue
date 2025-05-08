@@ -55,8 +55,8 @@ onMounted(async () => {
                 <template v-if="isEditMode">
                     <select v-model="member.activityStatus">
                         <option value="ACTIVE">ACTIVE</option>
-                        <option value="SUSPENDED">SUSPENDED</option>
-                        <option value="WITHDRAWN">WITHDRAWN</option>
+                        <option value="DEACTIVATE">DEACTIVATE</option>
+                        <option value="PERMANENT">PERMANENT</option>
                     </select>
 
                 </template>

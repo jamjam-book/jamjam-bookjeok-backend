@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import { Doughnut } from 'vue-chartjs';
 import {
     Chart as ChartJS,
@@ -104,7 +104,6 @@ const props = defineProps({
 
 const reviewArray = computed(() => props.reviews?.reviews || []);
 
-const total = reviewArray.value.length;
 const showForm = ref(false);
 const newReview = ref('');
 const newRating = ref(0);
@@ -166,7 +165,7 @@ const getStarClass = (index, rating) => {
     return 'empty';
 };
 
-const emit = defineEmits(['submit-review']);
+const emit = defineEmits(['submit-reviews']);
 
 const updateRating = (cnt) => {
     rating.value = cnt;
@@ -176,7 +175,7 @@ const updateRating = (cnt) => {
 const submitReview = () => {
     if (!newReview.value || !rating.value) return;
 
-    emit('submit-review', {
+    emit('submit-reviews', {
         content : newReview.value,
         rating : newRating.value
     });

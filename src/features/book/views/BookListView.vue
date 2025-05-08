@@ -1,7 +1,7 @@
 <template>
     <div class="book-category-page">
         <!-- 왼쪽: 필터 영역 -->
-        <aside class="filter-section" v-if="books.length > 0">
+        <aside class="filter-section" >
             <BookListFilter
                     :categories="categories"
                     :selected-category-ids="selectedCategoryIds"
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import {ref, watch, onMounted, onUnmounted, nextTick, computed} from 'vue';
+import {ref, watch, onMounted, onUnmounted, computed} from 'vue';
 import { debounce } from 'lodash';
 import { useRoute } from 'vue-router';
 import BookCard from '@/features/book/components/BookCard.vue';
@@ -67,7 +67,8 @@ const isLoading = ref(false);
 
 const initialCategoryId = computed(() => Number(route.query.categoryId))
 console.log(`categoryId : ${initialCategoryId}`)
-const selectedCategoryIds = ref([initialCategoryId.value]);
+
+const selectedCategoryIds = ref([]);
 const keyword = ref('');
 const keywordType = ref('');
 const selectedSort = ref('latest');
@@ -191,9 +192,20 @@ const initObserver = () => {
 };
 
 watch(() => route.query, async (newQuery, oldQuery) => {
-    if (newQuery.keyword !== oldQuery.keyword || newQuery.keywordType !== oldQuery.keywordType) {
+    const keywordChanged = newQuery.keyword !== oldQuery.keyword || newQuery.keywordType !== oldQuery.keywordType;
+    const categoryChanged = newQuery.categoryId !== oldQuery.categoryId;
+
+    if (keywordChanged || categoryChanged) {
         keyword.value = newQuery.keyword || '';
         keywordType.value = newQuery.keywordType || '';
+
+        if (newQuery.categoryId) {
+            selectedCategoryIds.value = [Number(newQuery.categoryId)];
+        } else {
+            selectedCategoryIds.value = [];
+        }
+
+        await fetchPriceRange();
         await resetAndFetch();
     }
 });
@@ -202,6 +214,13 @@ watch(() => route.query, async (newQuery, oldQuery) => {
 onMounted(async () => {
     keyword.value = route.query.keyword || '';
     keywordType.value = route.query.keywordType || '';
+
+    // categoryId가 있으면 selectedCategoryIds에 추가
+    if (route.query.categoryId) {
+        selectedCategoryIds.value = [Number(route.query.categoryId)];
+    } else {
+        selectedCategoryIds.value = [];
+    }
 
     await fetchCategories();
     await fetchPriceRange();
@@ -222,7 +241,7 @@ onUnmounted(() => {
 .book-category-page {
     display: flex;
     max-width: 1200px;
-    margin: 0 auto 100px;
+    margin: 0 auto 300px;
     padding: 24px;
     gap: 24px;
 }
