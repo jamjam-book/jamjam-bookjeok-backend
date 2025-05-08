@@ -89,10 +89,12 @@ onMounted(() => {
                             </div>
                             <div class="header-icons">
                                 <img class="icon favorite" src="../../assets/icons/favorite.png" alt="관심 목록"/>
-                                <div class="cart-wrapper">
-                                    <img class="icon cart" src="../../assets/icons/cart.png" alt="장바구니"/>
-                                    <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
-                                </div>
+                                <RouterLink to="/carts">
+                                    <div class="cart-wrapper">
+                                        <img class="icon" src="../../assets/icons/cart.png" alt="장바구니"/>
+                                        <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
+                                    </div>
+                                </RouterLink>
                                 <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
                             </div>
                         </template>
