@@ -5,6 +5,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/'
 </script>
 
 <template>
@@ -12,7 +14,7 @@ const props = defineProps({
         <h4 class="fw-bold" id="order-info-title">주문 정보</h4>
 
         <div v-for="item in order.items" :key="item.id" class="order-row">
-            <img :src="item.image" alt="도서 이미지" class="book-image"/>
+            <img :src="item.image.startsWith('http') ? item.image : IMAGE_BASE_URL + item.image" alt="도서 이미지" class="book-image"/>
 
             <div class="info-row">
                 <div class="header-row">
@@ -47,8 +49,8 @@ const props = defineProps({
 }
 
 .book-image {
-    width: 110px;
-    height: 136px;
+    width: auto;
+    height: 160px;
     object-fit: cover;
     margin-right: 24px;
 }

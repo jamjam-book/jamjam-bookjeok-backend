@@ -38,7 +38,7 @@ const formatPrice = (price) => {
 };
 
 const goToDetail = () => {
-    router.push(`/books/${props.book.id}`);
+    router.push(`/books/${props.book.bookId}`);
 };
 </script>
 

@@ -2,7 +2,8 @@
     <div v-if="visible" class="modal" tabindex="0" @keydown.enter="handleConfirm">
         <div class="modal-content">
             <p>{{ message }}</p>
-            <div class="modal-buttons">
+            <slot></slot>
+            <div v-if="!$slots.default" class="modal-buttons">
                 <button class="confirm-btn" @click="handleConfirm">확인</button>
             </div>
         </div>

@@ -1,6 +1,10 @@
 <script setup>
+import {computed} from "vue";
+
 const {item} = defineProps(['item']);
 const emit = defineEmits(['increase', 'decrease', 'update', 'remove']);
+
+console.log(item);
 
 function confirmQuantityChange() {
     if (!item.quantity || isNaN(item.quantity) || item.quantity < 1) {
@@ -35,6 +39,16 @@ function handleInput(e) {
         item.quantity = val;
     }
 }
+
+const IMAGE_BASE_URL = 'http://localhost:8080/images/';
+
+const fullImageUrl = computed(() => {
+    return item.image.startsWith('http')
+            ? item.image
+            : IMAGE_BASE_URL + item.image
+})
+
+console.log(fullImageUrl);
 </script>
 
 <template>
@@ -49,7 +63,7 @@ function handleInput(e) {
 
         <!-- 도서명, 가격 -->
         <div id="cart-left" class="d-flex align-items-center flex-grow-1">
-            <img :src="item.image" id="cart-image" alt="도서 이미지"/>
+            <img :src="fullImageUrl" id="cart-image" alt="도서 이미지"/>
             <div id="cart-book-info">
                 <div id="cart-book-title" class="fw-bold mb-2">{{ item.bookName }}</div>
                 <div>{{ item.price.toLocaleString() }}원</div>
@@ -111,8 +125,8 @@ function handleInput(e) {
 }
 
 #cart-image {
-    width: 110px;
-    height: 136px;
+    width: auto;
+    height: 160px;
     object-fit: cover;
     margin-left: 20px;
     margin-right: 1rem;

@@ -67,6 +67,7 @@ const isLoading = ref(false);
 
 const initialCategoryId = computed(() => Number(route.query.categoryId))
 console.log(`categoryId : ${initialCategoryId}`)
+
 const selectedCategoryIds = ref([]);
 const keyword = ref('');
 const keywordType = ref('');
@@ -154,6 +155,7 @@ const fetchBooks = async () => {
     }
 };
 
+
 const resetAndFetch = async () => {
     page.value = 0;
     lastPage.value = false;
@@ -226,6 +228,7 @@ onMounted(async () => {
     initObserver();
     initialized.value = true;
 });
+
 
 onUnmounted(() => {
     if (observer && scrollObserver.value) {
