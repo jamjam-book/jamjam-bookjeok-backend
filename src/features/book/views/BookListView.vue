@@ -1,7 +1,7 @@
 <template>
     <div class="book-category-page">
         <!-- 왼쪽: 필터 영역 -->
-        <aside class="filter-section">
+        <aside class="filter-section" >
             <BookListFilter
                     :categories="categories"
                     :selected-category-ids="selectedCategoryIds"
@@ -14,7 +14,7 @@
 
         <!-- 오른쪽: 정렬 + 목록 -->
         <main class="content-section">
-            <div class="sort-bar">
+            <div class="sort-bar" v-if="books.length > 0">
                 <button
                         v-for="option in sortOptions"
                         :key="option.value"
@@ -30,10 +30,15 @@
                 <span class="spinner" />
             </div>
 
+            <!-- 결과 없음 메시지 -->
+            <div v-if="!isLoading && books.length === 0" class="empty-message">
+                조회된 도서가 없습니다.
+            </div>
+
             <div v-else class="book-grid">
                 <BookCard
                         v-for="book in books"
-                        :key="book.id"
+                        :key="book.bookId"
                         :book="book"
                 />
             </div>
@@ -45,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import {ref, watch, onMounted, onUnmounted, computed} from 'vue';
 import { debounce } from 'lodash';
 import { useRoute } from 'vue-router';
 import BookCard from '@/features/book/components/BookCard.vue';
@@ -60,7 +65,11 @@ const size = 10;
 const lastPage = ref(false);
 const isLoading = ref(false);
 
+const initialCategoryId = computed(() => Number(route.query.categoryId))
+console.log(`categoryId : ${initialCategoryId}`)
 const selectedCategoryIds = ref([]);
+const keyword = ref('');
+const keywordType = ref('');
 const selectedSort = ref('latest');
 const minPrice = ref(0);
 const maxPrice = ref(50000);
@@ -94,6 +103,8 @@ const fetchPriceRange = async () => {
     try {
         const params = {
             categoryIds: selectedCategoryIds.value.join(','),
+            keyword: keyword.value,
+            keywordType: keywordType.value,
             sort: selectedSort.value,
         };
         const res = await getPriceRange(params);
@@ -115,6 +126,8 @@ const fetchBooks = async () => {
     const params = {
         page: page.value,
         size,
+        keyword: keyword.value,
+        keywordType: keywordType.value,
         categoryIds: selectedCategoryIds.value.join(','),
         sort: selectedSort.value,
         minPrice: priceRange.value[0],
@@ -176,7 +189,37 @@ const initObserver = () => {
     }
 };
 
+watch(() => route.query, async (newQuery, oldQuery) => {
+    const keywordChanged = newQuery.keyword !== oldQuery.keyword || newQuery.keywordType !== oldQuery.keywordType;
+    const categoryChanged = newQuery.categoryId !== oldQuery.categoryId;
+
+    if (keywordChanged || categoryChanged) {
+        keyword.value = newQuery.keyword || '';
+        keywordType.value = newQuery.keywordType || '';
+
+        if (newQuery.categoryId) {
+            selectedCategoryIds.value = [Number(newQuery.categoryId)];
+        } else {
+            selectedCategoryIds.value = [];
+        }
+
+        await fetchPriceRange();
+        await resetAndFetch();
+    }
+});
+
+
 onMounted(async () => {
+    keyword.value = route.query.keyword || '';
+    keywordType.value = route.query.keywordType || '';
+
+    // categoryId가 있으면 selectedCategoryIds에 추가
+    if (route.query.categoryId) {
+        selectedCategoryIds.value = [Number(route.query.categoryId)];
+    } else {
+        selectedCategoryIds.value = [];
+    }
+
     await fetchCategories();
     await fetchPriceRange();
     await fetchBooks();
@@ -195,7 +238,7 @@ onUnmounted(() => {
 .book-category-page {
     display: flex;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 300px;
     padding: 24px;
     gap: 24px;
 }
@@ -258,5 +301,12 @@ onUnmounted(() => {
     to {
         transform: rotate(360deg);
     }
+}
+
+.empty-message {
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #777;
 }
 </style>
