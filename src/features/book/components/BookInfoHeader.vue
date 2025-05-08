@@ -52,7 +52,7 @@
 
                 <div class="actions">
                     <button class="gray" :class="{ active: isBookLiked }" @click="toggleBookLike">관심도서 ♥</button>
-                    <button class="gray" @click="addToCart" :class="{ active: isBookLiked }">장바구니</button>
+                    <button class="gray" @click="addToCart">장바구니</button>
                 </div>
 
                 <div class="order">

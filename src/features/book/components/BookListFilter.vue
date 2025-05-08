@@ -44,7 +44,7 @@
 
 <script setup>
 import '@vueform/slider/themes/default.css';
-import { ref, watch, watchEffect } from 'vue';
+import {computed, ref, watch} from 'vue';
 import Slider from '@vueform/slider';
 import { debounce } from 'lodash';
 
@@ -58,16 +58,22 @@ const emit = defineEmits(['update:categoryIds', 'update:priceRange']);
 
 const priceRange = ref([props.minPrice, props.maxPrice]);
 
-const selectedCategoryIds = ref([...props.selectedCategoryIds]);
+const selectedCategoryIds = computed({
+    get: () => props.selectedCategoryIds,
+    set: (val) => emit('update:categoryIds', val)
+});
 
 const toggleCategory = (id) => {
-    const index = selectedCategoryIds.value.indexOf(id);
+    const newIds = [...props.selectedCategoryIds];
+    const index = newIds.indexOf(id);
+
     if (index === -1) {
-        selectedCategoryIds.value.push(id);
+        newIds.push(id);
     } else {
-        selectedCategoryIds.value.splice(index, 1);
+        newIds.splice(index, 1);
     }
-    emit('update:categoryIds', selectedCategoryIds.value);
+
+    emit('update:categoryIds', newIds);
 };
 
 const getCategoryName = (id) => {

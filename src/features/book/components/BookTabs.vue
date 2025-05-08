@@ -15,7 +15,7 @@
                     :reviews="reviews"
                     :ratingCounts="ratingCounts"
                     :isPurchaser="isPurchaser"
-                    @submit-review="handleSubmitReviews"
+                    @submit-reviews="handleReviewSubmit"
             />
         </div>
 
@@ -37,7 +37,7 @@ const props = defineProps({
 });
 
 const reviewArray = computed(() => props.reviews?.reviews || []);
-const reviewCount = reviewArray.value.length;
+const reviewCount = computed(() => reviewArray.value.length);
 
 const ratingCounts = computed(() => {
     const ratingArr = [0, 0, 0, 0, 0];
@@ -69,7 +69,7 @@ const scrollTo = (tab) => {
 
 const emit = defineEmits(['submit-reviews']);
 
-const handleSubmitReviews = (payload) => {
+const handleReviewSubmit = (payload) => {
     emit('submit-reviews', payload);
 };
 </script>
