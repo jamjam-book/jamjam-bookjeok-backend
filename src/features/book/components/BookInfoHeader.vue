@@ -52,7 +52,7 @@
 
                 <div class="actions">
                     <button class="gray" :class="{ active: isBookLiked }" @click="toggleBookLike">관심도서 ♥</button>
-                    <button class="gray">장바구니</button>
+                    <button class="gray" @click="addToCart" :class="{ active: isBookLiked }">장바구니</button>
                 </div>
 
                 <div class="order">
@@ -65,6 +65,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import axios from "axios";
 
 const props = defineProps({
     book: Object,
@@ -132,6 +133,29 @@ const fullImageUrl = computed(() => {
             ? props.book.imageUrl
             : IMAGE_BASE_URL + props.book.imageUrl
 });
+
+const addToCart = async () => {
+    try {
+        const memberUid = 'user01'; // 실제 로그인된 사용자에 따라 설정
+        const payload = {
+            bookId: props.book.bookId,
+            bookName: props.book.bookName,
+            quantity: quantity.value
+        };
+        const baseUrl = import.meta.env.VITE_API_BASE_URL;
+        const url = `${baseUrl}/members/${memberUid}/carts`;
+        const response = await axios.post(url, payload);
+
+        if (response.data.success) {
+            alert('장바구니에 추가되었습니다.');
+        } else {
+            alert('장바구니 추가 실패');
+        }
+    } catch (error) {
+        console.error('장바구니 추가 중 오류 발생:', error);
+        alert('장바구니 추가 중 오류가 발생했습니다.');
+    }
+};
 </script>
 
 <style scoped>
