@@ -32,9 +32,9 @@ export const memberRoutes = [
                     { path: 'posts', component: () => import('@/features/member/views/InterestPostView.vue') },
                 ]
             },
-            { path: 'questions', component: () => import('@/features/question/views/QuestionListView.vue')},
-            { path: 'questions/register', component: () => import('@/features/question/views/QuestionRegisterView.vue')},
-            { path: 'questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue')},
+            { path: ':memberId/questions', component: () => import('@/features/question/views/QuestionListView.vue'), name:"QuestionList"},
+            { path: ':memberId/questions/register', component: () => import('@/features/question/views/QuestionRegisterView.vue'), name:"QuestionRegister" },
+            { path: ':memberId/questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue'), name:"QuestionEdit"},
         ]
     },
     {
