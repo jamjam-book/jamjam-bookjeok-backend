@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="order">
-                    <button class="order-button">주문하기</button>
+                    <button class="order-button" @click="handleOrderNow">주문하기</button>
                 </div>
             </div>
         </div>
@@ -66,6 +66,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import axios from "axios";
+import {useRouter} from "vue-router";
 
 const props = defineProps({
     book: Object,
@@ -155,6 +156,32 @@ const addToCart = async () => {
         console.error('장바구니 추가 중 오류 발생:', error);
         alert('장바구니 추가 중 오류가 발생했습니다.');
     }
+};
+
+const router = useRouter();
+
+const handleOrderNow = () => {
+    const selectedItem = {
+        id: props.book.bookId,
+        bookName: props.book.bookName,
+        quantity: quantity.value,
+        price: props.book.price,
+        image: props.book.imageUrl,
+        selected: true
+    };
+
+    // 유효성 검사
+    if (!selectedItem.quantity || selectedItem.quantity < 1) {
+        alert('수량이 올바르지 않습니다.');
+        return;
+    }
+
+    const total = selectedItem.price * selectedItem.quantity;
+
+    sessionStorage.setItem('orderItems', JSON.stringify([selectedItem]));
+    sessionStorage.setItem('orderTotalPrice', total.toString());
+
+    router.push('/order');
 };
 </script>
 
