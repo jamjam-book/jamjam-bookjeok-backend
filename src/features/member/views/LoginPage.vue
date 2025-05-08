@@ -2,25 +2,27 @@
     <div class="main-login-wrap">
         <img class="main-login-logo" src="@/assets/images/logo.png" alt="Book적Book적 로고" />
         <div class="form-box">
-            <div class="form-group">
-                <label for="memberId">아이디</label>
-                <input
-                        id="memberId"
-                        v-model="memberId"
-                        type="text"
-                        placeholder="아이디를 입력해주세요."
-                />
-            </div>
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input
-                        id="password"
-                        v-model="password"
-                        type="password"
-                        placeholder="비밀번호를 입력해주세요."
-                />
-            </div>
-            <button class="login-button" @click="handleLogin">로그인</button>
+            <form @submit.prevent="handleLogin">
+                <div class="form-group">
+                    <label for="memberId">아이디</label>
+                    <input
+                            id="memberId"
+                            v-model="memberId"
+                            type="text"
+                            placeholder="아이디를 입력해주세요."
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input
+                            id="password"
+                            v-model="password"
+                            type="password"
+                            placeholder="비밀번호를 입력해주세요."
+                    />
+                </div>
+                <button class="login-button" type="submit">로그인</button>
+            </form>
             <div class="links">
                 <RouterLink to="/signup">회원가입</RouterLink>
                 <RouterLink to="/find-id">아이디 찾기</RouterLink>
@@ -61,9 +63,6 @@ const handleLogin = async () => {
             password: password.value
         })
 
-        console.log(memberId);
-        console.log(password);
-
         const at = resp.data.data.accessToken;
         // Pinia의 저장소에 access token 저장
         authStore.setAuth(at);
@@ -71,13 +70,12 @@ const handleLogin = async () => {
     } catch (e) {
         modalMessage.value = '아이디 또는 비밀번호를 확인해주세요.';
         modalVisible.value = true;
-        console.log('로그인 실패', e);
     }
 }
-
 </script>
 
 <style scoped>
+/* ... 기존 스타일 그대로 ... */
 .main-login-wrap {
     min-height: calc(100vh - 120px);
     display: flex;

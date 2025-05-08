@@ -215,8 +215,6 @@ watch(isLoggedIn, (val) => {
     position: absolute;
     right: -8px;
     top: -6px;
-    background: #e74c3c;
-    color: #fff;
     font-size: 12px;
     font-weight: 700;
     border-radius: 50%;
