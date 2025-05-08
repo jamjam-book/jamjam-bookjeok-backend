@@ -124,6 +124,13 @@ onMounted(async () => {
             console.error('[ERROR] 응답 구조가 예상과 다릅니다:', resp.data);
         }
 
+        const reloaded = sessionStorage.getItem('reloaded')
+        if (!reloaded) {
+            sessionStorage.setItem('reloaded', 'true')
+            location.reload()
+        } else {
+            sessionStorage.removeItem('reloaded')
+        }
     } catch (error) {
         console.error('[ERROR] 장바구니 조회 실패', error);
     }
