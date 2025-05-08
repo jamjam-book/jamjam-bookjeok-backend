@@ -4,7 +4,7 @@
 
 <br>
 
-<img src="src/assets/images/logo.png" alt="Book적Book적 로고" />
+<img src="readme-images/Book적Book적_logo.png" alt="Book적Book적 로고" />
 
 </div>
 
