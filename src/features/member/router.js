@@ -1,4 +1,8 @@
 import ProfileView from "@/features/member/views/ProfileView.vue";
+import {ref} from "vue";
+
+// const memberId = ref(''); 로그인 정보 저장 후 변경
+const memberId = ref('user01')
 
 export const memberRoutes = [
     {
@@ -16,12 +20,11 @@ export const memberRoutes = [
         name: 'MyPage',
         component: () => import('@/features/member/views/MyPageView.vue'),
         children: [
-            { path: '', redirect: 'profile' },
-            { path: '/profile', component: () => import('@/features/member/views/ProfileView.vue')},
-            { path: '/:memberId', component: () => import('@/features/member/views/PasswordResetRequestView.vue')},
+            { path: `:memberId`, redirect: `/members/${memberId}/profile` },
+            { path: ':memberId/profile', component: () => import('@/features/member/views/ProfileView.vue')},
             { path: ':memberId/password/modify', component: () => import('@/features/member/views/PasswordModifyView.vue')},
             { path: ':memberId/followings', component: () => import('@/features/member/views/FollowingView.vue')},
-            //{ path: '/:memberId/orders', component: () => import ('@/features/order/views/OrderListView.vue')},
+            { path: ':memberId/orders', component: () => import ('@/features/order/views/MemberOrdersView.vue')},
             {
                 path: ':memberId/interest',
                 name: 'MemberInterest',
@@ -32,9 +35,9 @@ export const memberRoutes = [
                     { path: 'posts', component: () => import('@/features/member/views/InterestPostView.vue') },
                 ]
             },
-            { path: 'questions', component: () => import('@/features/question/views/QuestionListView.vue')},
-            { path: 'questions/register', component: () => import('@/features/question/views/QuestionRegisterView.vue')},
-            { path: 'questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue')},
+            { path: ':memberId/questions', component: () => import('@/features/question/views/QuestionListView.vue'), name:"QuestionList"},
+            { path: ':memberId/questions/register', component: () => import('@/features/question/views/QuestionRegisterView.vue'), name:"QuestionRegister" },
+            { path: ':memberId/questions/:questionId/edit', component: () => import('@/features/question/views/QuestionEditView.vue'), name:"QuestionEdit"},
         ]
     },
     {
