@@ -4,13 +4,14 @@ import axios from 'axios'
 import SearchBar from "@/components/common/SearchBar.vue"
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import Modal from '@/components/common/Modal2.vue'
 import { loginUser } from "@/lib/user.js"
 
 const authStore = useAuthStore()
 const { isAuthenticated, userRole } = storeToRefs(authStore)
 const router = useRouter()
+const route = useRoute()
 
 const isLoggedIn = computed(() => isAuthenticated.value)
 const memberStatus = computed(() => userRole.value || 'MEMBER')
@@ -20,7 +21,8 @@ const isOpen = ref(false)
 const modalVisible = ref(false)
 const modalMessage = ref('')
 
-const memberId = ref('')
+// const memberId = ref('') 로그인 정보 저장 후 변경
+const memberId = ref('user01');
 const password = ref('')
 
 const toggleDropdown = () => {
@@ -144,7 +146,7 @@ watch(isLoggedIn, (val) => {
                                 </div>
                             </RouterLink>
                             <!-- 마이페이지 -->
-                            <RouterLink to="/profile">
+                            <RouterLink :to="`/members/${memberId}/profile`">
                                 <img class="icon" src="../../assets/icons/mypage.png" alt="마이페이지"/>
                             </RouterLink>
                         </div>

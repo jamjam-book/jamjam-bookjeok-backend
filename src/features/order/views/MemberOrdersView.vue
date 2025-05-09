@@ -54,9 +54,6 @@ const onPageChanged = (page) => {
 
 <template>
     <div class="mypage-container">
-        <div class="mypage-layout-left">
-            <MyPageNav/>
-        </div>
         <div class="mypage-layout-right">
             <h3 class="fw-bold mb-4">주문 내역</h3>
 
@@ -81,11 +78,6 @@ const onPageChanged = (page) => {
     display: flex;
     width: 1200px;
     margin: 42px auto 0;
-}
-
-.mypage-layout-left {
-    width: 200px;
-    margin-right: 100px;
 }
 
 .mypage-layout-right {

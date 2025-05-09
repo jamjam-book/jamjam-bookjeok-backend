@@ -1,12 +1,13 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import {ref} from "vue";
 
-const router = useRouter();
-const activeMenu = ref('주문 내역');
-const handleMenuClick = (menu) => {
-    activeMenu.value = menu;
-};
+const route = useRoute();
+// 로그인 정보 저장 후 값 변경
+const memberId = ref('user01');
+
+// 현재 경로와 비교해서 메뉴의 활성 여부 판단
+const isActive = (path) => route.path === path;
 </script>
 
 <template>
@@ -14,43 +15,64 @@ const handleMenuClick = (menu) => {
         <nav>
             <ul>
                 <li>
-                    <RouterLink to="/members/:memberId" :class="{ active: activeMenu === '회원 정보' }"
-                                @click.prevent="handleMenuClick('회원 정보')">회원 정보
+                    <RouterLink
+                            :to="`/members/${memberId}`"
+                            :class="{ active: isActive(`/members/${memberId}`) }"
+                    >
+                        회원 정보
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/profile" class="small-side"
-                                :class="{ active: activeMenu === '프로필 변경' }"
-                                @click.prevent="handleMenuClick('프로필 변경')">프로필 변경
+                    <RouterLink
+                            :to="`/members/${memberId}/profile`"
+                            class="small-side"
+                            :class="{ active: isActive(`/members/${memberId}/profile`) }"
+                    >
+                        프로필 변경
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/members/:memberId/password/modify" class="small-side"
-                                :class="{ active: activeMenu === '비밀번호 변경' }"
-                                @click.prevent="handleMenuClick('비밀번호 변경')">비밀번호 변경
+                    <RouterLink
+                            :to="`/members/${memberId}/password/modify`"
+                            class="small-side"
+                            :class="{ active: isActive(`/members/${memberId}/password/modify`) }"
+                    >
+                        비밀번호 변경
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/members/:memberId/followings" class="small-side"
-                                :class="{ active: activeMenu === '팔로잉 목록' }"
-                                @click.prevent="handleMenuClick('팔로잉 목록')">팔로잉 목록
+                    <RouterLink
+                            :to="`/members/${memberId}/followings`"
+                            class="small-side"
+                            :class="{ active: isActive(`/members/${memberId}/followings`) }"
+                    >
+                        팔로잉 목록
                     </RouterLink>
                 </li>
             </ul>
             <ul>
                 <li>
-                    <RouterLink to="members/:memberId/orders" :class="{ active: activeMenu === '주문 내역' }"
-                                @click.prevent="handleMenuClick('주문 내역')">주문 내역
+                    <RouterLink
+                            :to="`/members/${memberId}/orders`"
+                            :class="{ active: isActive(`/members/${memberId}/orders`) }"
+                    >
+                        주문 내역
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/members/:memberId/interest/authors" :class="{ active: activeMenu === '관심 목록' }"
-                                @click.prevent="handleMenuClick('관심 목록')">관심 목록
+                    <RouterLink
+                            :to="`/members/${memberId}/interest/authors`"
+                            :class="{ active: isActive(`/members/${memberId}/interest/authors`) }"
+                    >
+                        관심 목록
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/members/:memberId//questions" :class="{ active: activeMenu === '문의 사항' }"
-                                @click.prevent="handleMenuClick('문의 사항')">문의 사항
+                    <RouterLink
+                            :to="`/members/${memberId}/questions`"
+                            :class="{ active: isActive(`/members/${memberId}/questions`) }"
+                    >
+                        문의 사항
                     </RouterLink>
                 </li>
             </ul>
@@ -80,7 +102,7 @@ aside a {
     transition: all 0.2s;
     cursor: pointer;
 }
-aside a.active {
+aside nav ul li .active {
     font-weight: bold;
     color: #000;
     border-bottom: 2px solid #666;
