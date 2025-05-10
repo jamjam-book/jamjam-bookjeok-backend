@@ -126,7 +126,7 @@ const paginatedReviews = computed(() => {
 });
 
 
-const chartData = {
+const chartData = computed(() => ({
     labels: ['1점', '2점', '3점', '4점', '5점'],
     datasets: [{
         data: [
@@ -139,7 +139,7 @@ const chartData = {
         backgroundColor: ['#c08b59', '#d9a06b', '#e7b69c', '#f0cdbf', '#fdf2e9'],
         borderWidth: 0
     }]
-};
+}));
 
 const options = {
     responsive: true,
