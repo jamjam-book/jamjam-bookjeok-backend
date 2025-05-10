@@ -105,7 +105,7 @@
   - 커뮤니티 활동 내역은 마이페이지에서 확인할 수 있습니다.
 <br>
 
-## 📄 **명세서**
+## 📄 **화면 명세서**
 
 ---
 
@@ -208,12 +208,10 @@ src/
   <img src="readme-images/메인 페이지/메인페이지.gif" alt="메인 페이지" />
 </details>
 
-### 2. 로그인 / 회원가입 / 비밀번호 찾기
+### 2. 회원가입 / 로그인 / 비밀번호 찾기
 <details>
-  <summary>로그인</summary>
-</details>
-<details>
-  <summary>회원가입</summary>
+  <summary>회원가입, 로그인</summary>
+    <img src="readme-images/로그인, 회원가입, 로그아웃/로그인, 회원가입.gif" alt="로그인, 회원가입" />
 </details>
 <details>
   <summary>비밀번호 찾기</summary>
@@ -230,9 +228,11 @@ src/
 ### 3. 마이 페이지
 <details>
   <summary>프로필 관리</summary>
+    <img src="readme-images/회원 정보/프로필 변경.gif" alt="프로필 변경" />
 </details>
 <details>
   <summary>비밀번호 변경</summary>
+    <img src="readme-images/회원 정보/비밀번호 변경.png" alt="비밀번호 변경" />
 </details>
 <details>
   <summary>팔로잉 목록</summary>
@@ -245,9 +245,6 @@ src/
 <details>
   <summary>관심 목록</summary>
   <img src="readme-images/관심 및 팔로잉/관심 목록 조회 및 삭제.gif" alt="관심 목록" />
-</details>
-<details>
-  <summary>문의사항</summary>
 </details>
 
 ### 4. 도서 페이지
@@ -262,6 +259,10 @@ src/
 <details>
   <summary>도서 상세</summary>
   <img src="readme-images/도서/도서 상세 정보.gif" alt="도서 상세" />
+</details>
+<details>
+  <summary>도서 리뷰 등록</summary>
+  <img src="readme-images/도서/도서 리뷰 등록.gif" alt="도서 리뷰 등록" />
 </details>
 
 ### 5. 주문 / 결제 페이지
@@ -335,15 +336,49 @@ src/
 
 ### 2. 부모-자식 컴포넌트 간 전파 문제
 - **문제 상황**
+  - 상위 컴포넌트에서 props로 전달 받은 반응형 객체 처리 과정에서 에러 발생
+  - 에러 발생 코드
+  ```vue
+  // 상위 컴포넌트 BookListView 에서 연동
+  <BookListFilter
+  :categories="categories"
+  :selected-category-ids="selectedCategoryIds"
+  :min-price="minPrice"
+  :max-price="maxPrice"
+  @update:categoryIds="updateCategories"
+  @update:priceRange="updatePriceRange"
+  />
+  
+  // BookListFilter에 다음과 같이 값 저장
+  const selectedCategoryIds = ref([...props.selectedCategoryIds]);
+  ```
 - **원인**
+  - 상위 컴포넌트에서 props로 전달 받은 반응형 객체를 복사해서 새로운 ref로 저장하면 상위 컴포넌트와 하위 컴포넌트 간의 반응형 연결이 단절되어 상위 컴포넌트에서 값이 변해도 하위 컴포넌트에서 인식할 수 없다.
 - **해결 방법**
+  - `selectedCategoryIds`를 따로 만들지 말고 `props` 그대로 사용하기
+    - 데이터 속성을 감지하여 동적 처리를 하기 위해 computed 속성을 적용한다.
+  ```vue
+    // const selectedCategoryIds = ref([...props.selectedCategoryIds]);
+    const selectedCategoryIds = computed(() => props.selectedCategoryIds);
+  ```
 
-## 💬 **팀원 회고**
+  - 상위 컴포넌트의 값을 update 할 때는 emit 을 사용한다.  - 데이터 속성을 감지하여 동적 처리를 하기 위해 computed 속성을 적용한다.
+  ```vue
+    const toggleCategory = (id) => {
+    const newIds = [...props.selectedCategoryIds];
+    const index = newIds.indexOf(id);
 
----
-| **팀원**  | **프로젝트 회고**                                                                                                                                                                                                                                                                                        |
-|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **김소원** ||
-| **부재녕** ||
-| **장현영** ||
-| **정유진** ||
+    if (index === -1) {
+        newIds.push(id);
+    } else {
+        newIds.splice(index, 1);
+    }
+
+    emit('update:categoryIds', newIds);
+  };
+  
+  const selectedCategoryIds = computed({
+    get: () => props.selectedCategoryIds,
+    set: (val) => emit('update:categoryIds', val)
+  });
+  ```
