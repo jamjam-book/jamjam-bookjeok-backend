@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jamjam.bookjeok.domains.book.query.mapper.BookMapper">
+
+    <resultMap id="bookDetailResultMap" type="BookDetailDTO">
+        <id property="bookId" column="book_id" />
+        <result property="bookInfo" column="book_info" />
+        <result property="bookName" column="book_name" />
+        <result property="isbn" column="isbn" />
+        <result property="publishedAt" column="published_at" />
+        <result property="price" column="price" />
+        <result property="stockQuantity" column="stock_quantity" />
+        <result property="imageUrl" column="image_url" />
+        <result property="publisherName" column="publisher_name" />
+        <result property="authorNames" column="authors" />
+        <result property="interestCount" column="interestCount" />
+        <result property="ordersCount" column="ordersCount" />
+        <result property="isDeleted" column="is_deleted" />
+
+        <association property="bookCategory" javaType="BookCategoryDTO">
+            <id property="categoryId" column="category_id" />
+            <result property="categoryName" column="category_name" />
+        </association>
+
+        <association property="publisher" javaType="PublisherDTO">
+            <result property="publisherName" column="publisher_name" />
+        </association>
+    </resultMap>
+
+    <select id="findBookListOrderByOption" resultMap="bookDetailResultMap">
+        SELECT
+            a.book_id
+            , a.book_name
+            , a.book_info
+            , a.isbn
+            , a.published_at
+            , a.price
+            , a.stock_quantity
+            , a.image_url
+            , b.category_id
+            , b.category_name
+            , c.publisher_name
+            , a.is_deleted
+            , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
+            , COUNT(DISTINCT f.member_uid) AS interestCount
+            , SUM(g.quantity) AS ordersCount
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        JOIN book_authors d ON a.book_id = d.book_id
+        JOIN authors e ON d.author_id = e.author_id
+        LEFT JOIN interest_books f ON a.book_id = f.book_id
+        LEFT JOIN order_details g ON a.book_id = g.book_id
+        WHERE 1 = 1
+        <!-- 카테고리 조건 -->
+        <if test="category != null and category != ''">
+            AND b.category_id = #{category}
+        </if>
+
+        <!-- 검색 조건 -->
+        <if test="keywordType != null and keyword != null and keyword != ''">
+            <choose>
+                <when test="keywordType == 'author'">
+                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'isbn'">
+                    AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'title'">
+                    AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+
+        <!-- 판매 상태 조건 -->
+        <if test="isDeleted != null">
+            AND a.is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+        </if>
+
+        GROUP BY a.book_id
+
+        <!-- 정렬 조건 -->
+        <choose>
+            <when test="sort == 'old'">
+                ORDER BY a.created_at ASC
+            </when>
+            <when test="sort == 'ordersAsc'">
+                ORDER BY ordersCount ASC
+            </when>
+            <when test="sort == 'ordersDesc'">
+                ORDER BY ordersCount DESC
+            </when>
+            <when test="sort == 'interest'">
+                ORDER BY interestCount DESC
+            </when>
+            <otherwise>
+                ORDER BY a.created_at DESC
+            </otherwise>
+        </choose>
+
+        LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <select id="countBookListByOption" resultType="int">
+        SELECT COUNT(DISTINCT a.book_id)
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        JOIN book_authors d ON a.book_id = d.book_id
+        JOIN authors e ON d.author_id = e.author_id
+        WHERE 1 = 1
+
+        <if test="category != null and category != ''">
+            AND b.category_id = #{category}
+        </if>
+
+        <if test="keywordType != null and keyword != null and keyword != ''">
+            <choose>
+                <when test="keywordType == 'author'">
+                    AND e.author_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'isbn'">
+                    AND a.isbn LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="keywordType == 'title'">
+                    AND a.book_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+
+        <if test="isDeleted != null">
+            AND a.is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+        </if>
+    </select>
+
+    <select id="findBook" resultMap="bookDetailResultMap">
+        SELECT
+        a.book_id
+        , a.book_name
+        , a.book_info
+        , a.isbn
+        , a.published_at
+        , a.price
+        , a.stock_quantity
+        , a.image_url
+        , b.category_id
+        , b.category_name
+        , c.publisher_name
+        , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
+        , SUM(f.quantity) AS ordersCount
+        FROM books a
+        LEFT JOIN book_categories b ON a.category_id = b.category_id
+        LEFT JOIN publishers c ON a.publisher_id = c.publisher_id
+        LEFT JOIN book_authors d ON a.book_id = d.book_id
+        LEFT JOIN authors e ON d.author_id = e.author_id
+        LEFT JOIN order_details f ON a.book_id = f.book_id
+        WHERE a.book_id = #{ bookId }
+        GROUP BY a.book_id
+    </select>
+
+    <select id="findAllCategory" resultType="BookCategoryDTO">
+        SELECT
+              category_id
+            , category_name
+        FROM book_categories
+        WHERE is_deleted = false;
+    </select>
+
+</mapper>

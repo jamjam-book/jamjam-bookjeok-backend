@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamjam.bookjeok.domains.orderdetail.query.mapper.OrderDetailMapper">
+    <select id="findOrderDetailByMemberUidAndOrderId" resultType="com.jamjam.bookjeok.domains.orderdetail.query.dto.OrderDetailDTO">
+        SELECT
+            o.order_id, b.book_id, b.book_name, b.isbn, od.total_price,
+            od.quantity, b.image_url, o.ordered_at
+        FROM order_details od
+        JOIN orders o ON od.order_uid = o.order_uid
+        JOIN books b ON od.book_id = b.book_id
+        WHERE o.member_uid = #{ memberUid }
+        AND o.order_id = #{ orderId }
+    </select>
+</mapper>

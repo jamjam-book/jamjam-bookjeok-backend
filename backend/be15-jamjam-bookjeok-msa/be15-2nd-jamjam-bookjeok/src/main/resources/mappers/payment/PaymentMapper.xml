@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamjam.bookjeok.domains.payment.query.mapper.PaymentMapper">
+    <select id="findPaymentByPaymentId" resultType="com.jamjam.bookjeok.domains.payment.command.entity.Payment">
+        SELECT
+            payment_id, order_uid, payment_key, payment_type,
+            payment_method, total_amount, requested_at, approved_at
+        FROM payments
+        WHERE payment_id = #{ paymentId }
+    </select>
+</mapper>

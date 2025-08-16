@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jamjam.bookjeok.domains.book.repository.mapper.BookMapper">
+
+    <resultMap id="bookDetailResultMap" type="BookDetailDTO">
+        <id property="bookId" column="book_id" />
+        <result property="bookInfo" column="book_info" />
+        <result property="bookName" column="book_name" />
+        <result property="isbn" column="isbn" />
+        <result property="publishedAt" column="published_at" />
+        <result property="price" column="price" />
+        <result property="stockQuantity" column="stock_quantity" />
+        <result property="imageUrl" column="image_url" />
+        <result property="publisherName" column="publisher_name" />
+        <result property="authorNames" column="authors" />
+        <result property="interestCount" column="interestCount" />
+        <result property="ordersCount" column="ordersCount" />
+
+        <association property="bookCategory" javaType="BookCategoryDTO">
+            <id property="categoryId" column="category_id" />
+            <result property="categoryName" column="category_name" />
+        </association>
+
+        <association property="publisher" javaType="PublisherDTO">
+            <result property="publisherName" column="publisher_name" />
+        </association>
+    </resultMap>
+
+    <resultMap id="bookDetailPageResultMap" type="BookDetailPageDTO">
+        <id property="bookId" column="book_id"/>
+        <result property="bookName" column="book_name"/>
+        <result property="bookInfo" column="book_info"/>
+        <result property="isbn" column="isbn"/>
+        <result property="publishedAt" column="published_at"/>
+        <result property="price" column="price"/>
+        <result property="stockQuantity" column="stock_quantity"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="authorNames" column="author_names"/>
+        <result property="interestCount" column="interest_count"/>
+
+        <association property="bookCategory" javaType="BookCategoryDTO">
+            <id property="categoryId" column="category_id"/>
+            <result property="categoryName" column="category_name"/>
+            <result property="createdAt" column="category_created_at"/>
+            <result property="modifiedAt" column="category_modified_at"/>
+            <result property="deleted" column="category_is_deleted"/>
+        </association>
+
+        <association property="publisher" javaType="PublisherDTO">
+            <id property="publisherId" column="publisher_id"/>
+            <result property="publisherName" column="publisher_name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="popularBookResultMap" type="PopularBookDTO">
+        <id property="bookId" column="book_id"/>
+        <result property="bookName" column="book_name"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="isbn" column="isbn"/>
+        <result property="publishedAt" column="published_at"/>
+        <result property="totalQuantity" column="total_quantity"/>
+
+        <association property="publisher" javaType="PublisherDTO">
+            <id property="publisherId" column="publisher_id"/>
+            <result property="publisherName" column="publisher_name"/>
+        </association>
+    </resultMap>
+
+    <select id="findBookListOrderByOption" resultMap="bookDetailResultMap">
+        SELECT
+            a.book_id
+            , a.book_name
+            , a.book_info
+            , a.isbn
+            , a.published_at
+            , a.price
+            , a.stock_quantity
+            , a.image_url
+            , b.category_id
+            , b.category_name
+            , c.publisher_name
+            , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
+            , COUNT(DISTINCT f.member_uid) AS interestCount
+            , SUM(g.quantity) AS ordersCount
+        FROM books a
+        JOIN book_categories b ON a.category_id = b.category_id
+        JOIN publishers c ON a.publisher_id = c.publisher_id
+        JOIN book_authors d ON a.book_id = d.book_id
+        JOIN authors e ON d.author_id = e.author_id
+        LEFT JOIN interest_books f ON a.book_id = f.book_id
+        LEFT JOIN order_details g ON a.book_id = g.book_id
+        WHERE a.is_deleted = false
+        <if test="option != null">
+            <if test="option == 'category'">
+                AND b.category_id = #{ search }
+            </if>
+            <if test="option == 'author'">
+                AND e.author_name LIKE CONCAT('%', #{ search }, '%')
+            </if>
+            <if test="option == 'name'">
+                AND a.book_name LIKE CONCAT('%', #{ search }, '%')
+            </if>
+            <if test="option == 'publisher'">
+                AND c.publisher_name LIKE CONCAT('%', #{ search }, '%')
+            </if>
+        </if>
+        GROUP BY a.book_id
+        <if test="array != null">
+            <if test="array == 'interest'">
+                ORDER BY interestCount DESC;
+            </if>
+            <if test="array == 'orders'">
+                ORDER BY ordersCount DESC;
+            </if>
+        </if>
+        <if test="array == null">
+            ORDER BY a.created_at DESC;
+        </if>
+    </select>
+
+    <select id="findBookByIsbn" resultMap="bookDetailResultMap">
+        SELECT
+        a.book_id
+        , a.book_name
+        , a.book_info
+        , a.isbn
+        , a.published_at
+        , a.price
+        , a.stock_quantity
+        , a.image_url
+        , b.category_id
+        , b.category_name
+        , c.publisher_name
+        , GROUP_CONCAT(DISTINCT e.author_name ORDER BY e.author_name SEPARATOR ', ') AS authors
+        , SUM(f.quantity) AS ordersCount
+        FROM books a
+        LEFT JOIN book_categories b ON a.category_id = b.category_id
+        LEFT JOIN publishers c ON a.publisher_id = c.publisher_id
+        LEFT JOIN book_authors d ON a.book_id = d.book_id
+        LEFT JOIN authors e ON d.author_id = e.author_id
+        LEFT JOIN order_details f ON a.book_id = f.book_id
+        WHERE a.isbn = #{ isbn }
+        GROUP BY a.book_id
+    </select>
+
+    <select id="findAllCategory" resultType="BookCategoryDTO">
+        SELECT
+              category_id
+            , category_name
+        FROM book_categories
+        WHERE is_deleted = false;
+    </select>
+
+    <!-- 회원 : 도서 상세 조회 -->
+    <select id="getBookDetail" resultMap="bookDetailPageResultMap">
+        SELECT
+            a.book_id,
+            a.book_name,
+            a.book_info,
+            a.isbn,
+            a.published_at,
+            a.price,
+            a.stock_quantity,
+            a.image_url,
+            a.created_at,
+            a.modified_at,
+            a.is_deleted,
+            b.category_id,
+            b.category_name,
+            c.publisher_id,
+            c.publisher_name,
+            COUNT(DISTINCT e.member_uid) AS interest_count
+        FROM books a
+        LEFT JOIN book_categories b ON a.category_id = b.category_id
+        LEFT JOIN publishers c ON a.publisher_id = c.publisher_id
+        LEFT JOIN book_authors d ON a.book_id = d.book_id
+        LEFT JOIN interest_books e ON a.book_id = e.book_id
+        WHERE a.isbn = #{ isbn }
+        AND a.is_deleted = 0
+        GROUP BY a.book_id;
+    </select>
+
+    <select id="getAuthors" resultType="AuthorDTO">
+        SELECT DISTINCT c.author_name
+        FROM books a
+        JOIN book_authors b ON a.book_id = b.book_id
+        JOIN authors c ON b.author_id = c.author_id
+        WHERE a.book_id = #{ bookId };
+    </select>
+
+    <select id="getReviews" resultType="ReviewDTO">
+        SELECT
+            a.review_id,
+            a.member_uid,
+            a.book_id,
+            a.content,
+            a.rating,
+            a.created_at,
+            a.modified_at,
+            c.activity_status
+        FROM reviews a
+        JOIN books b ON a.book_id = b.book_id
+        LEFT JOIN members c ON a.member_uid = c.member_uid
+        WHERE a.book_id = #{ bookId }
+        AND a.is_deleted = 0;
+    </select>
+
+    <!-- 판매량 10위 -->
+    <select id="getPopularBooks" resultMap="popularBookResultMap">
+        SELECT
+            c.book_id,
+            c.book_name,
+            c.image_url,
+            c.isbn,
+            c.published_at,
+            d.publisher_id,
+            d.publisher_name,
+            SUM(a.quantity) AS total_quantity
+        FROM order_details a
+        JOIN orders b ON a.order_uid = b.order_uid
+        JOIN books c ON a.book_id = c.book_id
+        LEFT JOIN publishers d ON c.publisher_id = d.publisher_id
+        WHERE b.ordered_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        AND b.order_status_id = 1
+        AND c.is_deleted = 0
+        GROUP BY c.book_id
+        ORDER BY total_quantity DESC, c.published_at DESC
+        LIMIT 10;
+    </select>
+
+    <!-- 리뷰 자격 valid check -->
+    <select id="validCheckReviewer" resultType="Long">
+        SELECT
+            DISTINCT a.member_uid
+        FROM orders a
+        JOIN order_details b ON a.order_uid = b.order_uid
+        WHERE b.book_id = #{ bookId }
+        AND a.member_uid = #{ memberUid }
+        AND a.order_status_id = 1
+        AND a.member_uid NOT IN
+            (
+                SELECT s1.member_uid
+                FROM reviews s1
+                WHERE s1.book_id = #{ bookId }
+            )
+    </select>
+
+</mapper>
