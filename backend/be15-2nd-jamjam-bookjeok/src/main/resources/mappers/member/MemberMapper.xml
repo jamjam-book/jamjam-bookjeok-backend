@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jamjam.bookjeok.domains.member.repository.mapper.MemberMapper">
+<mapper namespace="com.jamjam.bookjeok.domains.member.query.mapper.MemberMapper">
     <select id="findMemberByMemberId" resultType="MemberDTO">
         SELECT
             member_uid, member_id, member_name, phone_number, email, nickname, birth_date,

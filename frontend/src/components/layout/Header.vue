@@ -69,10 +69,11 @@ const handleLogin = async () => {
 }
 
 onMounted(() => {
-    if (isLoggedIn.value) {
-        getCartCount();
-    }
+  // 개발·테스트용: JWT가 없어도 로그인 상태로 전환
+  authStore.devForceLogin({ role: 'MEMBER', minutes: 120, member: 'user01' })
+  getCartCount()
 })
+
 
 watch(isLoggedIn, (val) => {
     if (val) {

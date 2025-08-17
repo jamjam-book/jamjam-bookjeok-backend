@@ -1,87 +1,104 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.4'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+ext {
+    springCloudVersion = "2024.0.1"
 }
 
 group = 'com.jamjam'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// spring-boot-starter-web
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // spring-boot-starter-web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// validation
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// jpa
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	// mybatis
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    // mybatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 
-	// mariadb
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    // mariadb
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	// h2
-	runtimeOnly 'com.h2database:h2'
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	// swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    // h2
+    runtimeOnly 'com.h2database:h2'
 
-	// hateoas
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+
+    // hateoas
 //	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
-	// modelmapper
-	implementation 'org.modelmapper:modelmapper:3.2.1'
+    // modelmapper
+    implementation 'org.modelmapper:modelmapper:3.2.1'
 
-	// lombok
-	compileOnly 'org.projectlombok:lombok'
-	testCompileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-	// devtools
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // devtools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	// junit
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // junit
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// spring security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.springframework.security:spring-security-test'
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 
-	// jsoup - web crawling
-	// https://mvnrepository.com/artifact/org.jsoup/jsoup
-	implementation("org.jsoup:jsoup:1.17.2")
+    // jsoup - web crawling
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation("org.jsoup:jsoup:1.17.2")
 
-	// io
-	implementation 'commons-io:commons-io:2.14.0'
+    // io
+    implementation 'commons-io:commons-io:2.14.0'
 
-	// jwt
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    // jwt
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+
+    // email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

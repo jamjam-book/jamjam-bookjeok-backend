@@ -4,10 +4,12 @@ import com.jamjam.bookjeok.auth.dto.LoginRequest;
 import com.jamjam.bookjeok.auth.dto.TokenResponse;
 import com.jamjam.bookjeok.auth.entity.RefreshToken;
 import com.jamjam.bookjeok.auth.repository.RefreshTokenRepository;
-import com.jamjam.bookjeok.domains.member.entity.Member;
-import com.jamjam.bookjeok.domains.member.repository.repository.MemberRepository;
+import com.jamjam.bookjeok.domains.member.command.repository.MemberRepository;
+import com.jamjam.bookjeok.domains.member.command.entity.Member;
+
 import com.jamjam.bookjeok.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
